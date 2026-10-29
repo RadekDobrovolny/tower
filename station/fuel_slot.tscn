@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://station/fuel_slot.gd" id="1_slot"]
+
+[node name="FuelSlot" type="Node2D"]
+script = ExtResource("1_slot")
+
+[node name="Pad" type="Polygon2D" parent="."]
+color = Color(0.13, 0.16, 0.22, 1)
+polygon = PackedVector2Array(-44, -44, 44, -44, 44, 44, -44, 44)
+
+[node name="Border" type="Line2D" parent="."]
+points = PackedVector2Array(-44, -44, 44, -44, 44, 44, -44, 44)
+closed = true
+width = 3.0
+default_color = Color(0.95, 0.75, 0.25, 1)
+
+[node name="Pump" type="Polygon2D" parent="."]
+color = Color(0.55, 0.6, 0.68, 1)
+polygon = PackedVector2Array(-12, 48, 12, 48, 12, 62, -12, 62)
+
+[node name="Light" type="Polygon2D" parent="."]
+position = Vector2(34, 34)
+polygon = PackedVector2Array(-5, -5, 5, -5, 5, 5, -5, 5)

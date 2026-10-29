@@ -35,7 +35,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 - Upgrady zvyšují rychlost čerpadla a případně umožní obsluhovat větší lodě.
 
 ### Personál
-- **Tankovači** obsluhují lodě. Vylepšuje se jim rychlost chůze a rychlost tankování.
+- **Androidi** (tankovači) obsluhují lodě. Vylepšuje se jim rychlost chůze a rychlost tankování.
 - **Ochranka** bojuje s piráty, kteří se vylodili na stanici.
 - Personál se nabírá a trénuje.
 
@@ -51,8 +51,40 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 - **Výhra:** splnění cíle levelu, například vydělat X kreditů.
 - **Prohra:** zatím otevřené (viz níže).
 
+## Level 1
+
+Úvodní level, ve kterém se hráč naučí obsluhu lodí a vylepšování personálu. Pokrývá kroky 3 a 4 plánu vývoje.
+
+**Výchozí stav:** 1 čerpací slot, 1 android na levelu 1, 0 kr.
+
+**Cíle** (musí platit oba zároveň):
+- Mít na účtu **10 000 kr**. Počítá se zůstatek, peníze utracené za vylepšení se tedy do cíle nezapočítávají.
+- Mít androida na **levelu 3**.
+
+**Piráti:** v levelu 1 nejsou, přijdou až s krokem 5 plánu.
+
+### Android
+- Čeká u čerpadla. Když loď přistane, dojde k ní a natankuje ji.
+- Vylepšení zrychlí chůzi i tankování:
+
+| Level | Chůze | Tankování | Cena vylepšení |
+|---|---|---|---|
+| 1 | 80 px/s | 6 j/s | výchozí |
+| 2 | 110 px/s | 9 j/s | 1 500 kr |
+| 3 | 140 px/s | 13 j/s | 4 000 kr |
+
+### Lodě
+- Přilétají v průměru každých 8 s.
+- Když je slot obsazený, čekají ve frontě. Po 30 s čekání odletí bez placení.
+- Loď natankuje v průměru asi 58 jednotek po 2 kr, zaplatí tedy kolem 115 kr.
+
+### Tempo (odhad, ověříme simulací)
+- Android na levelu 1 stihne obsloužit asi 5 lodí za minutu, ostatní odletí. Hráč tak má důvod ho vylepšovat.
+- Kdo vylepšuje hned, jak na to má, dosáhne levelu 2 kolem 3. minuty, levelu 3 kolem 8. minuty a cíl splní kolem 19.–20. minuty.
+
 ## Otevřené otázky
 
+- Level 1 nabízí jen jedno rozhodnutí, totiž kdy vylepšit androida. Bude 20 minut dost zábavných, nebo přidat drobné události (spěchající loď s dýškem, porucha čerpadla)?
 - Co způsobí prohru? Zničení jádra nebo hlavní nádrže stanice? Bankrot?
 - Co piráti chtějí? Krást palivo nebo peníze, ničit sloty, unášet personál?
 - Jak se staví: na pevné pozice, nebo volně na mřížku?
@@ -65,7 +97,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 Do kroku 8 se používají jednoduché barevné tvary, grafika přijde na řadu, až bude hra hratelná.
 
 1. ~~Kostra projektu~~ ✅
-2. **Stanice a lodě:** stanice se sloty, lodě přilétají, kotví, natankují se automaticky a odletí. Hned potom první test web exportu.
+2. ~~**Stanice a lodě:** stanice se sloty, lodě přilétají, kotví, natankují se automaticky a odletí. Hned potom první test web exportu.~~ ✅
 3. **Personál:** tankovač chodí k lodím a tankuje je, lodě čekají ve frontě a mají omezenou trpělivost.
 4. **Ekonomika a HUD:** kredity, cíl levelu, nákup slotů a zaměstnanců.
 5. **Piráti, výsadek:** piráti vystoupí z lodi a útočí na stanici, brání ji ochranka a věže. Podmínka prohry.

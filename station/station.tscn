@@ -1,0 +1,43 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://station/station.gd" id="1_station"]
+[ext_resource type="PackedScene" path="res://station/fuel_slot.tscn" id="2_slot"]
+
+[node name="Station" type="Node2D"]
+script = ExtResource("1_station")
+
+[node name="Platform" type="Polygon2D" parent="."]
+color = Color(0.2, 0.24, 0.31, 1)
+polygon = PackedVector2Array(-328, -160, 328, -160, 360, -128, 360, 128, 328, 160, -328, 160, -360, 128, -360, -128)
+
+[node name="PlatformEdge" type="Line2D" parent="."]
+points = PackedVector2Array(-328, -160, 328, -160, 360, -128, 360, 128, 328, 160, -328, 160, -360, 128, -360, -128)
+closed = true
+width = 4.0
+default_color = Color(0.45, 0.52, 0.63, 1)
+
+[node name="Pipes" type="Line2D" parent="."]
+points = PackedVector2Array(-200, -22, -200, 10, 200, 10, 200, -22)
+width = 6.0
+default_color = Color(0.55, 0.32, 0.16, 1)
+
+[node name="PipeCenter" type="Line2D" parent="."]
+points = PackedVector2Array(0, -22, 0, 24)
+width = 6.0
+default_color = Color(0.55, 0.32, 0.16, 1)
+
+[node name="Tank" type="Polygon2D" parent="."]
+position = Vector2(0, 70)
+color = Color(0.85, 0.45, 0.2, 1)
+polygon = PackedVector2Array(46.2, 19.1, 19.1, 46.2, -19.1, 46.2, -46.2, 19.1, -46.2, -19.1, -19.1, -46.2, 19.1, -46.2, 46.2, -19.1)
+
+[node name="Slots" type="Node2D" parent="."]
+
+[node name="FuelSlot1" parent="Slots" instance=ExtResource("2_slot")]
+position = Vector2(-200, -80)
+
+[node name="FuelSlot2" parent="Slots" instance=ExtResource("2_slot")]
+position = Vector2(0, -80)
+
+[node name="FuelSlot3" parent="Slots" instance=ExtResource("2_slot")]
+position = Vector2(200, -80)
