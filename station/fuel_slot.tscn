@@ -22,3 +22,6 @@ polygon = PackedVector2Array(-12, 48, 12, 48, 12, 62, -12, 62)
 [node name="Light" type="Polygon2D" parent="."]
 position = Vector2(34, 34)
 polygon = PackedVector2Array(-5, -5, 5, -5, 5, 5, -5, 5)
+
+[node name="ServicePoint" type="Marker2D" parent="."]
+position = Vector2(-28, 58)

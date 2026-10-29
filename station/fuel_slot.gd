@@ -3,15 +3,24 @@ extends Node2D
 
 ## Přistávací plošina s čerpadlem. Najednou obslouží jednu loď.
 
+signal freed(slot: FuelSlot)
+
 const FREE_COLOR := Color(0.3, 0.9, 0.4)
 const BUSY_COLOR := Color(1.0, 0.55, 0.2)
+const LOCKED_COLOR := Color(0.25, 0.25, 0.28)
+const LOCKED_MODULATE := Color(1, 1, 1, 0.3)
 
-## Kolik jednotek paliva za sekundu čerpadlo načerpá.
-@export var pump_rate := 12.0
-
+## Zamčený slot je vidět, ale lodě k němu nelétají.
+var unlocked := true:
+	set(value):
+		unlocked = value
+		modulate = Color.WHITE if unlocked else LOCKED_MODULATE
+		if is_node_ready():
+			_update_light()
 var occupant: Ship = null
 
 @onready var _light: Polygon2D = $Light
+@onready var _service_point: Marker2D = $ServicePoint
 
 
 func _ready() -> void:
@@ -19,7 +28,12 @@ func _ready() -> void:
 
 
 func is_free() -> bool:
-	return occupant == null
+	return unlocked and occupant == null
+
+
+## Místo u čerpadla, kde stojí android, když tankuje.
+func service_position() -> Vector2:
+	return _service_point.global_position
 
 
 func reserve(ship: Ship) -> void:
@@ -30,7 +44,13 @@ func reserve(ship: Ship) -> void:
 func release() -> void:
 	occupant = null
 	_update_light()
+	freed.emit(self)
 
 
 func _update_light() -> void:
-	_light.color = FREE_COLOR if is_free() else BUSY_COLOR
+	if not unlocked:
+		_light.color = LOCKED_COLOR
+	elif occupant == null:
+		_light.color = FREE_COLOR
+	else:
+		_light.color = BUSY_COLOR

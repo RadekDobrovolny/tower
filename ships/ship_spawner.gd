@@ -1,7 +1,7 @@
 class_name ShipSpawner
 extends Node
 
-## Posílá ke stanici nové lodě, kdykoli je některý slot volný.
+## Posílá ke stanici nové lodě, dokud je u ní místo (volný slot nebo místo ve frontě).
 
 const SHIP_SCENE := preload("res://ships/ship.tscn")
 ## Jak daleko za okrajem obrazovky se nová loď objeví.
@@ -12,29 +12,25 @@ const EXIT_MARGIN := 300.0
 @export var station: Station
 @export var ships_parent: Node2D
 ## Rozmezí v sekundách mezi přílety dvou lodí.
-@export var min_interval := 1.5
-@export var max_interval := 4.0
+@export var min_interval := 3.0
+@export var max_interval := 7.0
 
 var _cooldown := 0.5
 
 
 func _process(delta: float) -> void:
 	_cooldown -= delta
-	if _cooldown > 0.0:
+	if _cooldown > 0.0 or not station.has_room():
 		return
-	var slot := station.get_free_slot()
-	if slot == null:
-		return
-	_spawn_ship(slot)
+	_spawn_ship()
 	_cooldown = randf_range(min_interval, max_interval)
 
 
-func _spawn_ship(slot: FuelSlot) -> void:
+func _spawn_ship() -> void:
 	var ship: Ship = SHIP_SCENE.instantiate()
-	ship.slot = slot
 	ship.position = _random_point_outside_screen(SPAWN_MARGIN)
 	ship.exit_point = _random_point_outside_screen(EXIT_MARGIN)
-	slot.reserve(ship)
+	station.admit(ship)
 	ships_parent.add_child(ship)
 
 

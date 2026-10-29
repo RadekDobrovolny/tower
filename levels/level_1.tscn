@@ -1,0 +1,27 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://levels/level.gd" id="1_level"]
+[ext_resource type="Script" path="res://space/starfield.gd" id="2_stars"]
+[ext_resource type="PackedScene" path="res://station/station.tscn" id="3_station"]
+[ext_resource type="Script" path="res://ships/ship_spawner.gd" id="4_spawner"]
+[ext_resource type="PackedScene" path="res://ui/hud.tscn" id="5_hud"]
+
+[node name="Level1" type="Node2D"]
+script = ExtResource("1_level")
+goal_credits = 2000
+
+[node name="Starfield" type="Node2D" parent="."]
+script = ExtResource("2_stars")
+
+[node name="Station" parent="." instance=ExtResource("3_station")]
+position = Vector2(640, 400)
+unlocked_slots = 1
+
+[node name="Ships" type="Node2D" parent="."]
+
+[node name="ShipSpawner" type="Node" parent="." node_paths=PackedStringArray("station", "ships_parent")]
+script = ExtResource("4_spawner")
+station = NodePath("../Station")
+ships_parent = NodePath("../Ships")
+
+[node name="HUD" parent="." instance=ExtResource("5_hud")]

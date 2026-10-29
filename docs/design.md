@@ -4,7 +4,7 @@ Pracovní název: **Tower**
 
 ## Koncept
 
-Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesmírnou čerpací stanici**, ke které přilétají malé lodě doplnit palivo. Za vydělané peníze stanici rozšiřuje: přidává čerpací sloty, staví obranné systémy a vylepšuje personál. Občas na stanici zaútočí **vesmírní piráti**.
+Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesmírnou čerpací stanici**, ke které přilétají malé lodě natankovat **galaxín**, vesmírné palivo. Za vydělané peníze stanici rozšiřuje: přidává čerpací sloty, staví obranné systémy a vylepšuje personál. Občas na stanici zaútočí **vesmírní piráti**.
 
 ## Základní rozhodnutí
 
@@ -14,7 +14,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 | Pohled | Shora. Stanice je plošina, lodě přilétají z okolního vesmíru. |
 | Tankování | Lodě obsluhuje **personál**: zaměstnanec dojde k zakotvené lodi a natankuje ji. |
 | Boj | **Nepřímý**: věže a ochranka bojují samy, hráč staví a vylepšuje obranu předem i během útoku. |
-| Struktura | Level běží nepřetržitě a má cíl (např. vydělat určitou částku). Jeden level má trvat **aspoň 20 minut**. |
+| Struktura | Level běží nepřetržitě a má cíl (např. vydělat určitou částku). Level 1 je krátký úvod na pár minut, další levely by měly trvat **aspoň 20 minut**. |
 
 ## Herní smyčka
 
@@ -24,10 +24,17 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 4. Za vydělané peníze hráč kupuje sloty, personál, obranu a upgrady.
 5. Čas od času zaútočí piráti a s postupem levelu jsou útoky silnější.
 
+## Svět a postavy
+
+- **Galaxín:** vesmírné palivo, které stanice prodává. Píše se s malým g jako běžné palivo (natankovat galaxín, plná nádrž galaxínu), velké G jen na začátku věty. Do budoucna se nabízí víc druhů, např. *galaxín Natural* a *galaxín Super*.
+- **Pumpík:** první android na stanici, tankuje lodě. Lodě ho znají a oslovují ho („Ahoj, Pumpíku!“).
+- **Hlášky:** lodě i Pumpík mluví v bublinách. Lodě zdraví, objednávají, stěžují si ve frontě, naštvaně odlétají a děkují, Pumpík odpovídá a raduje se z vylepšení. Všechny hlášky jsou v `dialogue/lines.gd`.
+
 ## Systémy
 
 ### Lodě (zákazníci)
 - Různé typy lodí se liší velikostí nádrže, trpělivostí a platbou. Na začátek stačí jeden typ.
+- Loď chce buď plnou nádrž, nebo galaxín jen za určitou částku („Chci galaxínu za 100 kreditů“).
 - S postupem levelu přilétá víc lodí a přibývají náročnější zákazníci.
 
 ### Čerpací sloty
@@ -55,36 +62,49 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 
 Úvodní level, ve kterém se hráč naučí obsluhu lodí a vylepšování personálu. Pokrývá kroky 3 a 4 plánu vývoje.
 
-**Výchozí stav:** 1 čerpací slot, 1 android na levelu 1, 0 kr.
+**Výchozí stav:** 1 čerpací slot, android Pumpík na levelu 1, 0 kr.
 
 **Cíle** (musí platit oba zároveň):
-- Mít na účtu **10 000 kr**. Počítá se zůstatek, peníze utracené za vylepšení se tedy do cíle nezapočítávají.
-- Mít androida na **levelu 3**.
+- Mít na účtu **2 000 kr**. Počítá se zůstatek, peníze utracené za vylepšení se tedy do cíle nezapočítávají.
+- Mít Pumpíka na **levelu 3**.
 
 **Piráti:** v levelu 1 nejsou, přijdou až s krokem 5 plánu.
 
-### Android
+### Pumpík
 - Čeká u čerpadla. Když loď přistane, dojde k ní a natankuje ji.
 - Vylepšení zrychlí chůzi i tankování:
 
-| Level | Chůze | Tankování | Cena vylepšení |
-|---|---|---|---|
-| 1 | 80 px/s | 6 j/s | výchozí |
-| 2 | 110 px/s | 9 j/s | 1 500 kr |
-| 3 | 140 px/s | 13 j/s | 4 000 kr |
+| Level | Chůze | Tankování | Cena vylepšení | Barva |
+|---|---|---|---|---|
+| 1 | 80 px/s | 8 j/s | výchozí | šedá |
+| 2 | 110 px/s | 12 j/s | 1 000 kr | tyrkysová |
+| 3 | 140 px/s | 18 j/s | 2 500 kr | zlatá |
 
 ### Lodě
-- Přilétají v průměru každých 8 s.
-- Když je slot obsazený, čekají ve frontě. Po 30 s čekání odletí bez placení.
-- Loď natankuje v průměru asi 58 jednotek po 2 kr, zaplatí tedy kolem 115 kr.
+- Přilétají každé 3–7 s, v průměru tedy každých 5 s.
+- Když je slot obsazený, čekají ve frontě (max. 4 lodě). Po 20 s čekání odletí bez placení.
+- Galaxín stojí 6 kr za jednotku.
+- 65 % lodí chce plnou nádrž, v průměru asi 58 jednotek za zhruba 350 kr.
+- 35 % lodí chce galaxín jen za 100, 150, 200 nebo 250 kr (vždy méně, než by stála plná nádrž).
+- 10 % lodí nechá Pumpíkovi dýško ve výši 10–20 % ceny (v průměru 15 %). Dýško se přičte ke kreditům stanice.
 
-### Tempo (odhad, ověříme simulací)
-- Android na levelu 1 stihne obsloužit asi 5 lodí za minutu, ostatní odletí. Hráč tak má důvod ho vylepšovat.
-- Kdo vylepšuje hned, jak na to má, dosáhne levelu 2 kolem 3. minuty, levelu 3 kolem 8. minuty a cíl splní kolem 19.–20. minuty.
+### Hlášky
+| Kdy | Kdo | Jak často |
+|---|---|---|
+| Přistání: pozdrav Pumpíka | loď | 50 % |
+| Přistání: objednávka (plná nádrž nebo částka) | loď | vždy |
+| Pumpík začíná tankovat | Pumpík | 50 % |
+| Ve frontě po polovině trpělivosti | loď | 60 % |
+| Odlet bez placení (červená bublina) | loď | vždy |
+| Odlet po zaplacení: dýško | loď, Pumpík poděkuje | 10 % |
+| Odlet po zaplacení: poděkování (když nebylo dýško) | loď | 50 % |
+| Vylepšení | Pumpík | vždy |
+
+### Tempo
+- Simulací (`tools/balance_sim.gd`) změřeno ještě pro cíl 10 000 kr: „robotický hráč“, který vylepšuje hned, jak na to má, dostane Pumpíka na level 2 kolem 0:40 a na level 3 kolem 1:45.
+- S cílem 2 000 kr pak stačí zhruba další půlminuta, level by tedy měl trvat kolem 2,5 minuty. Jde o odhad, simulací ověřený není.
 
 ## Otevřené otázky
-
-- Level 1 nabízí jen jedno rozhodnutí, totiž kdy vylepšit androida. Bude 20 minut dost zábavných, nebo přidat drobné události (spěchající loď s dýškem, porucha čerpadla)?
 - Co způsobí prohru? Zničení jádra nebo hlavní nádrže stanice? Bankrot?
 - Co piráti chtějí? Krást palivo nebo peníze, ničit sloty, unášet personál?
 - Jak se staví: na pevné pozice, nebo volně na mřížku?
@@ -98,8 +118,8 @@ Do kroku 8 se používají jednoduché barevné tvary, grafika přijde na řadu,
 
 1. ~~Kostra projektu~~ ✅
 2. ~~**Stanice a lodě:** stanice se sloty, lodě přilétají, kotví, natankují se automaticky a odletí. Hned potom první test web exportu.~~ ✅
-3. **Personál:** tankovač chodí k lodím a tankuje je, lodě čekají ve frontě a mají omezenou trpělivost.
-4. **Ekonomika a HUD:** kredity, cíl levelu, nákup slotů a zaměstnanců.
+3. ~~**Personál:** tankovač chodí k lodím a tankuje je, lodě čekají ve frontě a mají omezenou trpělivost.~~ ✅ (level 1)
+4. **Ekonomika a HUD:** kredity, cíle levelu a vylepšení androida jsou hotové (level 1). Zbývá nákup slotů a zaměstnanců.
 5. **Piráti, výsadek:** piráti vystoupí z lodi a útočí na stanici, brání ji ochranka a věže. Podmínka prohry.
 6. **Upgrady:** personál, sloty, obrana.
 7. **Piráti, útok lodí:** pirátské lodě útočí na obranné systémy.

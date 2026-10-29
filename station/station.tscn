@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://station/station.gd" id="1_station"]
 [ext_resource type="PackedScene" path="res://station/fuel_slot.tscn" id="2_slot"]
+[ext_resource type="PackedScene" path="res://staff/android.tscn" id="3_android"]
 
 [node name="Station" type="Node2D"]
 script = ExtResource("1_station")
@@ -34,10 +35,29 @@ polygon = PackedVector2Array(46.2, 19.1, 19.1, 46.2, -19.1, 46.2, -46.2, 19.1, -
 [node name="Slots" type="Node2D" parent="."]
 
 [node name="FuelSlot1" parent="Slots" instance=ExtResource("2_slot")]
-position = Vector2(-200, -80)
+position = Vector2(0, -80)
 
 [node name="FuelSlot2" parent="Slots" instance=ExtResource("2_slot")]
-position = Vector2(0, -80)
+position = Vector2(-200, -80)
 
 [node name="FuelSlot3" parent="Slots" instance=ExtResource("2_slot")]
 position = Vector2(200, -80)
+
+[node name="QueuePoints" type="Node2D" parent="."]
+
+[node name="QueuePoint1" type="Marker2D" parent="QueuePoints"]
+position = Vector2(-110, -235)
+
+[node name="QueuePoint2" type="Marker2D" parent="QueuePoints"]
+position = Vector2(110, -235)
+
+[node name="QueuePoint3" type="Marker2D" parent="QueuePoints"]
+position = Vector2(-200, -275)
+
+[node name="QueuePoint4" type="Marker2D" parent="QueuePoints"]
+position = Vector2(200, -275)
+
+[node name="Staff" type="Node2D" parent="."]
+
+[node name="Android" parent="Staff" instance=ExtResource("3_android")]
+position = Vector2(-75, 30)
