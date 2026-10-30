@@ -101,18 +101,22 @@ func patience_drain() -> float:
 	return 1.0 - bonus
 
 
-## Posádka přistálé lodi si nakoupí: každé zboží si koupí s jeho šancí.
-func serve_customer(_ship: Ship) -> void:
+## Posádka přistálé lodi si nakoupí: každé zboží si koupí s jeho šancí. Turisté nakupují
+## ochotněji (dvojnásobná šance) a utratí 20× víc.
+func serve_customer(ship: Ship) -> void:
+	var tourists := ship.kind == Ship.Kind.TOURIST
 	var total := 0
 	for item in _assortment():
-		if randf() < item.chance:
+		if randf() < item.chance * (2.0 if tourists else 1.0):
 			total += randi_range(item.price_min, item.price_max)
 	if total <= 0:
 		return
+	if tourists:
+		total = roundi(total * Ship.TOURIST_SHOPPING)
 	revenue += total
 	Game.add_credits(total)
 	FloatingText.spawn(station, station.to_local(global_position) + Vector2(0, -56),
-			"+%d kr obchod" % total, SALE_COLOR)
+			"+%d kr %s" % [total, "turisté" if tourists else "obchod"], SALE_COLOR)
 
 
 ## Cena přidání zboží, nebo -1, když teď přidat nejde (obchod není hotový, Bzučák na něm

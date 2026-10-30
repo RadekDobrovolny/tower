@@ -71,7 +71,9 @@ func _process(delta: float) -> void:
 				_send_tanker()
 		State.UNLOADING:
 			var units := minf(UNLOAD_RATE * _modifier("unloading") * delta, _units_to_deliver - _delivered)
-			var accepted := tank.fill(units, _supplier.low_quality)
+			# Čištění galaxínu v řídícím centru odstraní část nekvalitního galaxínu.
+			var low_quality_share: float = _modifier("purification") if _supplier.low_quality else 0.0
+			var accepted := tank.fill(units, low_quality_share)
 			_delivered += accepted
 			if accepted < units or _delivered >= _units_to_deliver:
 				_finish_delivery()

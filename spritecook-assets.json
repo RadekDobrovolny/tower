@@ -224,6 +224,58 @@
           "cell": "vpravo dole"
         }
       ]
+    },
+    {
+      "asset_id": "1aee2582-1f03-421b-83bf-802083a6b2c8",
+      "label": "Tower – arch D: nákladní a turistická loď, trosky, truhla",
+      "files": [
+        {
+          "file": "assets/sprites/ships/freighter.png",
+          "sha12": "1197d0584f76",
+          "cell": "vlevo nahoře"
+        },
+        {
+          "file": "assets/sprites/ships/tourist.png",
+          "sha12": "e0f44fd121b9",
+          "cell": "vpravo nahoře"
+        },
+        {
+          "file": "assets/sprites/loot/wreckage.png",
+          "sha12": "385e152f13d0",
+          "cell": "vlevo dole"
+        },
+        {
+          "file": "assets/sprites/loot/chest.png",
+          "sha12": "d48b40366175",
+          "cell": "vpravo dole"
+        }
+      ]
+    },
+    {
+      "asset_id": "563e523b-ea6b-4879-a4e7-6b13b3f65acd",
+      "label": "Tower – arch E: automaty, hologram, světla scény, ventil",
+      "files": [
+        {
+          "file": "assets/sprites/entertainment/slot_machines.png",
+          "sha12": "cc98f069151e",
+          "cell": "vlevo nahoře"
+        },
+        {
+          "file": "assets/sprites/entertainment/hologram.png",
+          "sha12": "7df2103b6437",
+          "cell": "vpravo nahoře"
+        },
+        {
+          "file": "assets/sprites/entertainment/stage_lights.png",
+          "sha12": "712014b8688e",
+          "cell": "vlevo dole"
+        },
+        {
+          "file": "assets/sprites/station/pipe_valve.png",
+          "sha12": "af51b6ea9e3c",
+          "cell": "vpravo dole"
+        }
+      ]
     }
   ]
 }

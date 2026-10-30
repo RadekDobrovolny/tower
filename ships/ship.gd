@@ -8,6 +8,8 @@ signal landed(ship: Ship)
 signal gave_up(ship: Ship)
 
 enum State { QUEUED, TO_SLOT, LANDED, DEPARTING }
+## Běžná loď, velká nákladní loď (2× větší nádrž) a turistická loď (v obchodě utratí 20× víc).
+enum Kind { REGULAR, FREIGHTER, TOURIST }
 
 ## Vzhledy raket zákazníků. Každá loď dostane náhodně jeden z nich.
 const HULL_TEXTURES := [
@@ -20,6 +22,17 @@ const HULL_TEXTURES := [
 const HULL_BRIGHTNESS := [1.0, 1.0, 1.7, 1.1]
 ## Tah motoru, když loď jen visí ve vzduchu (ve frontě). S rychlostí roste až na 1.
 const HOVER_THROTTLE := 0.3
+## Jak často přiletí nákladní a turistická loď, jejich vzhled a měřítko spritu.
+const FREIGHTER_CHANCE := 0.1
+const TOURIST_CHANCE := 0.08
+const FREIGHTER_TANK := 2.0
+const TOURIST_SHOPPING := 20.0
+const FREIGHTER_TEXTURE := preload("res://assets/sprites/ships/freighter.png")
+const TOURIST_TEXTURE := preload("res://assets/sprites/ships/tourist.png")
+const FREIGHTER_SCALE := 0.5
+const TOURIST_SCALE := 0.45
+## S jakou šancí loď čekající ve frontě uteče, když začnou útočit piráti.
+const FLEE_CHANCE := 0.5
 
 const MAX_SPEED := 260.0
 const ACCELERATION := 220.0
@@ -66,6 +79,7 @@ var station: Station
 var state := State.QUEUED
 var slot: FuelSlot
 var tank_capacity: float
+var kind := Kind.REGULAR
 var fuel: float
 ## Za kolik kreditů chce loď natankovat. 0 znamená plnou nádrž.
 var order_amount := 0
@@ -95,14 +109,16 @@ var _current_speed := 0.0
 
 
 func _ready() -> void:
-	tank_capacity = randf_range(40.0, 100.0)
+	var roll := randf()
+	if roll < FREIGHTER_CHANCE:
+		kind = Kind.FREIGHTER
+	elif roll < FREIGHTER_CHANCE + TOURIST_CHANCE:
+		kind = Kind.TOURIST
+	tank_capacity = randf_range(40.0, 100.0) * (FREIGHTER_TANK if kind == Kind.FREIGHTER else 1.0)
 	fuel = tank_capacity * randf_range(0.05, 0.3)
-	_choose_order()
-	var hull := randi() % HULL_TEXTURES.size()
-	_sprite.texture = HULL_TEXTURES[hull]
-	# Jemně jiný jas, aby dvě stejné rakety nevypadaly úplně stejně.
-	var brightness: float = HULL_BRIGHTNESS[hull] * randf_range(0.92, 1.05)
-	_sprite.modulate = Color(brightness, brightness, brightness)
+	if kind == Kind.REGULAR:
+		_choose_order()
+	_setup_hull()
 	_fuel_bar.max_value = tank_capacity
 	_fuel_bar.value = fuel
 	_patience_bar.max_value = PATIENCE
@@ -234,6 +250,32 @@ func _give_up() -> void:
 	_depart(ANGRY_DEPARTURE_DELAY)
 
 
+## Uteče z fronty, protože útočí piráti (počítá se jako loď, která odletěla bez placení).
+func flee() -> void:
+	Game.record_ship_lost()
+	_say(Lines.SHIP_SCARED, true)
+	gave_up.emit(self)
+	_depart(0.3)
+
+
+func _setup_hull() -> void:
+	var brightness := randf_range(0.92, 1.05)
+	match kind:
+		Kind.FREIGHTER:
+			_sprite.texture = FREIGHTER_TEXTURE
+			_sprite.scale = Vector2.ONE * FREIGHTER_SCALE
+		Kind.TOURIST:
+			_sprite.texture = TOURIST_TEXTURE
+			_sprite.scale = Vector2.ONE * TOURIST_SCALE
+		_:
+			var hull := randi() % HULL_TEXTURES.size()
+			_sprite.texture = HULL_TEXTURES[hull]
+			# Jemně jiný jas, aby dvě stejné rakety nevypadaly úplně stejně.
+			brightness *= HULL_BRIGHTNESS[hull]
+	_sprite.modulate = Color(brightness, brightness, brightness)
+	_engine.position.x = -_sprite.texture.get_width() * _sprite.scale.x / 2.0 + 2.0
+
+
 func _land() -> void:
 	global_position = slot.global_position
 	_body.scale = Vector2.ONE
@@ -245,7 +287,11 @@ func _land() -> void:
 		_target_fuel = minf(fuel + float(order_amount) / station.sell_price, tank_capacity)
 	if station.attendant_vocative() and randf() < GREETING_CHANCE:
 		_say(Lines.GREETINGS)
-	if order_amount > 0:
+	if kind == Kind.TOURIST:
+		_say(Lines.TOURISTS)
+	elif kind == Kind.FREIGHTER:
+		_say(Lines.FREIGHTER_ORDER)
+	elif order_amount > 0:
 		_say(Lines.ORDER_AMOUNT)
 	else:
 		_say(Lines.ORDER_FULL)

@@ -30,6 +30,26 @@ const BUILD_LABELS := {
 	"shop": "Začít stavět obchod", "tower": "Začít stavět obrannou věž",
 }
 const CONTROL_CENTER_SCENE := preload("res://economy/control_center.tscn")
+const LOOT_SCENE := preload("res://loot/loot.tscn")
+## Kořist ze sestřelených pirátů: šance, že něco vypadne, šance na truhlu s artefaktem
+## (jinak trosky) a kolik kreditů trosky vynesou. První hodnota platí pro nájezdníka,
+## druhá pro dělovou loď.
+const LOOT_CHANCE := [0.6, 1.0]
+const CHEST_CHANCE := [0.2, 0.45]
+const WRECKAGE_CREDITS := [Vector2i(150, 400), Vector2i(400, 900)]
+## Artefakty z pirátských truhel. Ty s cenou se prodají, ostatní mají trvalý účinek
+## a najdou se jen jednou (`unique`).
+const ARTIFACTS := [
+	{"id": "compass", "name": "Rezavý pirátský kompas", "credits": 1200},
+	{"id": "whisky", "name": "Láhev staré galaxínové whisky", "credits": 1800},
+	{"id": "skull", "name": "Zlatá lebka", "credits": 2500},
+	{"id": "crystal", "name": "Krystal čistého galaxínu", "credits": 0,
+			"effect": "doplní do zásobníku 400 j galaxínu"},
+	{"id": "radio", "name": "Pirátská vysílačka", "credits": 0, "unique": true,
+			"effect": "odposlech pirátů, útočí o 20 % méně často"},
+	{"id": "map", "name": "Mapa pirátských skrýší", "credits": 0, "unique": true,
+			"effect": "trosky z pirátů vynesou o 50 % víc"},
+]
 ## Od jakého levelu zásobníku jde k němu přistavět řídící centrum.
 const CONTROL_CENTER_TANK_LEVEL := 3
 ## Na které parcely (indexy) se ve startovním stavu mise staví čerpací sloty, zábavní systém,
@@ -38,7 +58,11 @@ const START_SLOT_PLOTS := [0, 1, 2]
 const START_SHOP_PLOT := 3
 const START_ENTERTAINMENT_PLOT := 4
 const START_TOWER_PLOT := 5
-const PIPE_COLOR := Color(0.55, 0.32, 0.16)
+const PIPE_SHADER := preload("res://fx/pipe.gdshader")
+const PIPE_TEXTURE := preload("res://fx/soft_light.tres")
+const PIPE_VALVE := preload("res://assets/sprites/station/pipe_valve.png")
+const PIPE_WIDTH := 9.0
+const VALVE_SCALE := 0.3
 ## Jak blízko (px) k androidovi nebo zásobníku musí hráč kliknout, aby je vybral.
 const ANDROID_PICK_RADIUS := 28.0
 const TANK_PICK_RADIUS := 50.0
@@ -53,6 +77,14 @@ var control_center_available := false
 var galaxin_economy := false
 ## Řídící centrum u zásobníku (i rozestavěné), nebo null.
 var control_center: ControlCenter
+## Názvy nalezených artefaktů (v pořadí nálezu).
+var artifacts_found: Array[String] = []
+## Účinky artefaktů: násobek prodlevy mezi útoky pirátů a násobek ceny trosek.
+var pirate_interval_factor := 1.0
+var loot_bonus := 1.0
+
+## Materiály potrubí k jednotlivým slotům (kvůli pulzu galaxínu).
+var _pipe_materials := {}
 
 ## Prodejní cena galaxínu (kr/j).
 var sell_price := BASE_PRICE
@@ -94,6 +126,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	_update_selection_marker()
 	_defend_with_androids()
+	_update_pipe_flow()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -305,17 +338,31 @@ func setup_start_buildings(slots: int, entertainment_level: int, shop_products :
 		(_place_building("tower", plots[START_TOWER_PLOT]) as DefenseTower).set_level(tower_level)
 
 
-## Natáhne potrubí ze zásobníku k čerpacímu slotu (po poslední fázi stavby slotu).
+## Natáhne potrubí ze zásobníku k čerpacímu slotu (po poslední fázi stavby slotu):
+## měděná trubka (shader fx/pipe.gdshader) s ventilem uprostřed.
 func connect_pipe(slot: FuelSlot) -> void:
-	var pipe_name := "Pipe%d" % slot.get_instance_id()
-	if _pipes.has_node(pipe_name):
+	if _pipe_materials.has(slot):
 		return
+	var from := tank.position
+	var to := slot.pipe_position()
 	var pipe := Line2D.new()
-	pipe.name = pipe_name
-	pipe.points = PackedVector2Array([slot.pipe_position(), tank.position])
-	pipe.width = 6.0
-	pipe.default_color = PIPE_COLOR
+	pipe.points = PackedVector2Array([from, to])
+	pipe.width = PIPE_WIDTH
+	pipe.texture = PIPE_TEXTURE
+	pipe.texture_mode = Line2D.LINE_TEXTURE_TILE
+	pipe.begin_cap_mode = Line2D.LINE_CAP_ROUND
+	pipe.end_cap_mode = Line2D.LINE_CAP_ROUND
+	var pipe_material := ShaderMaterial.new()
+	pipe_material.shader = PIPE_SHADER
+	pipe.material = pipe_material
 	_pipes.add_child(pipe)
+	var valve := Sprite2D.new()
+	valve.texture = PIPE_VALVE
+	valve.scale = Vector2.ONE * VALVE_SCALE
+	valve.position = from.lerp(to, 0.55)
+	valve.rotation = from.angle_to_point(to)
+	_pipes.add_child(valve)
+	_pipe_materials[slot] = pipe_material
 
 
 ## Zapne ekonomiku galaxínu (omezený zásobník, dodavatelé, vlastní cena) a naplní zásobník.
@@ -561,6 +608,82 @@ func _defend_with_androids() -> void:
 				android.engage(pirate)
 				pirate.fought_by = android
 				break
+
+
+## Pirát začal útočit: část lodí, které čekají ve frontě, dostane strach a uteče.
+func on_pirate_attack() -> void:
+	for ship in _queue.duplicate():
+		if randf() < Ship.FLEE_CHANCE:
+			ship.flee()
+
+
+## Ze sestřeleného piráta občas vypadne kořist a stavební dron ji sebere.
+func spawn_loot(at: Vector2, gunship: bool) -> void:
+	var tier := 1 if gunship else 0
+	if randf() >= LOOT_CHANCE[tier]:
+		return
+	var loot: Loot = LOOT_SCENE.instantiate()
+	loot.station = self
+	if randf() < CHEST_CHANCE[tier]:
+		loot.kind = Loot.Kind.CHEST
+		loot.artifact = _random_artifact()
+	else:
+		var credit_range: Vector2i = WRECKAGE_CREDITS[tier]
+		loot.credits = roundi(randi_range(credit_range.x, credit_range.y) * loot_bonus)
+	add_child(loot)
+	# Kořist zůstane na obrazovce, aby k ní dron doletěl a hráč ji viděl.
+	loot.global_position = at.clamp(get_viewport_rect().position + Vector2(40, 40),
+			get_viewport_rect().end - Vector2(40, 40))
+
+
+## Dron přivezl artefakt: prodá se, nebo začne platit jeho účinek.
+func add_artifact(artifact: Dictionary) -> void:
+	artifacts_found.append(artifact.name)
+	if artifact.credits > 0:
+		Game.add_credits(artifact.credits)
+	match artifact.id:
+		"crystal":
+			if galaxin_economy:
+				tank.fill(400.0, 0.0)
+			else:
+				Game.add_credits(800)
+		"radio":
+			pirate_interval_factor = 1.25
+		"map":
+			loot_bonus = 1.5
+	state_changed.emit()
+
+
+func _random_artifact() -> Dictionary:
+	var pool := ARTIFACTS.filter(func(artifact: Dictionary) -> bool:
+		return not (artifact.get("unique", false) and artifacts_found.has(artifact.name)))
+	return pool.pick_random()
+
+
+## Galaxín teče potrubím ke slotu, na kterém stojí loď a android ji tankuje.
+func _update_pipe_flow() -> void:
+	for slot: FuelSlot in _pipe_materials:
+		var flowing := slot.occupant != null and slot.occupant.state == Ship.State.LANDED \
+				and slot.occupant.fuel_missing() > 0.0 and _is_being_fueled(slot.occupant)
+		_pipe_materials[slot].set_shader_parameter("flow", 1.0 if flowing else 0.0)
+
+
+func _is_being_fueled(ship: Ship) -> bool:
+	for android in get_androids():
+		if android.is_fueling(ship):
+			return true
+	return false
+
+
+## Kolik lodí čeká ve frontě.
+func queue_size() -> int:
+	return _queue.size()
+
+
+## Jestli zrovna útočí nějaký pirát (nové lodě se ke stanici neodváží).
+func under_attack() -> bool:
+	return get_tree().get_nodes_in_group("pirates").any(
+			func(pirate: Node) -> bool: return pirate.is_attacking())
 
 
 ## Místa kolem stanice, kde visí útočící piráti (globální souřadnice).

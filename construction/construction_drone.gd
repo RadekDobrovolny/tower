@@ -64,14 +64,19 @@ func info_title() -> String:
 
 
 func info_lines() -> PackedStringArray:
-	var lines := PackedStringArray(["Stavební dron. Staví budovy po částech a vylepšuje je."])
+	var lines := PackedStringArray([
+		"Stavební dron. Staví budovy po částech, vylepšuje je, opravuje Pumpíka a sbírá kořist po pirátech.",
+	])
 	if _jobs.is_empty():
 		lines.append("Teď nemá práci, odpočívá u zásobníku.")
-		return lines
-	var job := _jobs[0]
-	lines.append("Pracuje na: %s, %s" % [job.target.info_title(), job.status_text(self).to_lower()])
-	if _jobs.size() > 1:
-		lines.append("Ve frontě čeká zakázek: %d" % (_jobs.size() - 1))
+	else:
+		var job := _jobs[0]
+		lines.append("Pracuje na: %s, %s" % [job.target.info_title(), job.status_text(self).to_lower()])
+		if _jobs.size() > 1:
+			lines.append("Ve frontě čeká zakázek: %d" % (_jobs.size() - 1))
+	var station := get_parent() as Station
+	if station and not station.artifacts_found.is_empty():
+		lines.append("Nalezené artefakty: %s" % ", ".join(station.artifacts_found))
 	return lines
 
 

@@ -84,6 +84,7 @@ func _process(delta: float) -> void:
 			if _fly_to_attack_point(delta):
 				state = State.ATTACKING
 				_bubble.say(Lines.pick(Lines.PIRATE_ARRIVAL), true)
+				station.on_pirate_attack()
 		State.ATTACKING:
 			_attack(delta)
 		State.LEAVING:
@@ -179,6 +180,7 @@ func _destroy() -> void:
 	_blast_light.show()
 	create_tween().tween_property(_blast_light, "energy", 0.0, 0.6).from(3.0)
 	FloatingText.spawn(get_parent(), global_position + Vector2(0, -40), "Pirát sestřelen!", DOWN_COLOR)
+	station.spawn_loot(global_position, kind == "gunship")
 	get_tree().create_timer(WRECK_TIME, false).timeout.connect(_finish)
 
 

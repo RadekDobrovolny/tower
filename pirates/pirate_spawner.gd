@@ -2,7 +2,7 @@ class_name PirateSpawner
 extends Node
 
 ## Posílá na stanici piráty, když je mise zapne. Zpočátku chodí jednotliví nájezdníci,
-## časem občas dva naráz a těžké dělové lodě. Každý pirát si vybere volné místo kolem
+## časem občas dva naráz a těžké dělové lodě, nakonec i bandy tří až čtyř lodí. Každý pirát si vybere volné místo kolem
 ## stanice (PirateTargets ve stanici) a přiletí k němu z bližšího okraje obrazovky.
 
 const PIRATE_SCENE := preload("res://pirates/pirate.tscn")
@@ -11,6 +11,9 @@ const FIRST_DELAY := 20.0
 ## Od kdy (s od zapnutí) občas přiletí dva piráti naráz a s jakou šancí.
 const PAIR_FROM := 180.0
 const PAIR_CHANCE := 0.35
+## Od kdy (s od zapnutí) občas přiletí celá banda tří až čtyř pirátů a s jakou šancí.
+const SQUAD_FROM := 420.0
+const SQUAD_CHANCE := 0.3
 ## Od kdy přilétají i těžké dělové lodě a s jakou šancí.
 const GUNSHIP_FROM := 240.0
 const GUNSHIP_CHANCE := 0.3
@@ -40,8 +43,12 @@ func _process(delta: float) -> void:
 	_cooldown -= delta
 	if _cooldown > 0.0:
 		return
-	_cooldown = randf_range(min_interval, max_interval)
-	var count := 2 if _time > PAIR_FROM and randf() < PAIR_CHANCE else 1
+	_cooldown = randf_range(min_interval, max_interval) * station.pirate_interval_factor
+	var count := 1
+	if _time > SQUAD_FROM and randf() < SQUAD_CHANCE:
+		count = randi_range(3, 4)
+	elif _time > PAIR_FROM and randf() < PAIR_CHANCE:
+		count = 2
 	for i in count:
 		_spawn()
 

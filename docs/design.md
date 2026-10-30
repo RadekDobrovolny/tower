@@ -99,6 +99,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
   - Pumpík se s levelem tankování zbarvuje. Má tři animace po 8 snímcích (`staff/pumpik_idle.png`, `pumpik_walk.png`, `pumpik_pump.png`): v klidu dýchá a pulzuje mu hledí, při chůzi střídá nohy (čím rychlejší chůze, tím rychleji kmitá) a u lodi pumpuje pistolí. Bzučák se ve vzduchu kolébá.
   - Paluba má opakovanou texturu a mosazné lemování. Planeta je vpravo dole v pozadí hry i v menu.
   - Rozestavěné budovy: v 1. části staveniště. Čerpací slot pak má přistávací plochu, art deco pumpu vedle ní a nakonec kontrolku a potrubí k patě pumpy. Zábavní systém ve 2. části ukazuje ztmavenou televizi (rozestavěný rám), ve 3. hotovou televizi a po zapojení elektřiny pohyblivý psychedelický obraz s běžící reklamou.
+- **Nové lodě, kořist a zábava** (16 kreditů, dva archy 2×2): nákladní loď `ships/freighter.png`, turistická `ships/tourist.png`, trosky `loot/wreckage.png`, truhla `loot/chest.png`, výherní automaty, hologram a světla scény v `entertainment/`, ventil potrubí `station/pipe_valve.png`. Potrubí samo je shader `fx/pipe.gdshader` (měděná trubka, mosazné objímky, růžový puls galaxínu, když se tankuje).
 - **Stavby a piráti** (24 kreditů, tři archy 2×2): obchod `shop/shop.png` a stánky `shop/food_cart.png`, `holonews.png`, `souvenirs.png`, `accessories.png`; řídící centrum `station/control_center.png` a anténa dispečinku `station/radar_dish.png`; obranná věž `defense/tower_base.png` a kanóny `defense/turret.png`, `turret_twin.png` (level 3); piráti `pirates/raider.png` a `pirates/gunship.png`.
 - **Animace Pumpíka** (60 kreditů): SpriteCook `frame-engine-v1.1`, 20 kreditů za animaci. Detailní animace chce zdroj aspoň 256×256, proto se Pumpík vyřízl z archu v plném rozlišení a doplnil průhledným okrajem na 300×400. Všechny tři animace jsou oříznuté jedním společným rámečkem, aby na sebe při přepínání seděly.
 - **Bez kreditů v kódu:** HUD (ikonky, shader panelů), neonový nápis, vesmírné pozadí a mlhoviny, efekty (kouř, jiskry, blikání neonu) a animace pohybem.
@@ -106,7 +107,8 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 ## Systémy
 
 ### Lodě (zákazníci)
-- Různé typy lodí se liší velikostí nádrže, trpělivostí a platbou. Na začátek stačí jeden typ.
+- **Druhy lodí:** běžné rakety (4 vzhledy), občas **nákladní loď** (10 %, 2× větší nádrž, objedná vždy plnou) a **turistická loď** (8 %, v obchodě nakupuje ochotněji a utratí 20× víc, nad obchodem se ukáže „+… kr turisté“).
+- **Strach z pirátů:** když pirát dorazí ke stanici a začne útočit, každá loď čekající ve frontě s šancí 50 % uteče („Piráti! Mizím!“, počítá se mezi lodě, které odletěly bez placení). Dokud útok trvá, žádná nová loď nepřiletí.
 - Loď chce buď plnou nádrž, nebo galaxín jen za určitou částku („Chci galaxínu za 100 kreditů“).
 - S postupem levelu přilétá víc lodí a přibývají náročnější zákazníci.
 
@@ -150,12 +152,16 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 - Billboard s televizí na stanici. Běží na něm reklamy a pořady (texty jsou v `dialogue/lines.gd`).
 - Lodím ve frontě pomaleji ubývá trpělivost a pobavení zákazníci častěji nechávají dýško. Lodě ve frontě občas komentují, co běží v televizi.
 - Části stavby (celkem 2 000 kr a 15 s): základní deska (300 kr, 3 s), rampa na obrazovku (400 kr, 4 s), instalace obrazovky (900 kr, 5 s), napojení elektřiny (400 kr, 3 s). Bonusy platí až po zapojení elektřiny.
+- Level 4 přidá vedle televize **holoprojekci** (tančící hologram), level 5 **neonovou show** (světla nad televizí).
+- **Výherní automaty** (6 000 kr, instalace 10 s) jdou dokoupit zvlášť: každé 4 s si každá loď ve frontě s šancí 25 % zahraje a stanice vydělá 15–60 kr („+… kr automaty“).
 
 | Level | Cena | Doba vylepšení | Úbytek trpělivosti | Šance na dýško |
 |---|---|---|---|---|
 | 1 | 2 000 kr (stavba po částech) | 15 s (stavba) | −25 % | 12 % |
 | 2 | 3 000 kr | 8 s | −40 % | 14 % |
 | 3 | 5 000 kr | 12 s | −55 % | 16 % |
+| 4 (holoprojekce) | 8 000 kr | 14 s | −65 % | 18 % |
+| 5 (neonová show) | 12 000 kr | 16 s | −75 % | 20 % |
 
 ### Ekonomika galaxínu (od mise 3)
 V misích 1 a 2 je galaxínu neomezeně a stojí pevně 6 kr/j. S misí 3 se zapne ekonomika galaxínu a hráč dostane do zásobníku první várku 300 j zdarma. Od té chvíle platí:
@@ -204,6 +210,7 @@ V misích 1 a 2 je galaxínu neomezeně a stojí pevně 6 kr/j. S misí 3 se zap
 | Rychlé doručení | 2 000 kr, 6 s | 4 000 kr, 8 s | doba dodání (i zpoždění) ×0,7 / ×0,45 |
 | Větší cisterny | 2 500 kr, 6 s | 5 000 kr, 8 s | cisterna ×1,5 / ×2 |
 | Rychlé přečerpávání | 1 500 kr, 5 s | 3 000 kr, 7 s | přečerpávání ×1,6 / ×2,5 |
+| Čištění galaxínu | 2 000 kr, 6 s | 3 500 kr, 8 s | vyčistí 40 % / 70 % nekvalitního galaxínu z dodávky; level 3 (5 000 kr, 10 s) vyčistí všechno, takže levný Lojza je bez pokut |
 | Automatický dispečink | 6 000 kr, 10 s | – | objedná cisternu u vybraného dodavatele sám, když v zásobníku zbývá méně než 40 % (a hráč na ni má) |
 
 ### Obrana (od mise 5)
@@ -219,7 +226,7 @@ V misích 1 a 2 je galaxínu neomezeně a stojí pevně 6 kr/j. S misí 3 se zap
 - **Pumpík jako ochranka:** když stanice nemá žádnou hotovou věž, postaví se útočícímu pirátovi Pumpík a střílí po něm galaxínovým laserem z tankovací pistole (1 poškození za 0,9 s). Základního piráta sestřelí, ale po boji (i když pirát uletí) je **poškozený**: netankuje a lodě na plošinách čekají, dokud ho Bzučák neopraví (10 s). Poškozený Pumpík proti dalšímu pirátovi nebojuje.
 
 ### Piráti (od mise 5)
-- Přilétají každých 40–70 s (první 20 s po začátku mise). Zhruba po 3 minutách občas přiletí dva naráz, po 4 minutách i těžké dělové lodě.
+- Přilétají každých 40–70 s (první 20 s po začátku mise). Zhruba po 3 minutách občas přiletí dva naráz, po 4 minutách i těžké dělové lodě a po 7 minutách občas celá banda 3–4 lodí (šance 30 %).
 - Pirát si vybere jedno ze 6 míst kolem stanice, přiletí k němu z bližšího okraje obrazovky, natočí se k zásobníku a každých 2,5 s po něm vystřelí a **ukradne kredity** (nejvýš kolik hráč má). Po 5 krádežích odletí.
 - Během útoku bliká v HUD „Piráti útočí!“ a piráti mluví v bublinách.
 
@@ -227,6 +234,19 @@ V misích 1 a 2 je galaxínu neomezeně a stojí pevně 6 kr/j. S misí 3 se zap
 |---|---|---|
 | Nájezdník | 4 | 120 kr |
 | Dělová loď | 10 | 250 kr |
+
+- **Kořist:** ze sestřeleného nájezdníka s šancí 60 % (z dělové lodi vždy) vypadne kořist a zůstane se vznášet na místě. Bzučák pro ni doletí a za 2 s ji sebere (zařadí se do jeho fronty zakázek).
+  - **Trosky** vynesou 150–400 kr (z dělové lodi 400–900 kr).
+  - **Truhla s artefaktem** (šance 20 %, z dělové lodi 45 %). Nalezené artefakty vypíše Bzučákův info panel.
+
+| Artefakt | Co přinese |
+|---|---|
+| Rezavý pirátský kompas | prodá se za 1 200 kr |
+| Láhev staré galaxínové whisky | 1 800 kr |
+| Zlatá lebka | 2 500 kr |
+| Krystal čistého galaxínu | doplní do zásobníku 400 j galaxínu |
+| Pirátská vysílačka (jen jednou) | piráti útočí o 20 % méně často |
+| Mapa pirátských skrýší (jen jednou) | trosky vynesou o 50 % víc |
 
 - Původní nápad na pozdější fázi: piráti vystoupí z lodi a útočí na stanici pěšky.
 
@@ -298,7 +318,7 @@ Představuje ekonomiku galaxínu. Cíle jsou zatím provizorní, uprav je podle 
 **Startovní stav** (jen při startu od mise 3): 2 čerpací sloty (třetí nejde postavit), Pumpík s tankováním na levelu 6 a chůzí na levelu 5, zábavní systém na levelu 3, 3 000 kr, zásobník na levelu 1. Vždy: 300 j galaxínu zdarma, prodejní cena 6 kr/j, vybraný dodavatel Galaxis.
 
 **Cíle** (musí platit oba zároveň):
-- Mít na účtu **15 000 kr**.
+- Mít na účtu **6 000 kr**.
 - Vylepšit zásobník na **level 3**.
 
 **Co jde dělat:** rozšiřovat zásobník a všechno, co zbylo z mise 2 (Pumpík, zábavní systém, druhý slot).
@@ -306,7 +326,7 @@ Představuje ekonomiku galaxínu. Cíle jsou zatím provizorní, uprav je podle 
 **Lodě** přilétají každé 2–5 s (při běžné ceně), dál podle nastavené ceny.
 
 ### Tempo
-- Robotický hráč (výchozí cena, Galaxis, objednává při zásobníku pod polovinou) misi splnil za 16:26 při plynulé hře (cestou utrácel i za vylepšení Pumpíka) a za 9:10 při startu rovnou od mise 3 (jednotlivé běhy, vyvažováno nebylo).
+- Cíl byl původně 15 000 kr, snížen na 6 000 kr. S původním cílem robotický hráč (výchozí cena, Galaxis, objednává při zásobníku pod polovinou) misi splnil za 16:26 při plynulé hře (cestou utrácel i za vylepšení Pumpíka) a za 9:10 při startu rovnou od mise 3 (jednotlivé běhy, vyvažováno nebylo).
 
 ## Mise 4: Obchod a logistika
 

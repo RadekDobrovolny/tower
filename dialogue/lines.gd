@@ -151,6 +151,29 @@ const ANDROID_UPGRADE := [
 	"Upgrade nainstalován.",
 ]
 
+## Nákladní loď s velkou nádrží objednává.
+const FREIGHTER_ORDER := [
+	"Velkou nádrž, prosím. Opravdu velkou.",
+	"Do plna. Bude to chvíli trvat.",
+	"Plnou, vezu náklad přes půl galaxie.",
+]
+
+## Turisté po přistání (pak hodně utratí v obchodě).
+const TOURISTS := [
+	"Kde tu máte suvenýry?",
+	"Fotka s androidem! Jé, ten je roztomilý!",
+	"Tohle je ta slavná pumpa z průvodce?",
+	"Všichni vystupovat, máme dvacet minut nákupů!",
+]
+
+## Loď utíká z fronty, protože útočí piráti.
+const SHIP_SCARED := [
+	"Piráti! Mizím!",
+	"Tady natankuju jindy!",
+	"Nic jsem neviděl, už letím!",
+	"Galaxín za život nestojí!",
+]
+
 ## Pirát dorazil ke stanici a začíná útok.
 const PIRATE_ARRIVAL := [
 	"Kasu sem, pumpaři!",

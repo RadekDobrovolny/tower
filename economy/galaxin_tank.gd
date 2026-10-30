@@ -102,11 +102,11 @@ func draw(requested: float) -> float:
 
 
 ## Doplní galaxín. Vrátí, kolik jednotek se do zásobníku vešlo.
-func fill(units: float, low_quality: bool) -> float:
+## `low_quality_share` je podíl nekvalitního galaxínu v dodávce (0–1).
+func fill(units: float, low_quality_share: float) -> float:
 	var accepted := minf(units, free_space())
 	amount += accepted
-	if low_quality:
-		_low_quality += accepted
+	_low_quality += accepted * low_quality_share
 	return accepted
 
 
