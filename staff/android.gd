@@ -133,8 +133,8 @@ func _process(delta: float) -> void:
 	_since_hit += delta
 	_heal(delta)
 	_update_health_looks()
-	if damaged or _enemy:
-		# Při boji a s poškozením netankuje, lodě na plošinách počkají.
+	if damaged or _enemy or job:
+		# Při boji, rozbitý a během opravy netankuje, lodě na plošinách počkají.
 		_update_hoses(false)
 		_moved = false
 		if _enemy:
@@ -170,12 +170,12 @@ func _process(delta: float) -> void:
 
 ## Jestli android může vzít další loď.
 func is_available() -> bool:
-	return not damaged and _enemy == null and _ships.size() < max_parallel_ships
+	return not damaged and _enemy == null and job == null and _ships.size() < max_parallel_ships
 
 
 ## Jestli se může postavit pirátovi (není poškozený a s nikým jiným nebojuje).
 func can_fight() -> bool:
-	return not damaged and _enemy == null
+	return not damaged and _enemy == null and job == null
 
 
 func max_health() -> int:
@@ -199,15 +199,16 @@ func engage(pirate: Pirate) -> void:
 	_bubble.say(Lines.pick(Lines.ANDROID_FIGHT))
 
 
-## Oprava je hotová (dron nebo nanoboti): plná odolnost, a když byl rozbitý, zase tankuje.
+## Oprava je hotová (dron nebo nanoboti): plná odolnost a zase se vrátí do práce.
 func finish_repair() -> void:
 	health = max_health()
-	if not damaged:
-		return
+	var was_out := damaged or job != null
 	damaged = false
 	_update_looks()
-	_bubble.say(Lines.pick(Lines.ANDROID_REPAIRED))
-	free_for_ship.emit(self)
+	if was_out:
+		_bubble.say(Lines.pick(Lines.ANDROID_REPAIRED))
+		# Až v dalším snímku: stanice teprve po dokončení zakázky smaže `job`.
+		free_for_ship.emit.call_deferred(self)
 
 
 ## Cena dalšího levelu štítů nebo nanobotů, nebo -1 (maximum, nebo je mise ještě nenabízí).
@@ -321,6 +322,8 @@ func info_lines() -> PackedStringArray:
 		lines.append("Stav: bojuje s piráty!")
 	elif damaged:
 		lines.append("Stav: rozbitý po zásazích pirátů, netankuje.")
+	elif job:
+		lines.append("Stav: v opravě, netankuje.")
 	if job:
 		lines.append(job.status_text(station.drone))
 	return lines
@@ -435,6 +438,7 @@ func _heal(delta: float) -> void:
 				finish_repair()
 	elif job == null and not damaged and _since_hit > SAFE_AFTER:
 		station.request_repair(self)
+		_update_looks()
 
 
 func _update_health_looks() -> void:
@@ -460,4 +464,9 @@ func _update_looks() -> void:
 	var tint := Color.WHITE.lerp(FUEL_LEVELS[fuel_level - 1].color, LEVEL_TINT)
 	_sprite.modulate = tint * DAMAGED_TINT if damaged else tint
 	_damage_sparks.emitting = damaged
-	_level_label.text = "%s · poškozený" % display_name if damaged else display_name
+	if damaged:
+		_level_label.text = "%s · poškozený" % display_name
+	elif job:
+		_level_label.text = "%s · v opravě" % display_name
+	else:
+		_level_label.text = display_name

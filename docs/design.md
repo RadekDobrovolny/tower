@@ -10,7 +10,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 
 | Oblast | Rozhodnutí |
 |---|---|
-| Platforma | 2D, hraje se v prohlížeči, ovládání myší |
+| Platforma | 2D, hraje se v prohlížeči, ovládání myší nebo dotykem. Na telefonu se hraje na šířku přes celý displej (na výšku hra vyzve k otočení; na Androidu se po prvním dotyku přepne na celou obrazovku; jde přidat na plochu jako aplikace). Obraz se roztahuje podle poměru stran displeje. |
 | Pohled | Shora. Stanice je plošina, lodě přilétají z okolního vesmíru. |
 | Tankování | Lodě obsluhuje **personál**: zaměstnanec dojde k zakotvené lodi a natankuje ji. |
 | Boj | **Nepřímý**: věže a ochranka bojují samy, hráč staví a vylepšuje obranu předem i během útoku. |
@@ -228,7 +228,7 @@ V misích 1 a 2 je galaxínu neomezeně a stojí pevně 6 kr/j. S misí 3 se zap
 
 - **Pumpík jako ochranka:** když stanice nemá žádnou hotovou věž, postaví se útočícímu pirátovi Pumpík a střílí po něm galaxínovým laserem z tankovací pistole (1 poškození za 0,9 s). Během boje netankuje.
 - **Odolnost Pumpíka:** piráti střílejí přednostně po něm (každých 2,5 s, 1 zásah). Základní odolnost jsou 3 zásahy, nad Pumpíkem je při poškození vidět ukazatel. Když odolnost klesne na nulu, je **rozbitý**: netankuje, nebrání se a lodě na plošinách čekají. Teprve pak piráti střílejí po zásobníku a kradou kredity.
-- **Oprava:** rozbitého Pumpíka opraví Bzučák (10 s při základní rychlosti práce) a dostane plnou odolnost. Částečně poškozeného opraví, až na něj 4 s nikdo nestřílí. Oprava má v Bzučákově frontě **přednost** před vším ostatním, rozdělaná stavba si drží postup a počká.
+- **Oprava:** rozbitého Pumpíka opraví Bzučák (10 s při základní rychlosti práce) a dostane plnou odolnost. Částečně poškozeného opraví, až na něj 4 s nikdo nestřílí. Během opravy Pumpík stojí a netankuje (nad ním „Pumpík · v opravě“), po opravě se vrátí do práce. Oprava má v Bzučákově frontě **přednost** před vším ostatním, rozdělaná stavba si drží postup a počká.
 - **Vylepšení Pumpíka do boje** (od mise 5): **štíty** level 1 za 3 000 kr (odolnost 5), level 2 za 6 000 kr (odolnost 7); **nanoboti** level 1 za 4 000 kr (opraví 1 bod odolnosti za 6 s), level 2 za 7 000 kr (za 3 s). S nanoboty se Pumpík opravuje sám, i když je rozbitý, a Bzučáka nevolá.
 
 ### Piráti (od mise 5)

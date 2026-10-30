@@ -64,7 +64,7 @@ func _process(delta: float) -> void:
 			_speed = minf(_speed + ACCELERATION * delta, MAX_SPEED)
 			_current_speed = _speed
 			position += Vector2.from_angle(_body.rotation) * _speed * delta
-			if not get_viewport_rect().grow(OFFSCREEN_MARGIN).has_point(global_position):
+			if not Game.visible_world_rect(self).grow(OFFSCREEN_MARGIN).has_point(global_position):
 				queue_free()
 	_engine.target_throttle = 0.0 if state == State.UNLOADING \
 			else IDLE_THROTTLE + (1.0 - IDLE_THROTTLE) * clampf(_current_speed / MAX_SPEED, 0.0, 1.0)

@@ -789,8 +789,8 @@ func spawn_loot(at: Vector2, gunship: bool) -> void:
 		loot.credits = roundi(randi_range(credit_range.x, credit_range.y) * loot_bonus)
 	add_child(loot)
 	# Kořist zůstane na obrazovce, aby k ní dron doletěl a hráč ji viděl.
-	loot.global_position = at.clamp(get_viewport_rect().position + Vector2(40, 40),
-			get_viewport_rect().end - Vector2(40, 40))
+	var screen := Game.visible_world_rect(self)
+	loot.global_position = at.clamp(screen.position + Vector2(40, 40), screen.end - Vector2(40, 40))
 
 
 ## Dron přivezl artefakt: prodá se, nebo začne platit jeho účinek.

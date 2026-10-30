@@ -6,7 +6,7 @@ Návrh hry, otevřené otázky a plán vývoje jsou v [docs/design.md](docs/desi
 
 ## Technické volby
 - Renderer **Compatibility** (`gl_compatibility`), protože ho vyžaduje web export.
-- Rozlišení 1280×720, stretch `canvas_items` + aspect `keep`.
+- Základní rozlišení 1280×720, stretch `canvas_items` + aspect `expand`: obraz se roztáhne na celý displej podle jeho poměru stran (žádné černé pruhy). Kamera (`Camera` ve světě i v menu) drží střed hry (640, 360) uprostřed. Co závisí na okraji obrazovky (přílety, odlety, kořist), počítej z `Game.visible_world_rect(node)`, ne z `get_viewport_rect()`.
 - Hra je kontinuální: jedna scéna světa `res://game/world.tscn` se skriptem `game/campaign.gd` (`Campaign`) a mise za sebou. Mise jsou zdroje `missions/mission_*.tres` (třída `Mission`: pravidla, cíle, startovní stav), jejich pořadí určuje `missions/missions.gd`. Novou misi přidej tam.
 - Hlavní scéna je menu (`res://ui/main_menu.tscn`), kde se vybírá, od které mise začít (`Game.start_mission`). Startovní stav mise se použije jen tehdy, když hra začne od ní. Při plynulé hře se stav stanice přenáší a nová mise jen zapne svá pravidla (`Campaign._begin_mission`).
 - Ovládání je klikáním: `Station._unhandled_input` vybere objekt (android, zásobník, stavební dron, budova, prázdná parcela) a HUD otevře info panel. Každý vybratelný objekt má `info_title()`, `info_lines()` a `info_actions() -> Array[ShopItem]` (text, cena nebo -1, akce). Akce s cenou -1 (teď nejde koupit) HUD vůbec nezobrazí, na co hráč nemá, ukáže šedě. Nové vylepšení přidáš do `info_actions()` daného objektu.
@@ -42,6 +42,7 @@ Návrh hry, otevřené otázky a plán vývoje jsou v [docs/design.md](docs/desi
 - Preset „Web“ v `export_presets.cfg` je bez vláken (`thread_support=false`), takže hra funguje i na itch.io bez hlaviček COOP/COEP.
 - Export: `godot --headless --path . --export-release "Web" build/web/index.html` (složka `build/` je v `.gitignore`).
 - Lokální test: konfigurace `web` v `.claude/launch.json` spustí server na portu 8060 nad `build/web`.
+- Telefon: `html/head_include` v exportu přidává výzvu „Otoč telefon na šířku“ (na výšku na dotykových zařízeních) a po prvním dotyku přepne hru na celou obrazovku a zamkne ji na šířku (kde to prohlížeč umí, Android). Export je zároveň PWA (`progressive_web_app/*`, celá obrazovka, na šířku), takže po přidání na plochu běží jako aplikace i na iPhonu.
 - Nasazení: workflow `.github/workflows/pages.yml` při každém pushi do `main` stáhne Godot a webové šablony (verze v `GODOT_VERSION`, po prvním běhu jsou v cache), vyexportuje hru a nasadí ji na GitHub Pages: https://radekdobrovolny.github.io/tower/. Když povýšíš Godot, změň verzi i tam. V nastavení repozitáře musí být Pages → Source „GitHub Actions“.
 - Na čisté kopii repozitáře vypíše `--import` na začátku chyby o fontech z `game_theme.tres` (téma se načte dřív, než se fonty naimportují). Jsou neškodné, export po importu proběhne bez chyb.
 - Nainstalované jsou jen webové šablony Godotu 4.7.2. Pro jiné platformy je doinstaluj přes Editor → Manage Export Templates.

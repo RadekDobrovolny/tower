@@ -39,7 +39,7 @@ func _spawn_ship() -> void:
 ## Náhodný bod za horním, levým nebo pravým okrajem obrazovky. Spodní okraj
 ## vynecháváme, aby lodě zbytečně nepřelétaly přes celou stanici.
 func _random_point_outside_screen(margin: float) -> Vector2:
-	var rect := get_viewport().get_visible_rect()
+	var rect := Game.visible_world_rect(station)
 	var max_side_y := rect.position.y + rect.size.y * 0.6
 	match randi() % 3:
 		0:

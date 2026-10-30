@@ -52,6 +52,13 @@ func record_pirate_shot() -> void:
 	stats_changed.emit()
 
 
+## Část světa, která je právě vidět na obrazovce (ve světových souřadnicích). Obraz se
+## roztahuje podle poměru stran displeje (aspect „expand“) a kamera drží střed hry
+## uprostřed, takže viditelná oblast může být širší nebo vyšší než základních 1280×720.
+static func visible_world_rect(item: CanvasItem) -> Rect2:
+	return item.get_canvas_transform().affine_inverse() * item.get_viewport_rect()
+
+
 ## Naformátuje číslo s mezerami mezi tisíci, např. 10000 → „10 000“.
 static func format_number(value: int) -> String:
 	var digits := str(absi(value))

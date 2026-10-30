@@ -101,7 +101,7 @@ func is_attacking() -> bool:
 
 ## Jestli na něj jde střílet: je ve hře a na obrazovce.
 func is_targetable() -> bool:
-	return state != State.DESTROYED and get_viewport_rect().has_point(global_position)
+	return state != State.DESTROYED and Game.visible_world_rect(self).has_point(global_position)
 
 
 ## Zásah za `damage`. Vrátí true, když ho tenhle zásah sestřelil.
@@ -187,7 +187,7 @@ func _fly_away(delta: float) -> void:
 	_speed = minf(_speed + 260.0 * delta, max_speed)
 	global_position += Vector2.from_angle(_body.rotation) * _speed * delta
 	_engine.target_throttle = 0.4 + 0.6 * _speed / max_speed
-	if not get_viewport_rect().grow(OFFSCREEN_MARGIN).has_point(global_position):
+	if not Game.visible_world_rect(self).grow(OFFSCREEN_MARGIN).has_point(global_position):
 		_finish()
 
 

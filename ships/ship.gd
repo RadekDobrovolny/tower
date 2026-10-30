@@ -349,5 +349,5 @@ func _fly_away(delta: float) -> void:
 	global_position += Vector2.from_angle(_body.rotation) * _speed * delta
 	var lift := clampf(global_position.distance_to(_takeoff_point) / APPROACH_RADIUS, 0.0, 1.0)
 	_body.scale = Vector2.ONE * lerpf(_takeoff_scale, FLIGHT_SCALE, lift)
-	if not get_viewport_rect().grow(OFFSCREEN_MARGIN).has_point(global_position):
+	if not Game.visible_world_rect(self).grow(OFFSCREEN_MARGIN).has_point(global_position):
 		queue_free()

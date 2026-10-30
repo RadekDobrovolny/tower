@@ -16,6 +16,9 @@ position = Vector2(1080, 170)
 scale = Vector2(0.6, 0.6)
 texture = ExtResource("9_planet")
 
+[node name="Camera" type="Camera2D" parent="."]
+position = Vector2(640, 360)
+
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="Center" type="CenterContainer" parent="UI"]

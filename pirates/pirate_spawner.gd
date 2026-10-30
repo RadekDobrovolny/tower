@@ -78,6 +78,6 @@ func _free_attack_points() -> Array[Vector2]:
 
 ## Místo za levým nebo pravým okrajem obrazovky, podle toho, ke kterému má cíl blíž.
 func _spawn_position(target: Vector2) -> Vector2:
-	var screen := station.get_viewport_rect()
+	var screen := Game.visible_world_rect(station)
 	var x := screen.position.x - SPAWN_MARGIN if target.x < screen.get_center().x else screen.end.x + SPAWN_MARGIN
 	return Vector2(x, clampf(target.y + randf_range(-200.0, 200.0), 0.0, screen.end.y))
