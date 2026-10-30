@@ -40,4 +40,6 @@ Návrh hry, otevřené otázky a plán vývoje jsou v [docs/design.md](docs/desi
 - Preset „Web“ v `export_presets.cfg` je bez vláken (`thread_support=false`), takže hra funguje i na itch.io bez hlaviček COOP/COEP.
 - Export: `godot --headless --path . --export-release "Web" build/web/index.html` (složka `build/` je v `.gitignore`).
 - Lokální test: konfigurace `web` v `.claude/launch.json` spustí server na portu 8060 nad `build/web`.
+- Nasazení: workflow `.github/workflows/pages.yml` při každém pushi do `main` stáhne Godot a webové šablony (verze v `GODOT_VERSION`, po prvním běhu jsou v cache), vyexportuje hru a nasadí ji na GitHub Pages: https://radekdobrovolny.github.io/tower/. Když povýšíš Godot, změň verzi i tam. V nastavení repozitáře musí být Pages → Source „GitHub Actions“.
+- Na čisté kopii repozitáře vypíše `--import` na začátku chyby o fontech z `game_theme.tres` (téma se načte dřív, než se fonty naimportují). Jsou neškodné, export po importu proběhne bez chyb.
 - Nainstalované jsou jen webové šablony Godotu 4.7.2. Pro jiné platformy je doinstaluj přes Editor → Manage Export Templates.

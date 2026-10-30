@@ -1,0 +1,81 @@
+# Při každém pushi do main vyexportuje hru pro web a nasadí ji na GitHub Pages
+# (https://radekdobrovolny.github.io/tower/). Export je bez vláken, takže Pages
+# nemusí posílat hlavičky COOP/COEP.
+
+name: Web na GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Nasazuje se vždy jen nejnovější push, starší rozběhnutý build se zruší.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+env:
+  GODOT_VERSION: 4.7.2
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # Godot a webové šablony se stahují jen poprvé (a po změně verze), pak jsou v cache.
+      - name: Cache Godotu a webových šablon
+        id: godot-cache
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/godot
+            ~/.local/share/godot/export_templates
+          key: godot-${{ env.GODOT_VERSION }}-web-nothreads
+
+      - name: Stáhnout Godot a webové šablony
+        if: steps.godot-cache.outputs.cache-hit != 'true'
+        run: |
+          base="https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable"
+          mkdir -p ~/godot
+          curl -fsSL -o /tmp/godot.zip "$base/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          unzip -q /tmp/godot.zip -d ~/godot
+          mv ~/godot/Godot_v${GODOT_VERSION}-stable_linux.x86_64 ~/godot/godot
+          # Balík šablon má přes 1 GB, ze kterého potřebujeme jen web bez vláken.
+          curl -fsSL -o /tmp/templates.tpz "$base/Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
+          templates=~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+          mkdir -p "$templates"
+          unzip -q -j /tmp/templates.tpz templates/web_nothreads_release.zip templates/version.txt -d "$templates"
+          rm /tmp/godot.zip /tmp/templates.tpz
+
+      - name: Import assetů
+        run: ~/godot/godot --headless --path . --import
+
+      - name: Export pro web
+        run: |
+          mkdir -p build/web
+          ~/godot/godot --headless --path . --export-release "Web" build/web/index.html
+          test -s build/web/index.pck
+          test -s build/web/index.wasm
+
+      - uses: actions/configure-pages@v6
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: build/web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Nasadit na GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
