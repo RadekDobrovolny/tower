@@ -39,6 +39,7 @@ var _goal_rows: Array[Dictionary] = []
 @onready var _info_text: RichTextLabel = %InfoText
 @onready var _info_actions: VBoxContainer = %InfoActions
 @onready var _hint: Label = $HintLabel
+@onready var _pirate_alert: Label = $PirateAlert
 @onready var _mission_popup: Control = $MissionPopup
 @onready var _mission_title: Label = %MissionTitle
 @onready var _mission_body: RichTextLabel = %MissionBody
@@ -65,6 +66,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_roll_credits(delta)
+	_update_pirate_alert()
 	if _galaxin_panel_ready:
 		_refresh_galaxin_panel()
 	if _info_panel.visible:
@@ -120,6 +122,15 @@ func _on_credits_changed(credits: int) -> void:
 		_pulse_credits(credits > _last_credits)
 	_last_credits = credits
 	_request_refresh()
+
+
+## Varování nahoře bliká, dokud nějaký pirát útočí.
+func _update_pirate_alert() -> void:
+	var attacking := get_tree().get_nodes_in_group("pirates").any(
+			func(pirate: Node) -> bool: return pirate.is_attacking())
+	_pirate_alert.visible = attacking
+	if attacking:
+		_pirate_alert.modulate.a = 0.6 + 0.4 * sin(Time.get_ticks_msec() / 150.0)
 
 
 ## Počítadlo kreditů nedoskočí hned, ale rychle „dojede“ ke skutečné hodnotě.
@@ -349,8 +360,12 @@ func _refresh_galaxin_panel() -> void:
 		_order_button.set_label("Cisterna je objednaná")
 		_order_button.set_cost(-1)
 		_order_button.set_enabled(false)
-	elif supply.order_units() <= 0:
+	elif supply.max_order_units() <= 0:
 		_order_button.set_label("Zásobník je plný")
+		_order_button.set_cost(-1)
+		_order_button.set_enabled(false)
+	elif supply.order_units() <= 0:
+		_order_button.set_label("Na cisternu nemáš kredity")
 		_order_button.set_cost(-1)
 		_order_button.set_enabled(false)
 	else:

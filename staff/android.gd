@@ -4,6 +4,8 @@ extends Node2D
 ## Android, který chodí k zakotveným lodím a tankuje je. Zvládne obsluhovat víc lodí
 ## najednou: postaví se mezi ně a ke každé natáhne hadici.
 ## Zvlášť se vylepšuje rychlost tankování a rychlost chůze (okamžitě, bez stavby).
+## Když stanice nemá obrannou věž, střílí po pirátech z tankovací pistole (galaxínovým
+## laserem). Po boji je poškozený: netankuje, dokud ho stavební dron neopraví.
 
 ## Android může vzít další loď (dotankoval nebo má volnou hadici).
 signal free_for_ship(android: Android)
@@ -43,6 +45,15 @@ const IDLE_FPS := 6.0
 const PUMP_FPS := 8.0
 ## Kolik pixelů ujde za jeden cyklus chůze (dva kroky). Rychlejší Pumpík proto rychleji kmitá nohama.
 const WALK_STRIDE := 64.0
+## Boj s piráty: prodleva mezi výstřely (s), poškození jednoho výstřelu a jak dlouho trvá oprava.
+const SHOT_INTERVAL := 0.9
+const SHOT_DAMAGE := 1
+const REPAIR_TIME := 10.0
+const BLAST_TIME := 0.12
+## Ústí tankovací pistole vůči středu androida (odtud letí laser).
+const NOZZLE := Vector2(-9, 22)
+## Jak moc poškozený android ztmavne.
+const DAMAGED_TINT := Color(0.55, 0.5, 0.5)
 
 @export var display_name := "Pumpík"
 ## Jméno v 5. pádě, kterým ho oslovují lodě.
@@ -56,6 +67,10 @@ var walk_level := 1
 var max_level := FUEL_LEVELS.size()
 ## Stanice, ze které android čerpá galaxín. Nastaví ji stanice.
 var station: Station
+## Po boji s piráty: netankuje, dokud ho dron neopraví.
+var damaged := false
+## Zakázka stavebního drona na opravu, nebo null.
+var job: ConstructionJob
 
 ## Lodě, které android právě obsluhuje.
 var _ships: Array[Ship] = []
@@ -66,11 +81,17 @@ var _animation := ""
 var _animation_time := 0.0
 ## Jestli se android v tomto snímku pohnul (pro animaci chůze).
 var _moved := false
+## Pirát, se kterým android bojuje, nebo null.
+var _enemy: Pirate
+var _shot_cooldown := 0.0
+var _blast_left := 0.0
 
 @onready var _sprite: Sprite2D = $Sprite
 @onready var _hoses: Array[Line2D] = [$Hose1, $Hose2]
 @onready var _level_label: Label = $LevelLabel
 @onready var _bubble: SpeechBubble = $SpeechBubble
+@onready var _blaster: Line2D = $Blaster
+@onready var _damage_sparks: CPUParticles2D = $DamageSparks
 
 
 func _ready() -> void:
@@ -79,6 +100,16 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	_blast_left -= delta
+	_blaster.visible = _blast_left > 0.0
+	if damaged or _enemy:
+		# Při boji a s poškozením netankuje, lodě na plošinách počkají.
+		_update_hoses(false)
+		_moved = false
+		if _enemy:
+			_fight(delta)
+		_animate(delta)
+		return
 	if _ships.is_empty():
 		_update_hoses(false)
 		_walk_to(_home, delta)
@@ -108,7 +139,26 @@ func _process(delta: float) -> void:
 
 ## Jestli android může vzít další loď.
 func is_available() -> bool:
-	return _ships.size() < max_parallel_ships
+	return not damaged and _enemy == null and _ships.size() < max_parallel_ships
+
+
+## Jestli se může postavit pirátovi (není poškozený a s nikým jiným nebojuje).
+func can_fight() -> bool:
+	return not damaged and _enemy == null
+
+
+func engage(pirate: Pirate) -> void:
+	_enemy = pirate
+	_shot_cooldown = SHOT_INTERVAL * 0.5
+	_bubble.say(Lines.pick(Lines.ANDROID_FIGHT))
+
+
+## Oprava stavebním dronem je hotová, android zase tankuje.
+func finish_repair() -> void:
+	damaged = false
+	_update_looks()
+	_bubble.say(Lines.pick(Lines.ANDROID_REPAIRED))
+	free_for_ship.emit(self)
 
 
 ## Přestane obsluhovat loď (např. když to vzdala a odlétá).
@@ -176,12 +226,19 @@ func info_title() -> String:
 
 
 func info_lines() -> PackedStringArray:
-	return PackedStringArray([
+	var lines := PackedStringArray([
 		"Android, který tankuje lodě. Zvládne obsluhovat dvě lodě najednou.",
 		"Tankování: level %d (%d j/s)" % [fuel_level, roundi(fuel_rate())],
 		"Chůze: level %d (%d px/s)" % [walk_level, roundi(walk_speed())],
 		"Právě obsluhuje lodí: %d / %d" % [_ships.size(), max_parallel_ships],
 	])
+	if _enemy:
+		lines.append("Stav: bojuje s piráty!")
+	elif damaged:
+		lines.append("Stav: poškozený po boji s piráty, netankuje.")
+		if job:
+			lines.append(job.status_text(station.drone))
+	return lines
 
 
 func info_actions() -> Array[ShopItem]:
@@ -236,14 +293,37 @@ func _walk_to(target: Vector2, delta: float) -> bool:
 	return global_position.is_equal_approx(target)
 
 
-## Chůze, když se hýbe; tankování, když má napojenou hadici; jinak klid.
+## Chůze, když se hýbe; tankování (i střelba z pistole), když má napojenou hadici nebo
+## bojuje; jinak klid (poškozený jen pomalu).
 func _animate(delta: float) -> void:
 	if _moved:
 		_play("walk", walk_speed() / WALK_STRIDE * ANIMATION_FRAMES, delta)
-	elif _hoses[0].visible:
+	elif _hoses[0].visible or _enemy:
 		_play("pump", PUMP_FPS, delta)
 	else:
-		_play("idle", IDLE_FPS, delta)
+		_play("idle", IDLE_FPS * (0.4 if damaged else 1.0), delta)
+
+
+func _fight(delta: float) -> void:
+	if not is_instance_valid(_enemy) or not _enemy.is_attacking():
+		_end_fight()
+		return
+	_shot_cooldown -= delta
+	if _shot_cooldown > 0.0:
+		return
+	_shot_cooldown = SHOT_INTERVAL
+	_blaster.points = PackedVector2Array([NOZZLE, to_local(_enemy.global_position)])
+	_blast_left = BLAST_TIME
+	_enemy.hit(SHOT_DAMAGE)
+
+
+## Po boji (pirát padl nebo odletěl) je android poškozený a čeká na opravu.
+func _end_fight() -> void:
+	_enemy = null
+	damaged = true
+	_update_looks()
+	_bubble.say(Lines.pick(Lines.ANDROID_DAMAGED))
+	station.request_repair(self)
 
 
 func _play(animation: String, fps: float, delta: float) -> void:
@@ -256,5 +336,7 @@ func _play(animation: String, fps: float, delta: float) -> void:
 
 
 func _update_looks() -> void:
-	_sprite.modulate = Color.WHITE.lerp(FUEL_LEVELS[fuel_level - 1].color, LEVEL_TINT)
-	_level_label.text = display_name
+	var tint := Color.WHITE.lerp(FUEL_LEVELS[fuel_level - 1].color, LEVEL_TINT)
+	_sprite.modulate = tint * DAMAGED_TINT if damaged else tint
+	_damage_sparks.emitting = damaged
+	_level_label.text = "%s · poškozený" % display_name if damaged else display_name

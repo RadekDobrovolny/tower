@@ -1,0 +1,86 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://pirates/pirate.gd" id="1_pirate"]
+[ext_resource type="PackedScene" path="res://fx/engine_flame.tscn" id="2_engine"]
+[ext_resource type="Shader" path="res://fx/hull_rim.gdshader" id="3_rim"]
+[ext_resource type="Texture2D" path="res://assets/sprites/pirates/raider.png" id="4_raider"]
+[ext_resource type="Material" path="res://fx/additive.tres" id="5_additive"]
+[ext_resource type="Texture2D" path="res://fx/soft_light.tres" id="6_light"]
+[ext_resource type="PackedScene" path="res://ui/speech_bubble.tscn" id="7_bubble"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rim"]
+shader = ExtResource("3_rim")
+shader_parameter/rim_color = Color(1, 0.55, 0.5, 1)
+shader_parameter/rim_strength = 0.8
+
+[sub_resource type="Gradient" id="Gradient_sparks"]
+offsets = PackedFloat32Array(0, 1)
+colors = PackedColorArray(1, 0.95, 0.7, 1, 1, 0.4, 0.2, 0)
+
+[sub_resource type="Gradient" id="Gradient_explosion"]
+offsets = PackedFloat32Array(0, 0.3, 1)
+colors = PackedColorArray(1, 0.95, 0.75, 1, 1, 0.45, 0.15, 0.9, 0.5, 0.1, 0.15, 0)
+
+[node name="Pirate" type="Node2D"]
+z_index = 4
+script = ExtResource("1_pirate")
+
+[node name="Body" type="Node2D" parent="."]
+
+[node name="EngineFlame" parent="Body" instance=ExtResource("2_engine")]
+position = Vector2(-28, 0)
+
+[node name="Sprite" type="Sprite2D" parent="Body"]
+material = SubResource("ShaderMaterial_rim")
+scale = Vector2(0.34, 0.34)
+texture = ExtResource("4_raider")
+
+[node name="Laser" type="Line2D" parent="."]
+visible = false
+material = ExtResource("5_additive")
+width = 3.0
+default_color = Color(1, 0.2, 0.15, 1)
+
+[node name="HitSparks" type="CPUParticles2D" parent="."]
+material = ExtResource("5_additive")
+emitting = false
+texture = ExtResource("6_light")
+amount = 14
+lifetime = 0.35
+one_shot = true
+explosiveness = 0.9
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 60.0
+initial_velocity_max = 140.0
+scale_amount_min = 0.04
+scale_amount_max = 0.08
+color_ramp = SubResource("Gradient_sparks")
+
+[node name="Explosion" type="CPUParticles2D" parent="."]
+material = ExtResource("5_additive")
+emitting = false
+texture = ExtResource("6_light")
+amount = 48
+lifetime = 0.9
+one_shot = true
+explosiveness = 0.95
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 40.0
+initial_velocity_max = 190.0
+damping_min = 60.0
+damping_max = 120.0
+scale_amount_min = 0.08
+scale_amount_max = 0.28
+color_ramp = SubResource("Gradient_explosion")
+
+[node name="BlastLight" type="PointLight2D" parent="."]
+visible = false
+color = Color(1, 0.6, 0.3, 1)
+energy = 0.0
+texture = ExtResource("6_light")
+texture_scale = 2.5
+
+[node name="SpeechBubble" parent="." instance=ExtResource("7_bubble")]
+height = 40.0

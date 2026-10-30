@@ -53,6 +53,12 @@ func _process(delta: float) -> bool:
 			return true
 		return false
 	_total += delta
+	# Nejdřív galaxín (bez něj nejsou tržby), pak teprve nákupy.
+	var station = _world.station
+	if station.galaxin_economy and station.tank.amount < station.tank.capacity() / 2.0:
+		var cost: int = station.supply.order_cost()
+		if station.supply.order():
+			_log("objednána cisterna (-%s kr)" % _game.format_number(cost))
 	for item in _world.get_shop_items():
 		var cost: int = item.cost.call()
 		if cost < 0 or _game.credits < cost:
@@ -60,11 +66,6 @@ func _process(delta: float) -> bool:
 		var label: String = item.label.call()
 		if item.buy.call():
 			_log("%s (-%s kr)" % [label, _game.format_number(cost)])
-	var station = _world.station
-	if station.galaxin_economy and station.tank.amount < station.tank.capacity() / 2.0:
-		var cost: int = station.supply.order_cost()
-		if station.supply.order():
-			_log("objednána cisterna (-%s kr)" % _game.format_number(cost))
 	if _total >= _next_report:
 		_next_report += REPORT_EVERY
 		_log("kredity %s, obslouženo %d, odletělo %d" % [

@@ -144,6 +144,9 @@ func info_lines() -> PackedStringArray:
 		lines.append("Nekvalitní galaxín: %d %% obsahu" % roundi(low_quality_share() * 100.0))
 	if job:
 		lines.append(job.status_text(station.drone))
+	if station.control_center_cost() >= 0:
+		lines.append("K zásobníku jde přistavět řídící centrum: 3 části, celkem %s kr. Vylepší dodávky a umí objednávat samo."
+				% Game.format_number(_control_center_total()))
 	return lines
 
 
@@ -151,7 +154,16 @@ func info_actions() -> Array[ShopItem]:
 	var actions: Array[ShopItem] = []
 	if not unlimited:
 		actions.append(ShopItem.new(_upgrade_label, next_upgrade_cost, start_upgrade, ShopItem.Kind.UPGRADE))
+		actions.append(ShopItem.new(func() -> String: return "Přistavět řídící centrum",
+				station.control_center_cost, station.build_control_center))
 	return actions
+
+
+func _control_center_total() -> int:
+	var total := 0
+	for phase in ControlCenter.PHASES:
+		total += phase.cost
+	return total
 
 
 func _upgrade_label() -> String:

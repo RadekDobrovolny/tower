@@ -151,6 +151,45 @@ const ANDROID_UPGRADE := [
 	"Upgrade nainstalován.",
 ]
 
+## Pirát dorazil ke stanici a začíná útok.
+const PIRATE_ARRIVAL := [
+	"Kasu sem, pumpaři!",
+	"Tohle je přepadení!",
+	"Kredity, nebo to tu rozstřílím!",
+	"Hezká stanička. Škoda by jí bylo.",
+]
+
+## Pirát se posmívá při krádeži.
+const PIRATE_TAUNT := [
+	"Díky za příspěvek!",
+	"Tohle si beru jako dýško.",
+	"Galaxín si nech, chceme prachy!",
+	"Ještě kousek a jdem.",
+]
+
+## Android se staví pirátovi.
+const ANDROID_FIGHT := [
+	"Takhle ne, kamaráde!",
+	"Pistole nabitá galaxínem!",
+	"Ze stanice ruce pryč!",
+	"Ochranka je v práci!",
+]
+
+## Android je po boji poškozený.
+const ANDROID_DAMAGED := [
+	"Au, jiskří mi to v kloubech...",
+	"Potřebuju servis.",
+	"Bzučáku, pomoc!",
+	"Chvilku netankuju, jsem na kusy.",
+]
+
+## Android je zase opravený.
+const ANDROID_REPAIRED := [
+	"Zase jako nový!",
+	"Díky, Bzučáku!",
+	"Zpátky k hadici!",
+]
+
 
 ## Vybere náhodnou hlášku a doplní do ní hodnoty, např. {"android": "Pumpíku"}.
 static func pick(lines: Array, values := {}) -> String:

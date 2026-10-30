@@ -10,6 +10,7 @@ var start_mission := 0
 var credits := 0
 var ships_served := 0
 var ships_lost := 0
+var pirates_shot := 0
 
 
 ## Vynuluje stav na začátku hry. Hráč může začínat s nějakými kredity.
@@ -17,6 +18,7 @@ func reset(start_credits := 0) -> void:
 	credits = start_credits
 	ships_served = 0
 	ships_lost = 0
+	pirates_shot = 0
 	credits_changed.emit(credits)
 	stats_changed.emit()
 
@@ -42,6 +44,11 @@ func record_ship_served() -> void:
 
 func record_ship_lost() -> void:
 	ships_lost += 1
+	stats_changed.emit()
+
+
+func record_pirate_shot() -> void:
+	pirates_shot += 1
 	stats_changed.emit()
 
 

@@ -3,6 +3,7 @@ extends Node2D
 
 ## Objednávky galaxínu od dodavatelů. Hráč zaplatí cisternu předem, ta po čase přiletí
 ## k zásobníku a přečerpá galaxín. Za to, co nedoveze nebo co se nevejde, vrátí peníze.
+## Řídící centrum u zásobníku dodávky vylepšuje a s dispečinkem objednává cisterny samo.
 
 enum State { IDLE, ORDERED, ARRIVING, UNLOADING }
 
@@ -10,6 +11,7 @@ const TANKER_SCENE := preload("res://economy/tanker.tscn")
 ## Jak rychle cisterna přečerpává do zásobníku (jednotky/s).
 const UNLOAD_RATE := 150.0
 const REFUND_COLOR := Color(0.45, 0.95, 0.85)
+const DISPATCH_COLOR := Color(0.55, 0.85, 1.0)
 
 ## Dodavatelé: cena za jednotku, velikost cisterny, doba dodání (s), šance a délka
 ## zpoždění (s), šance a rozsah poloprázdné cisterny (podíl objednaného), kvalita a barva.
@@ -41,8 +43,9 @@ const SUPPLIERS := [
 @export var dock_position := Vector2(-230, 85)
 @export var spawn_position := Vector2(-780, 60)
 
-## Zásobník, do kterého se přečerpává. Nastaví ho stanice.
+## Zásobník, do kterého se přečerpává, a stanice (kvůli řídícímu centru). Nastaví je stanice.
 var tank: GalaxinTank
+var station: Station
 ## Index vybraného dodavatele v SUPPLIERS.
 var selected := 1
 var state := State.IDLE
@@ -59,13 +62,15 @@ var _tanker: Tanker
 
 func _process(delta: float) -> void:
 	match state:
+		State.IDLE:
+			_dispatch()
 		State.ORDERED:
 			_time_left -= delta
 			_expected_left -= delta
 			if _time_left <= 0.0:
 				_send_tanker()
 		State.UNLOADING:
-			var units := minf(UNLOAD_RATE * delta, _units_to_deliver - _delivered)
+			var units := minf(UNLOAD_RATE * _modifier("unloading") * delta, _units_to_deliver - _delivered)
 			var accepted := tank.fill(units, _supplier.low_quality)
 			_delivered += accepted
 			if accepted < units or _delivered >= _units_to_deliver:
@@ -76,9 +81,15 @@ func selected_supplier() -> Dictionary:
 	return SUPPLIERS[selected]
 
 
-## Kolik jednotek by šlo teď objednat (velikost cisterny, ale nejvýš volné místo v zásobníku).
+## Kolik jednotek by šlo teď objednat: velikost cisterny, ale nejvýš volné místo v zásobníku
+## a nejvýš tolik, kolik hráč zaplatí (aby se hra nezasekla, když dojde galaxín i kredity).
 func order_units() -> int:
-	return mini(selected_supplier().units, floori(tank.free_space()))
+	return mini(max_order_units(), floori(maxi(Game.credits, 0) / selected_supplier().price))
+
+
+## Kolik jednotek by šlo objednat, kdyby na to hráč měl.
+func max_order_units() -> int:
+	return mini(roundi(selected_supplier().units * _modifier("capacity")), floori(tank.free_space()))
 
 
 func order_cost() -> int:
@@ -97,14 +108,16 @@ func order() -> bool:
 	_ordered_units = order_units()
 	Game.spend_credits(order_cost())
 	_units_to_deliver = _ordered_units
-	if randf() < _supplier.short_chance:
+	var reliability: float = _modifier("reliability")
+	var speed: float = _modifier("speed")
+	if randf() < _supplier.short_chance * reliability:
 		_units_to_deliver *= randf_range(_supplier.short_min, _supplier.short_max)
 	_delivered = 0.0
-	_expected_left = _supplier.lead_time
-	_time_left = _supplier.lead_time
-	_late = randf() < _supplier.delay_chance
+	_expected_left = _supplier.lead_time * speed
+	_time_left = _expected_left
+	_late = randf() < _supplier.delay_chance * reliability
 	if _late:
-		_time_left += randf_range(_supplier.delay_min, _supplier.delay_max)
+		_time_left += randf_range(_supplier.delay_min, _supplier.delay_max) * speed
 	state = State.ORDERED
 	return true
 
@@ -120,6 +133,8 @@ func status_text() -> String:
 			return "Cisterna přilétá"
 		State.UNLOADING:
 			return "Přečerpávání: %d / %d j" % [roundi(_delivered), _ordered_units]
+	if station and station.has_dispatch():
+		return "Dispečink hlídá zásobník"
 	return "Žádná cisterna na cestě"
 
 
@@ -152,3 +167,20 @@ func _finish_delivery() -> void:
 	_tanker.leave()
 	_tanker = null
 	state = State.IDLE
+
+
+## Účinek vylepšení řídícího centra (bez centra jako bez vylepšení).
+func _modifier(id: String) -> Variant:
+	if station and station.control_center:
+		return station.control_center.value(id)
+	return ControlCenter.base_value(id)
+
+
+## Automatický dispečink: když galaxín v zásobníku klesne pod hranici, objedná cisternu
+## u vybraného dodavatele (pokud na to hráč má).
+func _dispatch() -> void:
+	if not _modifier("dispatch") or tank.amount >= tank.capacity() * ControlCenter.DISPATCH_SHARE:
+		return
+	if order():
+		FloatingText.spawn(self, station.to_local(station.control_center.global_position) + Vector2(0, -50),
+				"Dispečink objednal cisternu", DISPATCH_COLOR)

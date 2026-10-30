@@ -23,6 +23,14 @@ extends Resource
 ## Rozmezí v sekundách mezi přílety lodí (při běžné ceně galaxínu).
 @export var ship_interval_min := 3.0
 @export var ship_interval_max := 7.0
+## Jestli jde postavit obchod, řídící centrum u zásobníku a obranné věže.
+@export var shop_available := false
+@export var control_center_available := false
+@export var tower_available := false
+## Jestli na stanici útočí piráti a rozmezí v sekundách mezi útoky.
+@export var pirates := false
+@export var pirate_interval_min := 40.0
+@export var pirate_interval_max := 70.0
 
 @export_group("Cíle")
 ## Kolik kreditů musí mít hráč zároveň na účtu. Cíle s hodnotou 0 se nepoužívají.
@@ -31,6 +39,13 @@ extends Resource
 @export var goal_fuel_level := 0
 @export var goal_entertainment_level := 0
 @export var goal_tank_level := 0
+## Kolik druhů zboží navíc musí obchod prodávat.
+@export var goal_shop_products := 0
+## Jestli musí řídící centrum objednávat samo (automatický dispečink).
+@export var goal_dispatch := false
+@export var goal_tower_level := 0
+## Kolik pirátů musí stanice sestřelit (věží i androidem).
+@export var goal_pirates_shot := 0
 
 @export_group("Start při výběru z menu")
 @export var start_credits := 0
@@ -40,3 +55,9 @@ extends Resource
 @export var start_entertainment_level := 0
 @export var start_slots := 1
 @export var start_tank_level := 1
+## -1 = bez obchodu, jinak kolik druhů zboží navíc obchod prodává.
+@export var start_shop_products := -1
+## 0 = bez řídícího centra, 1 = postavené, 2 = i s automatickým dispečinkem.
+@export var start_control_center := 0
+## 0 = bez obranné věže.
+@export var start_tower_level := 0

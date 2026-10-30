@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://station/station.tscn" id="3_station"]
 [ext_resource type="Script" path="res://ships/ship_spawner.gd" id="4_spawner"]
 [ext_resource type="PackedScene" path="res://ui/hud.tscn" id="5_hud"]
+[ext_resource type="Script" path="res://pirates/pirate_spawner.gd" id="6_pirates"]
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_campaign")
@@ -24,9 +25,16 @@ position = Vector2(640, 400)
 
 [node name="Ships" type="Node2D" parent="."]
 
+[node name="Pirates" type="Node2D" parent="."]
+
 [node name="ShipSpawner" type="Node" parent="." node_paths=PackedStringArray("station", "ships_parent")]
 script = ExtResource("4_spawner")
 station = NodePath("../Station")
 ships_parent = NodePath("../Ships")
+
+[node name="PirateSpawner" type="Node" parent="." node_paths=PackedStringArray("station", "pirates_parent")]
+script = ExtResource("6_pirates")
+station = NodePath("../Station")
+pirates_parent = NodePath("../Pirates")
 
 [node name="HUD" parent="." instance=ExtResource("5_hud")]

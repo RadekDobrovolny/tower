@@ -9,44 +9,100 @@
       "asset_id": "0a5f98a8-08e8-40b6-8dfd-142c5650f7a0",
       "label": "Tower – raketa zákazníka (test stylu)",
       "files": [
-        {"file": "assets/sprites/ships/rocket.png", "sha12": "28647438aeda"}
+        {
+          "file": "assets/sprites/ships/rocket.png",
+          "sha12": "28647438aeda"
+        }
       ]
     },
     {
       "asset_id": "5fbdf6cd-3726-4d88-a698-38d4714f6028",
       "label": "Tower – arch 1: Pumpík, Bzučák, pumpa, zásobník",
       "files": [
-        {"file": "assets/sprites/staff/pumpik.png", "sha12": "cfb4a20ff986", "cell": "vlevo nahoře", "note": "nahrazen animacemi níže, soubor smazán"},
-        {"file": "assets/sprites/construction/bzucak.png", "sha12": "cea6d077699b", "cell": "vpravo nahoře"},
-        {"file": "assets/sprites/station/pump.png", "sha12": "09f752162485", "cell": "vlevo dole"},
-        {"file": "assets/sprites/station/tank.png", "sha12": "c1827b8528e2", "cell": "vpravo dole"}
+        {
+          "file": "assets/sprites/staff/pumpik.png",
+          "sha12": "cfb4a20ff986",
+          "cell": "vlevo nahoře",
+          "note": "nahrazen animacemi níže, soubor smazán"
+        },
+        {
+          "file": "assets/sprites/construction/bzucak.png",
+          "sha12": "cea6d077699b",
+          "cell": "vpravo nahoře"
+        },
+        {
+          "file": "assets/sprites/station/pump.png",
+          "sha12": "09f752162485",
+          "cell": "vlevo dole"
+        },
+        {
+          "file": "assets/sprites/station/tank.png",
+          "sha12": "c1827b8528e2",
+          "cell": "vpravo dole"
+        }
       ]
     },
     {
       "asset_id": "c3485eb3-5f67-4fbb-b640-1c7fe5b56186",
       "label": "Tower – arch 2: rakety zákazníků a cisterna",
       "files": [
-        {"file": "assets/sprites/ships/rocket_cargo.png", "sha12": "f072f90fce05", "cell": "vlevo nahoře"},
-        {"file": "assets/sprites/ships/rocket_racer.png", "sha12": "5314a0e71350", "cell": "vpravo nahoře"},
-        {"file": "assets/sprites/ships/rocket_workhorse.png", "sha12": "76b1586934ea", "cell": "vlevo dole"},
-        {"file": "assets/sprites/ships/tanker.png", "sha12": "63b7dee07db7", "cell": "vpravo dole"}
+        {
+          "file": "assets/sprites/ships/rocket_cargo.png",
+          "sha12": "f072f90fce05",
+          "cell": "vlevo nahoře"
+        },
+        {
+          "file": "assets/sprites/ships/rocket_racer.png",
+          "sha12": "5314a0e71350",
+          "cell": "vpravo nahoře"
+        },
+        {
+          "file": "assets/sprites/ships/rocket_workhorse.png",
+          "sha12": "76b1586934ea",
+          "cell": "vlevo dole"
+        },
+        {
+          "file": "assets/sprites/ships/tanker.png",
+          "sha12": "63b7dee07db7",
+          "cell": "vpravo dole"
+        }
       ]
     },
     {
       "asset_id": "4dfaa099-ea66-4490-8961-3784444b995a",
       "label": "Tower – textura paluby stanice",
       "files": [
-        {"file": "assets/sprites/station/deck.png", "sha12": "5b9e3625b7a6", "note": "opakovatelná dlaždice zmenšená na 256×256"}
+        {
+          "file": "assets/sprites/station/deck.png",
+          "sha12": "5b9e3625b7a6",
+          "note": "opakovatelná dlaždice zmenšená na 256×256"
+        }
       ]
     },
     {
       "asset_id": "43270731-b241-47cc-90f4-968d51d4d351",
       "label": "Tower – arch 4: přistávací plocha, televize, staveniště, planeta",
       "files": [
-        {"file": "assets/sprites/station/landing_pad.png", "sha12": "37a2f066ff55", "cell": "vlevo nahoře"},
-        {"file": "assets/sprites/station/entertainment_tv.png", "sha12": "cbfd26c2451d", "cell": "vpravo nahoře"},
-        {"file": "assets/sprites/construction/foundation.png", "sha12": "3e90aaed78e4", "cell": "vlevo dole"},
-        {"file": "assets/sprites/space/planet.png", "sha12": "cbb1f43e22c8", "cell": "vpravo dole"}
+        {
+          "file": "assets/sprites/station/landing_pad.png",
+          "sha12": "37a2f066ff55",
+          "cell": "vlevo nahoře"
+        },
+        {
+          "file": "assets/sprites/station/entertainment_tv.png",
+          "sha12": "cbfd26c2451d",
+          "cell": "vpravo nahoře"
+        },
+        {
+          "file": "assets/sprites/construction/foundation.png",
+          "sha12": "3e90aaed78e4",
+          "cell": "vlevo dole"
+        },
+        {
+          "file": "assets/sprites/space/planet.png",
+          "sha12": "cbb1f43e22c8",
+          "cell": "vpravo dole"
+        }
       ]
     },
     {
@@ -64,23 +120,110 @@
       "asset_id": "87303178-3d50-4f40-bc11-f58ecbee4541",
       "label": "Pumpík – chůze (frame-engine-v1.1, 8 snímků, 20 kreditů)",
       "files": [
-        {"file": "assets/sprites/staff/pumpik_walk.png", "sha12": "83540c0ab3e1"}
+        {
+          "file": "assets/sprites/staff/pumpik_walk.png",
+          "sha12": "83540c0ab3e1"
+        }
       ]
     },
     {
       "asset_id": "bd459112-9bbc-4993-afd1-027e4d651025",
       "label": "Pumpík – klid (frame-engine-v1.1, 8 snímků, 20 kreditů)",
       "files": [
-        {"file": "assets/sprites/staff/pumpik_idle.png", "sha12": "33009eeccd43"}
+        {
+          "file": "assets/sprites/staff/pumpik_idle.png",
+          "sha12": "33009eeccd43"
+        }
       ]
     },
     {
       "asset_id": "a4a5f50c-50f7-4c89-9aff-8f785836dcfd",
       "label": "Pumpík – tankování (frame-engine-v1.1, 8 snímků, 20 kreditů)",
       "files": [
-        {"file": "assets/sprites/staff/pumpik_pump.png", "sha12": "5cc500a8993d"}
+        {
+          "file": "assets/sprites/staff/pumpik_pump.png",
+          "sha12": "5cc500a8993d"
+        }
       ],
       "note": "Všechny tři animace jsou oříznuté jedním společným rámečkem (sedí na sebe) a zmenšené tak, aby byl Pumpík vysoký 128 px; pásy po 8 snímcích 83×133."
+    },
+    {
+      "asset_id": "8b42948e-362b-4f1c-84d1-b206a3326d9b",
+      "label": "Tower – arch A: obchod, řídící centrum, věž, laser",
+      "files": [
+        {
+          "file": "assets/sprites/shop/shop.png",
+          "sha12": "41f1d96dec60",
+          "cell": "vlevo nahoře"
+        },
+        {
+          "file": "assets/sprites/station/control_center.png",
+          "sha12": "92458436405e",
+          "cell": "vpravo nahoře"
+        },
+        {
+          "file": "assets/sprites/defense/tower_base.png",
+          "sha12": "5ff976e0a740",
+          "cell": "vlevo dole"
+        },
+        {
+          "file": "assets/sprites/defense/turret.png",
+          "sha12": "2fbb6e50c171",
+          "cell": "vpravo dole"
+        }
+      ]
+    },
+    {
+      "asset_id": "2964a50a-3a2f-48bb-b62f-ee044297f915",
+      "label": "Tower – arch B: piráti, dvojitý laser, anténa",
+      "files": [
+        {
+          "file": "assets/sprites/pirates/raider.png",
+          "sha12": "f0ba51d04a9a",
+          "cell": "vlevo nahoře"
+        },
+        {
+          "file": "assets/sprites/pirates/gunship.png",
+          "sha12": "e38dc8af110a",
+          "cell": "vpravo nahoře"
+        },
+        {
+          "file": "assets/sprites/defense/turret_twin.png",
+          "sha12": "7cb8449cfb5c",
+          "cell": "vlevo dole"
+        },
+        {
+          "file": "assets/sprites/station/radar_dish.png",
+          "sha12": "0aa29ababaa6",
+          "cell": "vpravo dole"
+        }
+      ]
+    },
+    {
+      "asset_id": "efc75e48-dd89-4bae-b6b7-8a065859d99b",
+      "label": "Tower – arch C: stánky obchodu",
+      "files": [
+        {
+          "file": "assets/sprites/shop/food_cart.png",
+          "sha12": "c10d92686112",
+          "cell": "vlevo nahoře"
+        },
+        {
+          "file": "assets/sprites/shop/souvenirs.png",
+          "sha12": "25601dd8cd5e",
+          "cell": "vpravo nahoře"
+        },
+        {
+          "file": "assets/sprites/shop/accessories.png",
+          "sha12": "7d253f0f4473",
+          "cell": "vlevo dole"
+        },
+        {
+          "file": "assets/sprites/shop/holonews.png",
+          "sha12": "c3a120c39fc5",
+          "cell": "vpravo dole"
+        }
+      ]
     }
   ]
 }

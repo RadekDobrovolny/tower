@@ -2,10 +2,13 @@ class_name Plot
 extends Node2D
 
 ## Parcela na stanici, na které jde postavit budovu. Prázdná je skoro neviditelná,
-## po kliknutí nabídne, co tu jde postavit.
+## po kliknutí nabídne, co tu jde postavit. Běžné parcely jsou pro sloty a budovy,
+## menší místa na krajích paluby jsou jen pro obranné věže.
 
-const SIZE := Vector2(170, 120)
+enum Kind { BUILDING, TOWER }
 
+@export var kind := Kind.BUILDING
+@export var size := Vector2(170, 120)
 ## Z které strany čerpadla stojí android, když tu bude čerpací slot: -1 vlevo, 1 vpravo.
 ## Sousední parcely mají stranu natočenou k sobě, aby android obsloužil oba sloty najednou.
 @export_enum("Vlevo:-1", "Vpravo:1") var service_side := -1
@@ -16,13 +19,18 @@ var station: Station
 @onready var _outline: Line2D = $Outline
 
 
+func _ready() -> void:
+	var half := size / 2.0
+	_outline.points = PackedVector2Array([-half, Vector2(half.x, -half.y), half, Vector2(-half.x, half.y)])
+
+
 func is_empty() -> bool:
 	return building == null
 
 
 ## Obdélník parcely v souřadnicích stanice.
 func rect() -> Rect2:
-	return Rect2(position - SIZE / 2.0, SIZE)
+	return Rect2(position - size / 2.0, size)
 
 
 func place(new_building: Building) -> void:
@@ -35,11 +43,11 @@ func set_outline_visible(value: bool) -> void:
 
 
 func info_title() -> String:
-	return "Prázdná parcela"
+	return "Místo pro obrannou věž" if kind == Kind.TOWER else "Prázdná parcela"
 
 
 func info_lines() -> PackedStringArray:
-	var price_lines := station.build_price_lines()
+	var price_lines := station.build_price_lines(self)
 	if price_lines.is_empty():
 		return PackedStringArray(["Tady zatím nic nestojí a zatím tu nejde nic postavit."])
 	var lines := PackedStringArray([

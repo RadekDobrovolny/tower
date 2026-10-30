@@ -1,0 +1,54 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://defense/defense_tower.gd" id="1_tower"]
+[ext_resource type="Texture2D" path="res://assets/sprites/construction/foundation.png" id="2_foundation"]
+[ext_resource type="Texture2D" path="res://assets/sprites/defense/tower_base.png" id="3_base"]
+[ext_resource type="Texture2D" path="res://assets/sprites/defense/turret.png" id="4_turret"]
+[ext_resource type="Texture2D" path="res://fx/soft_light.tres" id="5_light"]
+[ext_resource type="Material" path="res://fx/additive.tres" id="6_additive"]
+
+[node name="DefenseTower" type="Node2D"]
+script = ExtResource("1_tower")
+
+[node name="Base" type="Sprite2D" parent="."]
+visible = false
+scale = Vector2(0.24, 0.24)
+texture = ExtResource("2_foundation")
+
+[node name="Pedestal" type="Sprite2D" parent="."]
+visible = false
+scale = Vector2(0.46, 0.46)
+texture = ExtResource("3_base")
+
+[node name="Turret" type="Sprite2D" parent="."]
+visible = false
+scale = Vector2(0.42, 0.42)
+texture = ExtResource("4_turret")
+offset = Vector2(24, 0)
+
+[node name="Beam" type="Line2D" parent="."]
+visible = false
+z_index = 6
+material = ExtResource("6_additive")
+width = 3.0
+default_color = Color(1, 0.3, 0.65, 1)
+
+[node name="Flash" type="PointLight2D" parent="."]
+visible = false
+color = Color(1, 0.35, 0.65, 1)
+energy = 1.6
+texture = ExtResource("5_light")
+texture_scale = 1.2
+
+[node name="Label" type="Label" parent="."]
+visible = false
+offset_left = -50.0
+offset_top = 34.0
+offset_right = 50.0
+offset_bottom = 52.0
+mouse_filter = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "Věž"
+horizontal_alignment = 1

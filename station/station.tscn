@@ -54,6 +54,39 @@ service_side = 1
 [node name="Plot5" parent="Plots" instance=ExtResource("2_plot")]
 position = Vector2(230, 85)
 
+[node name="TowerPlot1" parent="Plots" instance=ExtResource("2_plot")]
+position = Vector2(-322, -72)
+kind = 1
+size = Vector2(64, 100)
+
+[node name="TowerPlot2" parent="Plots" instance=ExtResource("2_plot")]
+position = Vector2(322, -72)
+kind = 1
+size = Vector2(64, 100)
+
+[node name="ControlCenterSpot" type="Marker2D" parent="."]
+position = Vector2(108, 92)
+
+[node name="PirateTargets" type="Node2D" parent="."]
+
+[node name="PirateTarget1" type="Marker2D" parent="PirateTargets"]
+position = Vector2(-300, -215)
+
+[node name="PirateTarget2" type="Marker2D" parent="PirateTargets"]
+position = Vector2(230, -200)
+
+[node name="PirateTarget3" type="Marker2D" parent="PirateTargets"]
+position = Vector2(-430, 95)
+
+[node name="PirateTarget4" type="Marker2D" parent="PirateTargets"]
+position = Vector2(430, 95)
+
+[node name="PirateTarget5" type="Marker2D" parent="PirateTargets"]
+position = Vector2(-20, 255)
+
+[node name="PirateTarget6" type="Marker2D" parent="PirateTargets"]
+position = Vector2(250, 245)
+
 [node name="QueuePoints" type="Node2D" parent="."]
 
 [node name="QueuePoint1" type="Marker2D" parent="QueuePoints"]
@@ -79,7 +112,7 @@ spawn_position = Vector2(-780, 215)
 position = Vector2(-75, 30)
 
 [node name="Drone" parent="." instance=ExtResource("4_drone")]
-position = Vector2(80, 125)
+position = Vector2(40, 138)
 
 [node name="SelectionMarker" type="Line2D" parent="."]
 visible = false

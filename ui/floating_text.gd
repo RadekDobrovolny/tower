@@ -5,7 +5,7 @@ extends RichTextLabel
 
 const RISE := 40.0
 const DURATION := 1.2
-const SIZE := Vector2(180, 28)
+const SIZE := Vector2(260, 28)
 
 
 static func spawn(parent: Node, at: Vector2, message: String, color := Color(1.0, 0.85, 0.3)) -> void:

@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="Mission" format=3]
+
+[ext_resource type="Script" path="res://missions/mission.gd" id="1_mission"]
+
+[resource]
+script = ExtResource("1_mission")
+title = "Obchod a logistika"
+description = "Stanice se rozrůstá. Posádky lodí by si rády něco koupily, než jim Pumpík natankuje, tak jim postav obchod a rozšiř nabídku. K zásobníku na levelu 3 jde přistavět řídící centrum: vylepší dodávky galaxínu a s automatickým dispečinkem bude cisterny objednávat samo."
+max_android_level = 6
+entertainment_available = true
+max_slots = 3
+galaxin_economy = true
+start_galaxin = 300
+ship_interval_min = 2.0
+ship_interval_max = 5.0
+shop_available = true
+control_center_available = true
+goal_shop_products = 2
+goal_dispatch = true
+start_credits = 6000
+start_fuel_level = 6
+start_walk_level = 5
+start_entertainment_level = 3
+start_slots = 2
+start_tank_level = 3

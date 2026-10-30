@@ -20,6 +20,7 @@ var _completed := false
 
 @onready var station: Station = $Station
 @onready var spawner: ShipSpawner = $ShipSpawner
+@onready var pirate_spawner: PirateSpawner = $PirateSpawner
 @onready var hud: Hud = $HUD
 
 
@@ -30,6 +31,7 @@ func _ready() -> void:
 	# (např. loď nejdřív zaplatí a teprve pak se započítá jako obsloužená).
 	Game.credits_changed.connect(_check_goals.unbind(1), CONNECT_DEFERRED)
 	station.state_changed.connect(_check_goals, CONNECT_DEFERRED)
+	Game.stats_changed.connect(_check_goals, CONNECT_DEFERRED)
 	hud.setup(self)
 	_begin_mission(start_index)
 	_pause_with_popup("Mise %d: %s" % [number(), mission.title], _briefing(mission), "Začít")
@@ -66,9 +68,12 @@ func get_shop_items() -> Array[ShopItem]:
 	for plot in station.get_plots():
 		if plot.building:
 			items.append_array(plot.building.info_actions())
-	var empty_plot := station.first_empty_plot()
-	if empty_plot:
-		items.append_array(station.build_options(empty_plot))
+	if station.control_center:
+		items.append_array(station.control_center.info_actions())
+	for kind in Plot.Kind.values():
+		var empty_plot := station.first_empty_plot(kind)
+		if empty_plot:
+			items.append_array(station.build_options(empty_plot))
 	return items
 
 
@@ -89,6 +94,17 @@ func get_goals() -> Array[Dictionary]:
 	if mission.goal_tank_level > 0:
 		goals.append(_goal("Zásobník na levelu %d" % mission.goal_tank_level,
 				station.tank.level, mission.goal_tank_level))
+	if mission.goal_shop_products > 0:
+		goals.append(_goal("Obchod: %d nové druhy zboží" % mission.goal_shop_products,
+				maxi(station.shop_products(), 0), mission.goal_shop_products))
+	if mission.goal_dispatch:
+		goals.append(_goal("Automatický dispečink", 1 if station.has_dispatch() else 0, 1))
+	if mission.goal_tower_level > 0:
+		goals.append(_goal("Obranná věž na levelu %d" % mission.goal_tower_level,
+				station.best_tower_level(), mission.goal_tower_level))
+	if mission.goal_pirates_shot > 0:
+		goals.append(_goal("Sestřelit %d pirátů" % mission.goal_pirates_shot,
+				Game.pirates_shot, mission.goal_pirates_shot))
 	return goals
 
 
@@ -107,7 +123,8 @@ func _apply_start_state(start: Mission) -> void:
 	Game.reset(start.start_credits)
 	for android in station.get_androids():
 		android.set_levels(start.start_fuel_level, start.start_walk_level)
-	station.setup_start_buildings(start.start_slots, start.start_entertainment_level)
+	station.setup_start_buildings(start.start_slots, start.start_entertainment_level,
+			start.start_shop_products, start.start_control_center, start.start_tower_level)
 	station.tank.set_level(start.start_tank_level)
 
 
@@ -120,10 +137,16 @@ func _begin_mission(index: int) -> void:
 		android.max_level = mission.max_android_level
 	station.max_slots = mission.max_slots
 	station.entertainment_available = mission.entertainment_available
+	station.shop_available = mission.shop_available
+	station.control_center_available = mission.control_center_available
+	station.tower_available = mission.tower_available
 	if mission.galaxin_economy and not station.galaxin_economy:
 		station.enable_galaxin_economy(mission.start_galaxin)
 	spawner.min_interval = mission.ship_interval_min
 	spawner.max_interval = mission.ship_interval_max
+	pirate_spawner.min_interval = mission.pirate_interval_min
+	pirate_spawner.max_interval = mission.pirate_interval_max
+	pirate_spawner.enabled = mission.pirates
 	hud.refresh_mission()
 	mission_started.emit(number())
 
@@ -150,6 +173,14 @@ func _briefing(briefed: Mission) -> String:
 		lines.append("- Zábavní systém na levelu %d" % briefed.goal_entertainment_level)
 	if briefed.goal_tank_level > 0:
 		lines.append("- Zásobník na levelu %d" % briefed.goal_tank_level)
+	if briefed.goal_shop_products > 0:
+		lines.append("- Obchod a v něm %d nové druhy zboží" % briefed.goal_shop_products)
+	if briefed.goal_dispatch:
+		lines.append("- Řídící centrum s automatickým dispečinkem")
+	if briefed.goal_tower_level > 0:
+		lines.append("- Obranná věž na levelu %d" % briefed.goal_tower_level)
+	if briefed.goal_pirates_shot > 0:
+		lines.append("- Sestřelit %d pirátů" % briefed.goal_pirates_shot)
 	return "\n".join(lines)
 
 
