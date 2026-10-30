@@ -127,7 +127,6 @@ func _send_tanker() -> void:
 	_tanker = TANKER_SCENE.instantiate()
 	_tanker.position = spawn_position
 	_tanker.dock_position = dock_position
-	_tanker.exit_position = spawn_position
 	_tanker.hose_target = tank.position
 	_tanker.tank_color = _supplier.color
 	_tanker.docked.connect(_on_tanker_docked)

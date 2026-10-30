@@ -20,6 +20,7 @@ var _time := 0.0
 @onready var _body: Node2D = $Body
 @onready var _sparks: Polygon2D = $Body/Sparks
 @onready var _beam: Line2D = $Body/Beam
+@onready var _beam_light: PointLight2D = $Body/BeamLight
 
 
 func _ready() -> void:
@@ -45,6 +46,8 @@ func _process(delta: float) -> void:
 	_beam.visible = working
 	_sparks.visible = working and fmod(_time, 0.3) < 0.15
 	_sparks.rotation = _time * 10.0
+	_beam_light.visible = working
+	_beam_light.energy = 1.1 if _sparks.visible else 0.6
 
 
 func add_job(job: ConstructionJob) -> void:

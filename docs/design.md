@@ -69,6 +69,16 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 
 **Efekty:** neonový nápis „galaxín“ s blikajícím písmenem, filmové zrno a ztmavené rohy obrazu, kouř od přistávajících raket, tetelení vzduchu nad tryskami, pulzující neon galaxínu.
 
+**Světla** (2D světla Godotu, hotové):
+- **Plamen motoru** raket i cisterny: plápolající plamen ze shaderu (bílé jádro, oranžová, konec do růžového neonu galaxínu), jiskry a oranžové světlo, které osvětlí loď i palubu pod ní. Délka plamene a síla světla rostou s rychlostí. Loď visící ve frontě má malý plamen, na plošině motor zhasne.
+- **Značky přistávacích plošek** (jantarová světla v rozích) svítí, až je slot hotový. Volná ploška pomalu „dýchá“, když k ní letí loď, světla rychle obíhají dokola (navádění), a když loď stojí na plošce, svítí klidně a slaběji.
+- **Zásobník** barví palubu kolem do růžova. Čím víc galaxínu v něm je, tím víc svítí.
+- **Televize** svítí do okolí v barvě, která zrovna převládá na obrazovce.
+- **Bzučák** svítí tyrkysově na konci svařovacího paprsku.
+- **Skleněné koule pump** jemně září růžovým neonem.
+- **Reflektor nad palubou**: teplé světlo, uprostřed stanice nejsilnější, k okrajům slábne.
+- **Viditelnost lodí:** trupy mají chladný obrys ze strany, odkud svítí vzdálená hvězda (vlevo nahoře). Černá závodní raketa je navíc zjasněná, jinak by v temném vesmíru zanikla.
+
 **Rozhraní (HUD):** moderní herní HUD v noir paletě.
 - **Písmo** Chakra Petch (Google Fonts, licence OFL v `assets/fonts/OFL.txt`): hranaté technické písmo se zkosenými rohy. Běžný text 13 px, nadpisy polotučně verzálkami s prostrkáním.
 - **Panely** jsou tmavé poloprůhledné se zkoseným levým horním a pravým dolním rohem a tenkým mosazným lemem. Shader `ui/hud_panel.gdshader` přidává scanlines, filmové zrno, svítící mosazné rohy, světelný pruh přejíždějící šikmo přes obrazovku a při otevření panel „naskenuje“ shora dolů. Panel galaxínu má místo mosazi neonově růžový akcent.
@@ -159,7 +169,7 @@ V misích 1 a 2 je galaxínu neomezeně a stojí pevně 6 kr/j. S misí 3 se zap
 | 4 | 1 800 j | 5 000 kr | 18 s |
 
 - **Prodejní cena** se nastavuje v rozmezí 3–12 kr/j (běžná je 6). Lodě přilétají `(6 / cena)^1,5`× častěji a trpělivost jim ubývá `cena / 6`× rychleji. Při 3 kr tedy přilétá zhruba 2,8× víc lodí, při 12 kr asi třetina. Nejvíc vydělá něco mezi (při testu se zásobníkem doplňovaným zadarmo: 3 kr → 87 lodí / 12 700 kr, 6 kr → 48 lodí / 14 400 kr, 12 kr → 19 lodí / 10 700 kr za 3 minuty).
-- **Dodávky** se objednávají ručně v panelu Galaxín. Cisterna se platí předem (velikost cisterny, nejvýš volné místo v zásobníku), po čase přiletí, přečerpá galaxín a za to, co nedovezla nebo co se nevešlo, vrátí peníze. Najednou může být objednaná jen jedna cisterna.
+- **Dodávky** se objednávají ručně v panelu Galaxín. Cisterna se platí předem (velikost cisterny, nejvýš volné místo v zásobníku), po čase přiletí, přečerpá galaxín a za to, co nedovezla nebo co se nevešlo, vrátí peníze. Pak se natočí náhodným směrem pryč od stanice a odletí přídí napřed. Najednou může být objednaná jen jedna cisterna.
 
 | Dodavatel | Cena | Cisterna | Dodání | Zpoždění | Méně galaxínu | Kvalita |
 |---|---|---|---|---|---|---|
@@ -201,7 +211,7 @@ Mise jsou zdroje `missions/mission_*.tres` (dají se upravovat v inspektoru Godo
 
 ### Lodě
 - Přilétají každé 3–7 s, v průměru tedy každých 5 s.
-- Když je slot obsazený, čekají ve frontě (max. 4 lodě). Po 20 s čekání odletí bez placení.
+- Když je slot obsazený, čekají ve frontě (max. 4 lodě). Každá loď zůstává na místě, kam se ve frontě zařadila, fronta se nepřeskládává. Na uvolněný slot letí ta, která čeká nejdéle, a její místo pak zabere další přilétající loď. Po 20 s čekání odletí bez placení.
 - Galaxín stojí 6 kr za jednotku.
 - 65 % lodí chce plnou nádrž, v průměru asi 58 jednotek za zhruba 350 kr.
 - 35 % lodí chce galaxín jen za 100, 150, 200 nebo 250 kr (vždy méně, než by stála plná nádrž).

@@ -1,0 +1,55 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://fx/engine_flame.gd" id="1_engine"]
+[ext_resource type="Shader" path="res://fx/engine_flame.gdshader" id="2_shader"]
+[ext_resource type="Texture2D" path="res://fx/soft_light.tres" id="3_light"]
+[ext_resource type="Material" path="res://fx/additive.tres" id="4_additive"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_flame"]
+resource_local_to_scene = true
+shader = ExtResource("2_shader")
+shader_parameter/throttle = 0.0
+shader_parameter/seed = 0.0
+
+[sub_resource type="Gradient" id="Gradient_embers"]
+offsets = PackedFloat32Array(0, 0.4, 1)
+colors = PackedColorArray(1, 0.9, 0.6, 1, 1, 0.45, 0.2, 0.8, 1, 0.2, 0.5, 0)
+
+[node name="EngineFlame" type="Node2D"]
+script = ExtResource("1_engine")
+
+[node name="Glow" type="Sprite2D" parent="."]
+modulate = Color(1, 0.55, 0.25, 1)
+material = ExtResource("4_additive")
+position = Vector2(-8, 0)
+scale = Vector2(0.45, 0.3)
+texture = ExtResource("3_light")
+
+[node name="Embers" type="CPUParticles2D" parent="."]
+material = ExtResource("4_additive")
+position = Vector2(-6, 0)
+emitting = false
+amount = 18
+lifetime = 0.4
+local_coords = false
+direction = Vector2(-1, 0)
+spread = 12.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 80.0
+initial_velocity_max = 150.0
+scale_amount_min = 1.2
+scale_amount_max = 2.4
+color_ramp = SubResource("Gradient_embers")
+
+[node name="Flame" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_flame")
+scale = Vector2(0.34, 0.13)
+texture = ExtResource("3_light")
+offset = Vector2(-64, 0)
+
+[node name="Light" type="PointLight2D" parent="."]
+position = Vector2(-14, 0)
+color = Color(1, 0.6, 0.3, 1)
+energy = 0.0
+texture = ExtResource("3_light")
+texture_scale = 1.6

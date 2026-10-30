@@ -28,6 +28,7 @@ var occupant: Ship = null
 @onready var _pump: Sprite2D = $Pump
 @onready var _light: Polygon2D = $Light
 @onready var _service_point: Marker2D = $ServicePoint
+@onready var _pad_lights: PadLights = $PadLights
 
 
 func _ready() -> void:
@@ -36,6 +37,11 @@ func _ready() -> void:
 	_light.position.x = _pump.position.x
 	super()
 	_update_light()
+
+
+func _process(delta: float) -> void:
+	super(delta)
+	_pad_lights.mode = _pad_lights_mode()
 
 
 func build_phases() -> Array:
@@ -96,6 +102,17 @@ func _update_construction_looks() -> void:
 	_light.visible = built_phases >= 4
 	if built_phases >= 4:
 		station.connect_pipe(self)
+
+
+## Značky na ploše svítí, až je slot hotový. Podle lodi na něm „dýchají“, navádějí, nebo svítí klidně.
+func _pad_lights_mode() -> PadLights.Mode:
+	if not is_operational():
+		return PadLights.Mode.OFF
+	if occupant == null:
+		return PadLights.Mode.IDLE
+	if occupant.state == Ship.State.LANDED:
+		return PadLights.Mode.LANDED
+	return PadLights.Mode.APPROACH
 
 
 func _update_light() -> void:

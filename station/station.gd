@@ -37,8 +37,11 @@ var sell_price := BASE_PRICE
 ## Vybraný objekt, nebo null.
 var selected: Node
 
-## Lodě čekající ve frontě, první je na řadě.
+## Lodě čekající ve frontě v pořadí, jak přiletěly (první je na řadě).
 var _queue: Array[Ship] = []
+## Na kterém místě fronty (index v QueuePoints) která loď čeká. Loď na svém místě zůstává,
+## dokud nejde tankovat nebo neodletí, fronta se nepřeskládává.
+var _queue_spots := {}
 ## Zakotvené lodě, které čekají, až se jich ujme android.
 var _awaiting_service: Array[Ship] = []
 
@@ -272,8 +275,10 @@ func admit(ship: Ship) -> void:
 	if slot:
 		_send_to_slot(ship, slot)
 	else:
+		var spot := _free_queue_spot()
 		_queue.append(ship)
-		ship.go_to_queue(_queue_position(_queue.size() - 1))
+		_queue_spots[ship] = spot
+		ship.go_to_queue(_queue_position(spot))
 
 
 func _apply_galaxin_economy() -> void:
@@ -380,25 +385,33 @@ func _queue_position(index: int) -> Vector2:
 	return (_queue_points.get_child(index) as Node2D).global_position
 
 
-## Posune čekající lodě na místa odpovídající jejich pořadí ve frontě.
-func _advance_queue() -> void:
-	for i in _queue.size():
-		_queue[i].go_to_queue(_queue_position(i))
+## První místo ve frontě, kde zrovna nikdo nečeká.
+func _free_queue_spot() -> int:
+	for i in _queue_points.get_child_count():
+		if not _queue_spots.values().has(i):
+			return i
+	return -1
 
 
+func _leave_queue(ship: Ship) -> void:
+	_queue.erase(ship)
+	_queue_spots.erase(ship)
+
+
+## Na uvolněný slot letí loď, která ve frontě čeká nejdéle. Ostatní zůstávají na svých místech.
 func _on_slot_freed(slot: FuelSlot) -> void:
 	if _queue.is_empty() or not slot.is_free():
 		return
-	_send_to_slot(_queue.pop_front(), slot)
-	_advance_queue()
+	var ship := _queue[0]
+	_leave_queue(ship)
+	_send_to_slot(ship, slot)
 
 
 func _on_ship_gave_up(ship: Ship) -> void:
-	_queue.erase(ship)
+	_leave_queue(ship)
 	_awaiting_service.erase(ship)
 	for android in get_androids():
 		android.release_ship(ship)
-	_advance_queue()
 
 
 func _on_ship_landed(ship: Ship) -> void:

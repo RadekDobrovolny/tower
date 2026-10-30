@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://construction/construction_drone.gd" id="1_drone"]
 [ext_resource type="Texture2D" path="res://assets/sprites/construction/bzucak.png" id="2_bzucak"]
+[ext_resource type="Texture2D" path="res://fx/soft_light.tres" id="3_light"]
 
 [node name="Drone" type="Node2D"]
 z_index = 5
@@ -18,6 +19,14 @@ default_color = Color(0.4, 0.9, 1, 0.7)
 [node name="Sprite" type="Sprite2D" parent="Body"]
 scale = Vector2(0.16, 0.16)
 texture = ExtResource("2_bzucak")
+
+[node name="BeamLight" type="PointLight2D" parent="Body"]
+visible = false
+position = Vector2(0, 26)
+color = Color(0.4, 0.9, 1, 1)
+energy = 0.8
+texture = ExtResource("3_light")
+texture_scale = 0.9
 
 [node name="Sparks" type="Polygon2D" parent="Body"]
 visible = false

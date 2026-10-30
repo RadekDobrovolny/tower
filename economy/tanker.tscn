@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://economy/tanker.gd" id="1_tanker"]
 [ext_resource type="PackedScene" path="res://ui/speech_bubble.tscn" id="2_bubble"]
 [ext_resource type="Texture2D" path="res://assets/sprites/ships/tanker.png" id="3_tanker"]
+[ext_resource type="PackedScene" path="res://fx/engine_flame.tscn" id="4_engine"]
 
 [node name="Tanker" type="Node2D"]
 script = ExtResource("1_tanker")
@@ -13,6 +14,10 @@ width = 4.0
 default_color = Color(0.9, 0.5, 0.2, 1)
 
 [node name="Body" type="Node2D" parent="."]
+
+[node name="EngineFlame" parent="Body" instance=ExtResource("4_engine")]
+position = Vector2(-46, 0)
+scale = Vector2(1.2, 1.2)
 
 [node name="Sprite" type="Sprite2D" parent="Body"]
 scale = Vector2(0.6, 0.6)

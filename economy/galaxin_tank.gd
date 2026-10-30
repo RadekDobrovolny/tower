@@ -16,6 +16,9 @@ const LEVELS := [
 const LOW_SHARE := 0.2
 const LOW_COLOR := Color(1.0, 0.35, 0.3)
 const OK_COLOR := Color(0.95, 0.75, 0.25)
+## Síla růžové záře z průzorů u prázdného a plného zásobníku.
+const GLOW_EMPTY := 0.3
+const GLOW_FULL := 2.0
 
 ## Neomezený zásobník se nikdy nevyprázdní a neukazuje hladinu.
 var unlimited := true:
@@ -33,7 +36,9 @@ var job: ConstructionJob
 ## Kolik jednotek v zásobníku je nekvalitního galaxínu (od levného dodavatele).
 var _low_quality := 0.0
 var _blink := 0.0
+var _glow_time := 0.0
 
+@onready var _glow: PointLight2D = $Glow
 @onready var _gauge: ProgressBar = $Gauge
 @onready var _amount_label: Label = $AmountLabel
 @onready var _level_label: Label = $LevelLabel
@@ -44,6 +49,9 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	_glow_time += delta
+	var fill := 1.0 if unlimited else amount / capacity()
+	_glow.energy = lerpf(GLOW_EMPTY, GLOW_FULL, fill) * (0.85 + 0.15 * sin(_glow_time * 1.6))
 	if unlimited:
 		return
 	var low := amount < capacity() * LOW_SHARE

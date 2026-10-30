@@ -16,6 +16,10 @@ const HULL_TEXTURES := [
 	preload("res://assets/sprites/ships/rocket_racer.png"),
 	preload("res://assets/sprites/ships/rocket_workhorse.png"),
 ]
+## Zjasnění jednotlivých vzhledů (stejné pořadí). Černá závodní raketa by jinak v temném vesmíru zanikla.
+const HULL_BRIGHTNESS := [1.0, 1.0, 1.7, 1.1]
+## Tah motoru, když loď jen visí ve vzduchu (ve frontě). S rychlostí roste až na 1.
+const HOVER_THROTTLE := 0.3
 
 const MAX_SPEED := 260.0
 const ACCELERATION := 220.0
@@ -79,10 +83,12 @@ var _speed := 0.0
 var _departure_delay := 0.0
 var _takeoff_point: Vector2
 var _takeoff_scale := 1.0
+## Rychlost v posledním snímku, podle ní táhne motor.
+var _current_speed := 0.0
 
 @onready var _body: Node2D = $Body
 @onready var _sprite: Sprite2D = $Body/Sprite
-@onready var _engine_flame: Polygon2D = $Body/EngineFlame
+@onready var _engine: EngineFlame = $Body/EngineFlame
 @onready var _fuel_bar: ProgressBar = $FuelBar
 @onready var _patience_bar: ProgressBar = $PatienceBar
 @onready var _bubble: SpeechBubble = $SpeechBubble
@@ -92,9 +98,11 @@ func _ready() -> void:
 	tank_capacity = randf_range(40.0, 100.0)
 	fuel = tank_capacity * randf_range(0.05, 0.3)
 	_choose_order()
-	_sprite.texture = HULL_TEXTURES.pick_random()
+	var hull := randi() % HULL_TEXTURES.size()
+	_sprite.texture = HULL_TEXTURES[hull]
 	# Jemně jiný jas, aby dvě stejné rakety nevypadaly úplně stejně.
-	_sprite.modulate = Color.from_hsv(0.0, 0.0, randf_range(0.85, 1.0))
+	var brightness: float = HULL_BRIGHTNESS[hull] * randf_range(0.92, 1.05)
+	_sprite.modulate = Color(brightness, brightness, brightness)
 	_fuel_bar.max_value = tank_capacity
 	_fuel_bar.value = fuel
 	_patience_bar.max_value = PATIENCE
@@ -116,9 +124,10 @@ func _process(delta: float) -> void:
 	var waiting_for_fuel := state == State.LANDED and _patience_left < PATIENCE
 	_patience_bar.visible = state == State.QUEUED or waiting_for_fuel
 	_fuel_bar.visible = state == State.LANDED and not waiting_for_fuel
+	_engine.target_throttle = _engine_throttle()
 
 
-## Pošle loď na dané místo ve frontě. Volá se i při posunu fronty.
+## Pošle loď na její místo ve frontě, kde počká, až na ni přijde řada.
 func go_to_queue(point: Vector2) -> void:
 	_target = point
 	state = State.QUEUED
@@ -228,7 +237,7 @@ func _give_up() -> void:
 func _land() -> void:
 	global_position = slot.global_position
 	_body.scale = Vector2.ONE
-	_engine_flame.hide()
+	_current_speed = 0.0
 	_fuel_on_arrival = fuel
 	_patience_left = PATIENCE
 	_target_fuel = tank_capacity
@@ -249,12 +258,18 @@ func _depart(delay: float) -> void:
 		var old_slot := slot
 		slot = null
 		old_slot.release()
-	_engine_flame.show()
 	_takeoff_point = global_position
 	_takeoff_scale = _body.scale.x
 	_speed = 0.0
 	_departure_delay = delay
 	state = State.DEPARTING
+
+
+## Na plošině (a před odletem) je motor vypnutý, ve vzduchu táhne podle rychlosti.
+func _engine_throttle() -> float:
+	if state == State.LANDED or (state == State.DEPARTING and _departure_delay > 0.0):
+		return 0.0
+	return HOVER_THROTTLE + (1.0 - HOVER_THROTTLE) * clampf(_current_speed / MAX_SPEED, 0.0, 1.0)
 
 
 func _say(lines: Array, angry := false) -> void:
@@ -271,6 +286,7 @@ func _fly_to(target: Vector2, delta: float, landing: bool) -> bool:
 	var closeness := clampf(distance / APPROACH_RADIUS, 0.0, 1.0)
 	var step := minf(MAX_SPEED * maxf(closeness, 0.2) * delta, distance)
 	global_position += to_target.normalized() * step
+	_current_speed = step / delta if delta > 0.0 else 0.0
 	if landing:
 		_body.scale = Vector2.ONE * lerpf(1.0, FLIGHT_SCALE, closeness)
 	return distance - step < 0.5
@@ -283,6 +299,7 @@ func _fly_away(delta: float) -> void:
 	var target_angle := global_position.direction_to(exit_point).angle()
 	_body.rotation = lerp_angle(_body.rotation, target_angle, minf(TURN_SPEED * delta, 1.0))
 	_speed = minf(_speed + ACCELERATION * delta, MAX_SPEED)
+	_current_speed = _speed
 	global_position += Vector2.from_angle(_body.rotation) * _speed * delta
 	var lift := clampf(global_position.distance_to(_takeoff_point) / APPROACH_RADIUS, 0.0, 1.0)
 	_body.scale = Vector2.ONE * lerpf(_takeoff_scale, FLIGHT_SCALE, lift)

@@ -3,6 +3,11 @@
 [ext_resource type="Script" path="res://ships/ship.gd" id="1_ship"]
 [ext_resource type="PackedScene" path="res://ui/speech_bubble.tscn" id="2_bubble"]
 [ext_resource type="Texture2D" path="res://assets/sprites/ships/rocket.png" id="3_rocket"]
+[ext_resource type="PackedScene" path="res://fx/engine_flame.tscn" id="4_engine"]
+[ext_resource type="Shader" path="res://fx/hull_rim.gdshader" id="5_rim"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rim"]
+shader = ExtResource("5_rim")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_bg"]
 bg_color = Color(0, 0, 0, 0.6)
@@ -18,12 +23,12 @@ script = ExtResource("1_ship")
 
 [node name="Body" type="Node2D" parent="."]
 
-[node name="EngineFlame" type="Polygon2D" parent="Body"]
-color = Color(1, 0.48, 0.18, 0.9)
-polygon = PackedVector2Array(-28, -4, -44, 0, -28, 4)
+[node name="EngineFlame" parent="Body" instance=ExtResource("4_engine")]
+position = Vector2(-28, 0)
 
 [node name="Sprite" type="Sprite2D" parent="Body"]
 texture_filter = 4
+material = SubResource("ShaderMaterial_rim")
 scale = Vector2(0.375, 0.375)
 texture = ExtResource("3_rocket")
 

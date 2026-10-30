@@ -2,6 +2,7 @@ extends Node2D
 
 ## Psychedelický obraz na obrazovce zábavního systému: soustředné elipsy, které se
 ## přelévají barvami a vnitřní se pomalu točí. Vyšší level = jasnější a rychlejší obraz.
+## Obrazovka svítí do okolí v barvě, která na ní zrovna převládá.
 
 ## Poloosy obrazovky (vnější elipsy se do ní musí vejít).
 @export var radius := Vector2(36, 21)
@@ -10,9 +11,13 @@ var level := 1
 
 var _time := 0.0
 
+@onready var _light: PointLight2D = $Light
+
 
 func _process(delta: float) -> void:
 	_time += delta * (0.8 + 0.2 * level)
+	_light.color = Color.from_hsv(fmod(_time * 0.07 + 0.3, 1.0), 0.6, 1.0)
+	_light.energy = 1.2 + 0.3 * level
 	queue_redraw()
 
 
