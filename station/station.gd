@@ -346,7 +346,7 @@ func build_control_center() -> bool:
 
 ## Zadá stavebnímu dronovi zakázku na `target` (budova nebo zásobník; musí mít vlastnost `job`).
 func queue_job(target: Node2D, title: String, phases: Array, on_phase_done: Callable,
-		on_done: Callable) -> ConstructionJob:
+		on_done: Callable, urgent := false) -> ConstructionJob:
 	var job := ConstructionJob.new(target, title, phases)
 	job.on_phase_done = on_phase_done
 	job.on_done = func() -> void:
@@ -355,7 +355,7 @@ func queue_job(target: Node2D, title: String, phases: Array, on_phase_done: Call
 			on_done.call()
 		state_changed.emit()
 	target.set("job", job)
-	drone.add_job(job)
+	drone.add_job(job, urgent)
 	return job
 
 
@@ -840,7 +840,7 @@ func pirate_targets() -> Array[Vector2]:
 	return result
 
 
-## Zadá stavebnímu dronovi opravu poškozeného androida.
+## Zadá stavebnímu dronovi opravu poškozeného androida. Oprava má přednost před vším ostatním.
 func request_repair(android: Android) -> void:
 	queue_job(android, "Oprava: %s" % android.display_name,
-			[{"name": "Oprava", "duration": Android.REPAIR_TIME}], Callable(), android.finish_repair)
+			[{"name": "Oprava", "duration": Android.REPAIR_TIME}], Callable(), android.finish_repair, true)

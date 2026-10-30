@@ -68,6 +68,7 @@ func get_shop_items() -> Array[ShopItem]:
 	for plot in station.get_plots():
 		if plot.building:
 			items.append_array(plot.building.info_actions())
+	items.append_array(station.drone.info_actions())
 	if station.control_center:
 		items.append_array(station.control_center.info_actions())
 	for kind in Plot.Kind.values():
@@ -140,6 +141,7 @@ func _begin_mission(index: int) -> void:
 	station.shop_available = mission.shop_available
 	station.control_center_available = mission.control_center_available
 	station.tower_available = mission.tower_available
+	station.drone.upgrades_available = mission.drone_upgrades
 	if mission.galaxin_economy and not station.galaxin_economy:
 		station.enable_galaxin_economy(mission.start_galaxin)
 	spawner.min_interval = mission.ship_interval_min

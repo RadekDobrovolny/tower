@@ -4,8 +4,10 @@ extends Node2D
 ## Android, který chodí k zakotveným lodím a tankuje je. Zvládne obsluhovat víc lodí
 ## najednou: postaví se mezi ně a ke každé natáhne hadici.
 ## Zvlášť se vylepšuje rychlost tankování a rychlost chůze (okamžitě, bez stavby).
-## Když stanice nemá obrannou věž, střílí po pirátech z tankovací pistole (galaxínovým
-## laserem). Po boji je poškozený: netankuje, dokud ho stavební dron neopraví.
+## Piráti střílejí přednostně po něm. Každý zásah ubere bod odolnosti, a když odolnost
+## klesne na nulu, je rozbitý: netankuje a nebrání se, dokud ho stavební dron (nebo vlastní
+## nanoboti) neopraví. Když stanice nemá obrannou věž, střílí po pirátech z tankovací
+## pistole (galaxínovým laserem). Štíty přidávají odolnost, nanoboti ho opravují průběžně.
 
 ## Android může vzít další loď (dotankoval nebo má volnou hadici).
 signal free_for_ship(android: Android)
@@ -45,10 +47,28 @@ const IDLE_FPS := 6.0
 const PUMP_FPS := 8.0
 ## Kolik pixelů ujde za jeden cyklus chůze (dva kroky). Rychlejší Pumpík proto rychleji kmitá nohama.
 const WALK_STRIDE := 64.0
-## Boj s piráty: prodleva mezi výstřely (s), poškození jednoho výstřelu a jak dlouho trvá oprava.
+## Boj s piráty: prodleva mezi výstřely (s), poškození jednoho výstřelu a jak dlouho trvá
+## oprava stavebním dronem.
 const SHOT_INTERVAL := 0.9
 const SHOT_DAMAGE := 1
 const REPAIR_TIME := 10.0
+## Kolik zásahů od pirátů vydrží bez štítů.
+const BASE_HEALTH := 3
+## Štíty: kolik zásahů přidají a cena levelu. Nanoboti: za kolik sekund opraví jeden bod
+## odolnosti (i když je rozbitý) a cena levelu. Level 0 = bez vylepšení.
+const SHIELD_LEVELS := [
+	{"bonus": 0, "cost": 0},
+	{"bonus": 2, "cost": 3000},
+	{"bonus": 4, "cost": 6000},
+]
+const NANOBOT_LEVELS := [
+	{"seconds": 0.0, "cost": 0},
+	{"seconds": 6.0, "cost": 4000},
+	{"seconds": 3.0, "cost": 7000},
+]
+## Za jak dlouho po posledním zásahu zavolá částečně poškozený android dron na opravu.
+const SAFE_AFTER := 4.0
+const HIT_FLASH_TIME := 0.15
 const BLAST_TIME := 0.12
 ## Ústí tankovací pistole vůči středu androida (odtud letí laser).
 const NOZZLE := Vector2(-9, 22)
@@ -67,8 +87,11 @@ var walk_level := 1
 var max_level := FUEL_LEVELS.size()
 ## Stanice, ze které android čerpá galaxín. Nastaví ji stanice.
 var station: Station
-## Po boji s piráty: netankuje, dokud ho dron neopraví.
+## Rozbitý po zásazích pirátů: netankuje, dokud ho dron (nebo nanoboti) neopraví.
 var damaged := false
+var health := BASE_HEALTH
+var shield_level := 0
+var nanobot_level := 0
 ## Zakázka stavebního drona na opravu, nebo null.
 var job: ConstructionJob
 
@@ -85,6 +108,9 @@ var _moved := false
 var _enemy: Pirate
 var _shot_cooldown := 0.0
 var _blast_left := 0.0
+var _hit_flash := 0.0
+var _since_hit := 0.0
+var _nanobot_time := 0.0
 
 @onready var _sprite: Sprite2D = $Sprite
 @onready var _hoses: Array[Line2D] = [$Hose1, $Hose2]
@@ -92,6 +118,7 @@ var _blast_left := 0.0
 @onready var _bubble: SpeechBubble = $SpeechBubble
 @onready var _blaster: Line2D = $Blaster
 @onready var _damage_sparks: CPUParticles2D = $DamageSparks
+@onready var _health_bar: ProgressBar = $HealthBar
 
 
 func _ready() -> void:
@@ -102,6 +129,10 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	_blast_left -= delta
 	_blaster.visible = _blast_left > 0.0
+	_hit_flash -= delta
+	_since_hit += delta
+	_heal(delta)
+	_update_health_looks()
 	if damaged or _enemy:
 		# Při boji a s poškozením netankuje, lodě na plošinách počkají.
 		_update_hoses(false)
@@ -147,18 +178,68 @@ func can_fight() -> bool:
 	return not damaged and _enemy == null
 
 
+func max_health() -> int:
+	return BASE_HEALTH + SHIELD_LEVELS[shield_level].bonus
+
+
+## Zásah od piráta. Když odolnost klesne na nulu, android je rozbitý.
+func take_hit() -> void:
+	if damaged:
+		return
+	health -= 1
+	_hit_flash = HIT_FLASH_TIME
+	_since_hit = 0.0
+	if health <= 0:
+		_break_down()
+
+
 func engage(pirate: Pirate) -> void:
 	_enemy = pirate
 	_shot_cooldown = SHOT_INTERVAL * 0.5
 	_bubble.say(Lines.pick(Lines.ANDROID_FIGHT))
 
 
-## Oprava stavebním dronem je hotová, android zase tankuje.
+## Oprava je hotová (dron nebo nanoboti): plná odolnost, a když byl rozbitý, zase tankuje.
 func finish_repair() -> void:
+	health = max_health()
+	if not damaged:
+		return
 	damaged = false
 	_update_looks()
 	_bubble.say(Lines.pick(Lines.ANDROID_REPAIRED))
 	free_for_ship.emit(self)
+
+
+## Cena dalšího levelu štítů nebo nanobotů, nebo -1 (maximum, nebo je mise ještě nenabízí).
+func next_shield_cost() -> int:
+	if not station.tower_available or shield_level + 1 >= SHIELD_LEVELS.size():
+		return -1
+	return SHIELD_LEVELS[shield_level + 1].cost
+
+
+func next_nanobot_cost() -> int:
+	if not station.tower_available or nanobot_level + 1 >= NANOBOT_LEVELS.size():
+		return -1
+	return NANOBOT_LEVELS[nanobot_level + 1].cost
+
+
+func upgrade_shields() -> bool:
+	var cost := next_shield_cost()
+	if cost < 0 or not Game.spend_credits(cost):
+		return false
+	shield_level += 1
+	health += SHIELD_LEVELS[shield_level].bonus - SHIELD_LEVELS[shield_level - 1].bonus
+	_on_upgraded()
+	return true
+
+
+func upgrade_nanobots() -> bool:
+	var cost := next_nanobot_cost()
+	if cost < 0 or not Game.spend_credits(cost):
+		return false
+	nanobot_level += 1
+	_on_upgraded()
+	return true
 
 
 ## Přestane obsluhovat loď (např. když to vzdala a odlétá).
@@ -232,12 +313,16 @@ func info_lines() -> PackedStringArray:
 		"Chůze: level %d (%d px/s)" % [walk_level, roundi(walk_speed())],
 		"Právě obsluhuje lodí: %d / %d" % [_ships.size(), max_parallel_ships],
 	])
+	if station.tower_available or shield_level > 0:
+		lines.append("Odolnost: %d / %d zásahů" % [health, max_health()])
+	if nanobot_level > 0:
+		lines.append("Nanoboti: opraví 1 bod odolnosti za %d s" % roundi(NANOBOT_LEVELS[nanobot_level].seconds))
 	if _enemy:
 		lines.append("Stav: bojuje s piráty!")
 	elif damaged:
-		lines.append("Stav: poškozený po boji s piráty, netankuje.")
-		if job:
-			lines.append(job.status_text(station.drone))
+		lines.append("Stav: rozbitý po zásazích pirátů, netankuje.")
+	if job:
+		lines.append(job.status_text(station.drone))
 	return lines
 
 
@@ -245,8 +330,16 @@ func info_actions() -> Array[ShopItem]:
 	var actions: Array[ShopItem] = [
 		ShopItem.new(_fuel_upgrade_label, next_fuel_cost, upgrade_fuel, ShopItem.Kind.UPGRADE),
 		ShopItem.new(_walk_upgrade_label, next_walk_cost, upgrade_walk, ShopItem.Kind.UPGRADE),
+		ShopItem.new(_shield_upgrade_label, next_shield_cost, upgrade_shields, ShopItem.Kind.UPGRADE),
+		ShopItem.new(func() -> String: return "Nanoboti: level %d (samooprava)" % (nanobot_level + 1),
+				next_nanobot_cost, upgrade_nanobots, ShopItem.Kind.UPGRADE),
 	]
 	return actions
+
+
+func _shield_upgrade_label() -> String:
+	var next: Dictionary = SHIELD_LEVELS[mini(shield_level + 1, SHIELD_LEVELS.size() - 1)]
+	return "Štíty: level %d (odolnost %d)" % [shield_level + 1, BASE_HEALTH + next.bonus]
 
 
 func _fuel_upgrade_label() -> String:
@@ -306,7 +399,7 @@ func _animate(delta: float) -> void:
 
 func _fight(delta: float) -> void:
 	if not is_instance_valid(_enemy) or not _enemy.is_attacking():
-		_end_fight()
+		_enemy = null
 		return
 	_shot_cooldown -= delta
 	if _shot_cooldown > 0.0:
@@ -317,13 +410,41 @@ func _fight(delta: float) -> void:
 	_enemy.hit(SHOT_DAMAGE)
 
 
-## Po boji (pirát padl nebo odletěl) je android poškozený a čeká na opravu.
-func _end_fight() -> void:
+## Odolnost klesla na nulu: android je rozbitý a čeká na opravu (bez nanobotů ho opraví dron).
+func _break_down() -> void:
 	_enemy = null
 	damaged = true
 	_update_looks()
 	_bubble.say(Lines.pick(Lines.ANDROID_DAMAGED))
-	station.request_repair(self)
+	if nanobot_level == 0 and job == null:
+		station.request_repair(self)
+
+
+## Nanoboti opravují bod po bodu. Bez nich zavolá částečně poškozený android dron,
+## až na něj chvíli nikdo nestřílí.
+func _heal(delta: float) -> void:
+	if health >= max_health():
+		_nanobot_time = 0.0
+		return
+	if nanobot_level > 0:
+		_nanobot_time += delta
+		if _nanobot_time >= NANOBOT_LEVELS[nanobot_level].seconds:
+			_nanobot_time = 0.0
+			health += 1
+			if health >= max_health():
+				finish_repair()
+	elif job == null and not damaged and _since_hit > SAFE_AFTER:
+		station.request_repair(self)
+
+
+func _update_health_looks() -> void:
+	_health_bar.visible = health < max_health() and not damaged
+	_health_bar.max_value = max_health()
+	_health_bar.value = health
+	if _hit_flash > 0.0:
+		_sprite.modulate = Color(2.0, 0.8, 0.8)
+	elif _sprite.modulate.r > 1.5:
+		_update_looks()
 
 
 func _play(animation: String, fps: float, delta: float) -> void:

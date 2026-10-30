@@ -37,10 +37,6 @@ position = Vector2(0, -100)
 scale = Vector2(0.9, 0.9)
 texture = ExtResource("6_light")
 
-[node name="Light" type="Polygon2D" parent="."]
-visible = false
-position = Vector2(64, 36)
-polygon = PackedVector2Array(-4, -3, 4, -3, 4, 3, -4, 3)
 
 [node name="ServicePoint" type="Marker2D" parent="."]
 position = Vector2(-28, 58)

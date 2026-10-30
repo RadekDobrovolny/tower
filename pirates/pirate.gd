@@ -1,30 +1,34 @@
 class_name Pirate
 extends Node2D
 
-## Pirátská loď. Přiletí k jednomu z míst kolem stanice, natočí se k zásobníku a každou
-## chvíli po něm vystřelí a ukradne kredity. Po několika krádežích odletí. Sestřelit ji
-## může obranná věž, a když stanice věž nemá, android (Pumpík).
+## Pirátská loď. Přiletí k jednomu z míst kolem stanice a každou chvíli vystřelí: dokud
+## je android (Pumpík) v provozu, střílí po něm, a když je rozbitý, střílí po zásobníku
+## a ukradne část kreditů z pokladny. Po několika krádežích odletí. Sestřelit ji může
+## obranná věž, a když stanice věž nemá, android.
 ## Pozice jsou globální (piráti jsou ve světě, ne ve stanici).
 
 signal finished(pirate: Pirate)
 
 enum State { ARRIVING, ATTACKING, LEAVING, DESTROYED }
 
-## Druhy pirátů: vzhled, výdrž (počet zásahů po 1), kolik ukradne jednou ranou, rychlost.
+## Druhy pirátů: vzhled, výdrž (počet zásahů po 1) a rychlost.
 const KINDS := {
 	"raider": {
 		"texture": preload("res://assets/sprites/pirates/raider.png"), "scale": 0.34,
-		"hp": 4, "steal": 120, "speed": 230.0,
+		"hp": 4, "speed": 230.0,
 	},
 	"gunship": {
 		"texture": preload("res://assets/sprites/pirates/gunship.png"), "scale": 0.42,
-		"hp": 10, "steal": 250, "speed": 170.0,
+		"hp": 10, "speed": 170.0,
 	},
 }
 const TURN_SPEED := 3.5
 ## Na jakou vzdálenost od místa útoku pirát začne zpomalovat.
 const APPROACH_RADIUS := 200.0
 const STEAL_INTERVAL := 2.5
+## Kolik procent kreditů z pokladny ukradne jedna rána po zásobníku.
+const STEAL_SHARE_MIN := 0.03
+const STEAL_SHARE_MAX := 0.08
 ## Po tolika krádežích pirát odletí.
 const MAX_STEALS := 5
 const LASER_TIME := 0.15
@@ -126,26 +130,43 @@ func _fly_to_attack_point(delta: float) -> bool:
 
 
 func _attack(delta: float) -> void:
-	var to_tank := station.tank.global_position - global_position
-	_body.rotation = lerp_angle(_body.rotation, to_tank.angle(), minf(TURN_SPEED * delta, 1.0))
+	var target := _android_target()
+	var aim: Vector2 = target.global_position if target else station.tank.global_position
+	_body.rotation = lerp_angle(_body.rotation, (aim - global_position).angle(), minf(TURN_SPEED * delta, 1.0))
 	_body.position.y = sin(_time * 3.0) * 2.0
 	_engine.target_throttle = 0.3
 	_steal_timer -= delta
 	if _steal_timer > 0.0:
 		return
 	_steal_timer = STEAL_INTERVAL
+	if target:
+		_fire_at(target.global_position)
+		target.take_hit()
+		return
 	_steal()
 	if _steals >= MAX_STEALS:
 		_leave()
 
 
-## Vystřelí po zásobníku a ukradne kredity (nejvýš kolik hráč má).
+## Android v provozu, po kterém pirát střílí, nebo null (všichni jsou rozbití).
+func _android_target() -> Android:
+	for android in station.get_androids():
+		if not android.damaged:
+			return android
+	return null
+
+
+func _fire_at(target: Vector2) -> void:
+	var nose := _body.to_global(Vector2(_sprite.texture.get_width() * _sprite.scale.x * 0.45, 0.0))
+	_laser.points = PackedVector2Array([to_local(nose), to_local(target)])
+	_laser_left = LASER_TIME
+
+
+## Vystřelí po zásobníku a ukradne část kreditů z pokladny.
 func _steal() -> void:
 	_steals += 1
-	var nose := _body.to_global(Vector2(_sprite.texture.get_width() * _sprite.scale.x * 0.45, 0.0))
-	_laser.points = PackedVector2Array([to_local(nose), to_local(station.tank.global_position)])
-	_laser_left = LASER_TIME
-	var amount := mini(KINDS[kind].steal, maxi(Game.credits, 0))
+	_fire_at(station.tank.global_position)
+	var amount := roundi(maxi(Game.credits, 0) * randf_range(STEAL_SHARE_MIN, STEAL_SHARE_MAX))
 	if amount > 0:
 		Game.add_credits(-amount)
 		FloatingText.spawn(station, station.tank.position + Vector2(0, -60), "-%d kr ukradeno" % amount, STEAL_COLOR)

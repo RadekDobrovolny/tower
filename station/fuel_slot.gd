@@ -16,8 +16,6 @@ const PHASES := [
 const PUMP_OFFSET_X := 64.0
 ## Pata pumpy vůči jejímu středu: odtud vede potrubí do zásobníku.
 const PUMP_FOOT := Vector2(0, 28)
-const FREE_COLOR := Color(0.3, 0.9, 0.4)
-const BUSY_COLOR := Color(1.0, 0.55, 0.2)
 
 ## Z které strany čerpadla stojí android: -1 vlevo, 1 vpravo. Nastaví stanice podle parcely.
 var service_side := -1
@@ -26,7 +24,6 @@ var occupant: Ship = null
 @onready var _base: Sprite2D = $Base
 @onready var _pad: Sprite2D = $Pad
 @onready var _pump: Sprite2D = $Pump
-@onready var _light: Polygon2D = $Light
 @onready var _service_point: Marker2D = $ServicePoint
 @onready var _pad_lights: PadLights = $PadLights
 
@@ -34,9 +31,7 @@ var occupant: Ship = null
 func _ready() -> void:
 	_service_point.position.x = absf(_service_point.position.x) * service_side
 	_pump.position.x = PUMP_OFFSET_X * -service_side
-	_light.position.x = _pump.position.x
 	super()
-	_update_light()
 
 
 func _process(delta: float) -> void:
@@ -68,12 +63,10 @@ func pipe_position() -> Vector2:
 
 func reserve(ship: Ship) -> void:
 	occupant = ship
-	_update_light()
 
 
 func release() -> void:
 	occupant = null
-	_update_light()
 	freed.emit(self)
 
 
@@ -99,7 +92,6 @@ func _update_construction_looks() -> void:
 	_base.visible = built_phases == 1
 	_pad.visible = built_phases >= 2
 	_pump.visible = built_phases >= 3
-	_light.visible = built_phases >= 4
 	if built_phases >= 4:
 		station.connect_pipe(self)
 
@@ -114,6 +106,3 @@ func _pad_lights_mode() -> PadLights.Mode:
 		return PadLights.Mode.LANDED
 	return PadLights.Mode.APPROACH
 
-
-func _update_light() -> void:
-	_light.color = FREE_COLOR if occupant == null else BUSY_COLOR

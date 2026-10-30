@@ -27,6 +27,8 @@ extends Resource
 @export var shop_available := false
 @export var control_center_available := false
 @export var tower_available := false
+## Jestli jde vylepšovat stavební dron (rychlost letu a práce).
+@export var drone_upgrades := false
 ## Jestli na stanici útočí piráti a rozmezí v sekundách mezi útoky.
 @export var pirates := false
 @export var pirate_interval_min := 40.0
