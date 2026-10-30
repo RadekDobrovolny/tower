@@ -43,6 +43,24 @@ const IMPATIENT := [
 	"Haló, jsem tu taky!",
 ]
 
+## Loď ve frontě kouká na zábavní systém (místo stížnosti, když ho stanice má).
+const TV_COMMENTS := [
+	"Hele, reklama na galaxín!",
+	"Tenhle seriál znám!",
+	"Aspoň že tu běží telka.",
+	"Pusťte tam zprávy!",
+	"Ještě chvilku, je to napínavé.",
+]
+
+## Texty, které běží na obrazovce zábavního systému.
+const BILLBOARD := [
+	"Galaxín - palivo budoucnosti!",
+	"Plná nádrž, plná pohoda.",
+	"Tankuj chytře, tankuj galaxín.",
+	"Nejrychlejší hadice v galaxii!",
+	"Dnes v 8: Pirátské hvězdy, 3. díl",
+]
+
 ## Loď to přestalo bavit a odlétá bez placení.
 const ANGRY_LEAVE := [
 	"Tak to ne! Letím jinam.",
@@ -78,6 +96,42 @@ const ANDROID_TIP_THANKS := [
 	"To nemusíte!",
 	"Díky, šťastný let!",
 	"Moje obvody se tetelí!",
+]
+
+## Loď dostala nekvalitní galaxín a stanice platí pokutu.
+const QUALITY_COMPLAINT := [
+	"Tohle je břečka! Hlásím vás!",
+	"Fuj, to není galaxín!",
+	"Inspekce o tom uslyší!",
+	"Motor mi kašle. Pokuta!",
+]
+
+## Pumpíkovi došel galaxín v zásobníku.
+const ANDROID_EMPTY := [
+	"Došel galaxín!",
+	"Zásobník je prázdný, šéfe!",
+	"Objednej cisternu!",
+]
+
+## Cisterna dorazila včas a plná.
+const TANKER_ARRIVAL := [
+	"Galaxín je tu!",
+	"Dovoz galaxínu, podepiš to tady.",
+	"Čerstvá várka galaxínu!",
+]
+
+## Cisterna dorazila se zpožděním.
+const TANKER_LATE := [
+	"Promiň, zácpa u Saturnu.",
+	"Pozdě, ale přece!",
+	"Navigace mě poslala oklikou.",
+]
+
+## Cisterna přivezla méně, než se objednalo.
+const TANKER_SHORT := [
+	"Víc nebylo, šéfe.",
+	"Trochu jsem to cestou upil...",
+	"Zbytek vrátím v kreditech.",
 ]
 
 ## Android začíná tankovat. Zazní jen někdy.

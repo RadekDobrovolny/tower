@@ -1,18 +1,20 @@
 extends Node
 
-## Globální stav rozehraného levelu (autoload `Game`).
+## Globální stav rozehrané hry (autoload `Game`).
 
 signal credits_changed(credits: int)
 signal stats_changed
 
+## Od které mise (index v Missions.ALL) hra začne. Nastavuje ho menu.
+var start_mission := 0
 var credits := 0
 var ships_served := 0
 var ships_lost := 0
 
 
-## Vynuluje stav na začátku levelu.
-func reset() -> void:
-	credits = 0
+## Vynuluje stav na začátku hry. Hráč může začínat s nějakými kredity.
+func reset(start_credits := 0) -> void:
+	credits = start_credits
 	ships_served = 0
 	ships_lost = 0
 	credits_changed.emit(credits)

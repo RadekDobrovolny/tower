@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://ships/ship.gd" id="1_ship"]
 [ext_resource type="PackedScene" path="res://ui/speech_bubble.tscn" id="2_bubble"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ships/rocket.png" id="3_rocket"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_bg"]
 bg_color = Color(0, 0, 0, 0.6)
@@ -18,16 +19,13 @@ script = ExtResource("1_ship")
 [node name="Body" type="Node2D" parent="."]
 
 [node name="EngineFlame" type="Polygon2D" parent="Body"]
-color = Color(1, 0.6, 0.2, 0.9)
-polygon = PackedVector2Array(-10, -4, -22, 0, -10, 4)
+color = Color(1, 0.48, 0.18, 0.9)
+polygon = PackedVector2Array(-28, -4, -44, 0, -28, 4)
 
-[node name="Hull" type="Polygon2D" parent="Body"]
-color = Color(0.85, 0.85, 0.9, 1)
-polygon = PackedVector2Array(22, 0, -14, -15, -8, 0, -14, 15)
-
-[node name="Cockpit" type="Polygon2D" parent="Body"]
-color = Color(0.4, 0.8, 1, 1)
-polygon = PackedVector2Array(12, 0, 2, -5, 2, 5)
+[node name="Sprite" type="Sprite2D" parent="Body"]
+texture_filter = 4
+scale = Vector2(0.375, 0.375)
+texture = ExtResource("3_rocket")
 
 [node name="FuelBar" type="ProgressBar" parent="."]
 visible = false

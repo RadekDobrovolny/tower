@@ -23,7 +23,8 @@ func _process(delta: float) -> void:
 	if _cooldown > 0.0 or not station.has_room():
 		return
 	_spawn_ship()
-	_cooldown = randf_range(min_interval, max_interval)
+	# Při nízké ceně galaxínu přilétá lodí víc, při vysoké míň.
+	_cooldown = randf_range(min_interval, max_interval) / station.demand_factor()
 
 
 func _spawn_ship() -> void:

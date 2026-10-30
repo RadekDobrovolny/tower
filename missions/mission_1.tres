@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Mission" format=3]
+
+[ext_resource type="Script" path="res://missions/mission.gd" id="1_mission"]
+
+[resource]
+script = ExtResource("1_mission")
+title = "Pumpík se učí tankovat"
+description = "Právě jsi převzal malou čerpací stanici na okraji galaxie. Máš jeden čerpací slot a androida Pumpíka. Vydělej první peníze a vylepši Pumpíkovi tankování, ať stíhá obsluhovat. Na Pumpíka i na budovy můžeš kliknout."
+max_android_level = 3
+max_slots = 1
+ship_interval_min = 3.0
+ship_interval_max = 7.0
+goal_credits = 2000
+goal_fuel_level = 3

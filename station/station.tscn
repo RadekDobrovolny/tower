@@ -1,47 +1,50 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://station/station.gd" id="1_station"]
-[ext_resource type="PackedScene" path="res://station/fuel_slot.tscn" id="2_slot"]
+[ext_resource type="PackedScene" path="res://station/plot.tscn" id="2_plot"]
 [ext_resource type="PackedScene" path="res://staff/android.tscn" id="3_android"]
+[ext_resource type="PackedScene" path="res://construction/construction_drone.tscn" id="4_drone"]
+[ext_resource type="PackedScene" path="res://economy/galaxin_tank.tscn" id="5_tank"]
+[ext_resource type="Script" path="res://economy/supply.gd" id="6_supply"]
+[ext_resource type="Texture2D" path="res://assets/sprites/station/deck.png" id="7_deck"]
 
 [node name="Station" type="Node2D"]
 script = ExtResource("1_station")
 
 [node name="Platform" type="Polygon2D" parent="."]
-color = Color(0.2, 0.24, 0.31, 1)
+texture_repeat = 2
+texture = ExtResource("7_deck")
 polygon = PackedVector2Array(-328, -160, 328, -160, 360, -128, 360, 128, 328, 160, -328, 160, -360, 128, -360, -128)
 
 [node name="PlatformEdge" type="Line2D" parent="."]
 points = PackedVector2Array(-328, -160, 328, -160, 360, -128, 360, 128, 328, 160, -328, 160, -360, 128, -360, -128)
 closed = true
 width = 4.0
-default_color = Color(0.45, 0.52, 0.63, 1)
+default_color = Color(0.54, 0.42, 0.2, 1)
 
-[node name="Pipes" type="Line2D" parent="."]
-points = PackedVector2Array(-200, -22, -200, 10, 200, 10, 200, -22)
-width = 6.0
-default_color = Color(0.55, 0.32, 0.16, 1)
+[node name="Pipes" type="Node2D" parent="."]
 
-[node name="PipeCenter" type="Line2D" parent="."]
-points = PackedVector2Array(0, -22, 0, 24)
-width = 6.0
-default_color = Color(0.55, 0.32, 0.16, 1)
-
-[node name="Tank" type="Polygon2D" parent="."]
+[node name="Tank" parent="." instance=ExtResource("5_tank")]
 position = Vector2(0, 70)
-color = Color(0.85, 0.45, 0.2, 1)
-polygon = PackedVector2Array(46.2, 19.1, 19.1, 46.2, -19.1, 46.2, -46.2, 19.1, -46.2, -19.1, -19.1, -46.2, 19.1, -46.2, 46.2, -19.1)
 
-[node name="Slots" type="Node2D" parent="."]
+[node name="Plots" type="Node2D" parent="."]
 
-[node name="FuelSlot1" parent="Slots" instance=ExtResource("2_slot")]
+[node name="Plot1" parent="Plots" instance=ExtResource("2_plot")]
 position = Vector2(0, -80)
 
-[node name="FuelSlot2" parent="Slots" instance=ExtResource("2_slot")]
+[node name="Plot2" parent="Plots" instance=ExtResource("2_plot")]
 position = Vector2(-200, -80)
+service_side = 1
 
-[node name="FuelSlot3" parent="Slots" instance=ExtResource("2_slot")]
+[node name="Plot3" parent="Plots" instance=ExtResource("2_plot")]
 position = Vector2(200, -80)
+
+[node name="Plot4" parent="Plots" instance=ExtResource("2_plot")]
+position = Vector2(-230, 85)
+service_side = 1
+
+[node name="Plot5" parent="Plots" instance=ExtResource("2_plot")]
+position = Vector2(230, 85)
 
 [node name="QueuePoints" type="Node2D" parent="."]
 
@@ -57,7 +60,22 @@ position = Vector2(-200, -275)
 [node name="QueuePoint4" type="Marker2D" parent="QueuePoints"]
 position = Vector2(200, -275)
 
+[node name="Supply" type="Node2D" parent="."]
+script = ExtResource("6_supply")
+dock_position = Vector2(-170, 215)
+spawn_position = Vector2(-780, 215)
+
 [node name="Staff" type="Node2D" parent="."]
 
 [node name="Android" parent="Staff" instance=ExtResource("3_android")]
 position = Vector2(-75, 30)
+
+[node name="Drone" parent="." instance=ExtResource("4_drone")]
+position = Vector2(80, 125)
+
+[node name="SelectionMarker" type="Line2D" parent="."]
+visible = false
+z_index = 4
+closed = true
+width = 2.0
+default_color = Color(1, 0.9, 0.5, 0.9)

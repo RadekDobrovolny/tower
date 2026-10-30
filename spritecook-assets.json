@@ -1,0 +1,86 @@
+{
+  "project": {
+    "name": "Tower",
+    "spritecook_project_id": "61f5bc80-e8c0-4bd9-b70b-1de6dcd7dad8"
+  },
+  "notes": "Všechno generováno modelem gpt-image-2.5-flare (medium, 1K, 8 kreditů za obrázek). Archy 2×2 jsou rozstříhané nástrojem tools/slice_sheet.gd a zmenšené. Originály 1024×1024 jsou v SpriteCooku pod uvedeným asset_id.",
+  "assets": [
+    {
+      "asset_id": "0a5f98a8-08e8-40b6-8dfd-142c5650f7a0",
+      "label": "Tower – raketa zákazníka (test stylu)",
+      "files": [
+        {"file": "assets/sprites/ships/rocket.png", "sha12": "28647438aeda"}
+      ]
+    },
+    {
+      "asset_id": "5fbdf6cd-3726-4d88-a698-38d4714f6028",
+      "label": "Tower – arch 1: Pumpík, Bzučák, pumpa, zásobník",
+      "files": [
+        {"file": "assets/sprites/staff/pumpik.png", "sha12": "cfb4a20ff986", "cell": "vlevo nahoře", "note": "nahrazen animacemi níže, soubor smazán"},
+        {"file": "assets/sprites/construction/bzucak.png", "sha12": "cea6d077699b", "cell": "vpravo nahoře"},
+        {"file": "assets/sprites/station/pump.png", "sha12": "09f752162485", "cell": "vlevo dole"},
+        {"file": "assets/sprites/station/tank.png", "sha12": "c1827b8528e2", "cell": "vpravo dole"}
+      ]
+    },
+    {
+      "asset_id": "c3485eb3-5f67-4fbb-b640-1c7fe5b56186",
+      "label": "Tower – arch 2: rakety zákazníků a cisterna",
+      "files": [
+        {"file": "assets/sprites/ships/rocket_cargo.png", "sha12": "f072f90fce05", "cell": "vlevo nahoře"},
+        {"file": "assets/sprites/ships/rocket_racer.png", "sha12": "5314a0e71350", "cell": "vpravo nahoře"},
+        {"file": "assets/sprites/ships/rocket_workhorse.png", "sha12": "76b1586934ea", "cell": "vlevo dole"},
+        {"file": "assets/sprites/ships/tanker.png", "sha12": "63b7dee07db7", "cell": "vpravo dole"}
+      ]
+    },
+    {
+      "asset_id": "4dfaa099-ea66-4490-8961-3784444b995a",
+      "label": "Tower – textura paluby stanice",
+      "files": [
+        {"file": "assets/sprites/station/deck.png", "sha12": "5b9e3625b7a6", "note": "opakovatelná dlaždice zmenšená na 256×256"}
+      ]
+    },
+    {
+      "asset_id": "43270731-b241-47cc-90f4-968d51d4d351",
+      "label": "Tower – arch 4: přistávací plocha, televize, staveniště, planeta",
+      "files": [
+        {"file": "assets/sprites/station/landing_pad.png", "sha12": "37a2f066ff55", "cell": "vlevo nahoře"},
+        {"file": "assets/sprites/station/entertainment_tv.png", "sha12": "cbfd26c2451d", "cell": "vpravo nahoře"},
+        {"file": "assets/sprites/construction/foundation.png", "sha12": "3e90aaed78e4", "cell": "vlevo dole"},
+        {"file": "assets/sprites/space/planet.png", "sha12": "cbb1f43e22c8", "cell": "vpravo dole"}
+      ]
+    },
+    {
+      "asset_id": "e440b2ef-efd4-4d1b-87bc-211736838454",
+      "label": "Slice 1 (Pumpík vyříznutý z archu 1 v plném rozlišení, 246×382)",
+      "files": []
+    },
+    {
+      "asset_id": "9576857d-e533-4c10-a206-f74e25233f08",
+      "label": "Tower – Pumpík (zdroj animace)",
+      "files": [],
+      "note": "Slice 1 doplněný průhledným okrajem na 300×400 (detailní animace chce zdroj aspoň 256×256)"
+    },
+    {
+      "asset_id": "87303178-3d50-4f40-bc11-f58ecbee4541",
+      "label": "Pumpík – chůze (frame-engine-v1.1, 8 snímků, 20 kreditů)",
+      "files": [
+        {"file": "assets/sprites/staff/pumpik_walk.png", "sha12": "83540c0ab3e1"}
+      ]
+    },
+    {
+      "asset_id": "bd459112-9bbc-4993-afd1-027e4d651025",
+      "label": "Pumpík – klid (frame-engine-v1.1, 8 snímků, 20 kreditů)",
+      "files": [
+        {"file": "assets/sprites/staff/pumpik_idle.png", "sha12": "33009eeccd43"}
+      ]
+    },
+    {
+      "asset_id": "a4a5f50c-50f7-4c89-9aff-8f785836dcfd",
+      "label": "Pumpík – tankování (frame-engine-v1.1, 8 snímků, 20 kreditů)",
+      "files": [
+        {"file": "assets/sprites/staff/pumpik_pump.png", "sha12": "5cc500a8993d"}
+      ],
+      "note": "Všechny tři animace jsou oříznuté jedním společným rámečkem (sedí na sebe) a zmenšené tak, aby byl Pumpík vysoký 128 px; pásy po 8 snímcích 83×133."
+    }
+  ]
+}

@@ -2,28 +2,31 @@
 
 [ext_resource type="Script" path="res://staff/android.gd" id="1_android"]
 [ext_resource type="PackedScene" path="res://ui/speech_bubble.tscn" id="2_bubble"]
+[ext_resource type="Texture2D" path="res://assets/sprites/staff/pumpik_idle.png" id="3_pumpik"]
 
 [node name="Android" type="Node2D"]
 script = ExtResource("1_android")
 
-[node name="Hose" type="Line2D" parent="."]
+[node name="Hose1" type="Line2D" parent="."]
 visible = false
 width = 3.0
 default_color = Color(0.9, 0.5, 0.2, 1)
 
-[node name="Body" type="Polygon2D" parent="."]
-color = Color(0.7, 0.75, 0.82, 1)
-polygon = PackedVector2Array(10, 0, 8.66, 5, 5, 8.66, 0, 10, -5, 8.66, -8.66, 5, -10, 0, -8.66, -5, -5, -8.66, 0, -10, 5, -8.66, 8.66, -5)
+[node name="Hose2" type="Line2D" parent="."]
+visible = false
+width = 3.0
+default_color = Color(0.9, 0.5, 0.2, 1)
 
-[node name="Visor" type="Polygon2D" parent="."]
-color = Color(0.3, 0.9, 1, 1)
-polygon = PackedVector2Array(-6, -5, 6, -5, 6, -1, -6, -1)
+[node name="Sprite" type="Sprite2D" parent="."]
+scale = Vector2(0.42, 0.42)
+texture = ExtResource("3_pumpik")
+hframes = 8
 
 [node name="LevelLabel" type="Label" parent="."]
 offset_left = -50.0
-offset_top = -32.0
+offset_top = -48.0
 offset_right = 50.0
-offset_bottom = -14.0
+offset_bottom = -30.0
 mouse_filter = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
@@ -32,4 +35,4 @@ text = "Pumpík · L1"
 horizontal_alignment = 1
 
 [node name="SpeechBubble" parent="." instance=ExtResource("2_bubble")]
-height = 34.0
+height = 52.0

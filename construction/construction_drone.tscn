@@ -1,0 +1,26 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://construction/construction_drone.gd" id="1_drone"]
+[ext_resource type="Texture2D" path="res://assets/sprites/construction/bzucak.png" id="2_bzucak"]
+
+[node name="Drone" type="Node2D"]
+z_index = 5
+script = ExtResource("1_drone")
+
+[node name="Body" type="Node2D" parent="."]
+
+[node name="Beam" type="Line2D" parent="Body"]
+visible = false
+points = PackedVector2Array(0, 6, 0, 26)
+width = 3.0
+default_color = Color(0.4, 0.9, 1, 0.7)
+
+[node name="Sprite" type="Sprite2D" parent="Body"]
+scale = Vector2(0.16, 0.16)
+texture = ExtResource("2_bzucak")
+
+[node name="Sparks" type="Polygon2D" parent="Body"]
+visible = false
+position = Vector2(0, 26)
+color = Color(1, 0.95, 0.5, 1)
+polygon = PackedVector2Array(0, -6, 2, -2, 6, 0, 2, 2, 0, 6, -2, 2, -6, 0, -2, -2)

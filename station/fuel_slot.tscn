@@ -1,27 +1,33 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://station/fuel_slot.gd" id="1_slot"]
+[ext_resource type="Texture2D" path="res://assets/sprites/construction/foundation.png" id="2_foundation"]
+[ext_resource type="Texture2D" path="res://assets/sprites/station/landing_pad.png" id="3_pad"]
+[ext_resource type="Texture2D" path="res://assets/sprites/station/pump.png" id="4_pump"]
 
 [node name="FuelSlot" type="Node2D"]
 script = ExtResource("1_slot")
 
-[node name="Pad" type="Polygon2D" parent="."]
-color = Color(0.13, 0.16, 0.22, 1)
-polygon = PackedVector2Array(-44, -44, 44, -44, 44, 44, -44, 44)
+[node name="Base" type="Sprite2D" parent="."]
+visible = false
+scale = Vector2(0.37, 0.37)
+texture = ExtResource("2_foundation")
 
-[node name="Border" type="Line2D" parent="."]
-points = PackedVector2Array(-44, -44, 44, -44, 44, 44, -44, 44)
-closed = true
-width = 3.0
-default_color = Color(0.95, 0.75, 0.25, 1)
+[node name="Pad" type="Sprite2D" parent="."]
+visible = false
+scale = Vector2(0.344, 0.344)
+texture = ExtResource("3_pad")
 
-[node name="Pump" type="Polygon2D" parent="."]
-color = Color(0.55, 0.6, 0.68, 1)
-polygon = PackedVector2Array(-12, 48, 12, 48, 12, 62, -12, 62)
+[node name="Pump" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(64, 0)
+scale = Vector2(0.22, 0.22)
+texture = ExtResource("4_pump")
 
 [node name="Light" type="Polygon2D" parent="."]
-position = Vector2(34, 34)
-polygon = PackedVector2Array(-5, -5, 5, -5, 5, 5, -5, 5)
+visible = false
+position = Vector2(64, 36)
+polygon = PackedVector2Array(-4, -3, 4, -3, 4, 3, -4, 3)
 
 [node name="ServicePoint" type="Marker2D" parent="."]
 position = Vector2(-28, 58)
