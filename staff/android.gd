@@ -5,9 +5,10 @@ extends Node2D
 ## najednou: postaví se mezi ně a ke každé natáhne hadici.
 ## Zvlášť se vylepšuje rychlost tankování a rychlost chůze (okamžitě, bez stavby).
 ## Piráti střílejí přednostně po něm. Každý zásah ubere bod odolnosti, a když odolnost
-## klesne na nulu, je rozbitý: netankuje a nebrání se, dokud ho stavební dron (nebo vlastní
-## nanoboti) neopraví. Když stanice nemá obrannou věž, střílí po pirátech z tankovací
-## pistole (galaxínovým laserem). Štíty přidávají odolnost, nanoboti ho opravují průběžně.
+## klesne na nulu, je rozbitý: netankuje, nebrání se a čeká, až ho opraví stavební dron.
+## Částečně poškozený pracuje dál a zastaví se, až když k němu dron doletí opravovat.
+## Když stanice nemá obrannou věž, střílí po pirátech z tankovací pistole (galaxínovým
+## laserem). Štíty přidávají odolnost, nanoboti opravují částečné poškození (rozbitého ne).
 
 ## Android může vzít další loď (dotankoval nebo má volnou hadici).
 signal free_for_ship(android: Android)
@@ -55,7 +56,7 @@ const REPAIR_TIME := 10.0
 ## Kolik zásahů od pirátů vydrží bez štítů.
 const BASE_HEALTH := 3
 ## Štíty: kolik zásahů přidají a cena levelu. Nanoboti: za kolik sekund opraví jeden bod
-## odolnosti (i když je rozbitý) a cena levelu. Level 0 = bez vylepšení.
+## odolnosti (jen u částečného poškození, rozbitého neopraví) a cena levelu. Level 0 = bez vylepšení.
 const SHIELD_LEVELS := [
 	{"bonus": 0, "cost": 0},
 	{"bonus": 2, "cost": 3000},
@@ -87,7 +88,7 @@ var walk_level := 1
 var max_level := FUEL_LEVELS.size()
 ## Stanice, ze které android čerpá galaxín. Nastaví ji stanice.
 var station: Station
-## Rozbitý po zásazích pirátů: netankuje, dokud ho dron (nebo nanoboti) neopraví.
+## Rozbitý po zásazích pirátů: netankuje, dokud ho dron neopraví.
 var damaged := false
 var health := BASE_HEALTH
 var shield_level := 0
@@ -133,7 +134,7 @@ func _process(delta: float) -> void:
 	_since_hit += delta
 	_heal(delta)
 	_update_health_looks()
-	if damaged or _enemy or job:
+	if damaged or _enemy or is_being_repaired():
 		# Při boji, rozbitý a během opravy netankuje, lodě na plošinách počkají.
 		_update_hoses(false)
 		_moved = false
@@ -170,12 +171,17 @@ func _process(delta: float) -> void:
 
 ## Jestli android může vzít další loď.
 func is_available() -> bool:
-	return not damaged and _enemy == null and job == null and _ships.size() < max_parallel_ships
+	return not damaged and _enemy == null and not is_being_repaired() and _ships.size() < max_parallel_ships
 
 
 ## Jestli se může postavit pirátovi (není poškozený a s nikým jiným nebojuje).
 func can_fight() -> bool:
-	return not damaged and _enemy == null and job == null
+	return not damaged and _enemy == null and not is_being_repaired()
+
+
+## Jestli u něj už je dron a opravuje ho (pak stojí). Dokud dron letí, pracuje dál.
+func is_being_repaired() -> bool:
+	return station != null and station.drone.is_working_on(job)
 
 
 func max_health() -> int:
@@ -199,16 +205,15 @@ func engage(pirate: Pirate) -> void:
 	_bubble.say(Lines.pick(Lines.ANDROID_FIGHT))
 
 
-## Oprava je hotová (dron nebo nanoboti): plná odolnost a zase se vrátí do práce.
+## Dron dokončil opravu: plná odolnost a zpátky do práce. Stanice se dozví, že může
+## zase dostávat lodě (i ty, které mezitím přistály a čekají).
 func finish_repair() -> void:
 	health = max_health()
-	var was_out := damaged or job != null
 	damaged = false
 	_update_looks()
-	if was_out:
-		_bubble.say(Lines.pick(Lines.ANDROID_REPAIRED))
-		# Až v dalším snímku: stanice teprve po dokončení zakázky smaže `job`.
-		free_for_ship.emit.call_deferred(self)
+	_bubble.say(Lines.pick(Lines.ANDROID_REPAIRED))
+	# Až po snímku: dokud dron dokončuje zakázku, ještě „pracuje“ na androidovi.
+	free_for_ship.emit.call_deferred(self)
 
 
 ## Cena dalšího levelu štítů nebo nanobotů, nebo -1 (maximum, nebo je mise ještě nenabízí).
@@ -317,12 +322,12 @@ func info_lines() -> PackedStringArray:
 	if station.tower_available or shield_level > 0:
 		lines.append("Odolnost: %d / %d zásahů" % [health, max_health()])
 	if nanobot_level > 0:
-		lines.append("Nanoboti: opraví 1 bod odolnosti za %d s" % roundi(NANOBOT_LEVELS[nanobot_level].seconds))
+		lines.append("Nanoboti: opraví 1 bod odolnosti za %d s (rozbitého neopraví)" % roundi(NANOBOT_LEVELS[nanobot_level].seconds))
 	if _enemy:
 		lines.append("Stav: bojuje s piráty!")
 	elif damaged:
 		lines.append("Stav: rozbitý po zásazích pirátů, netankuje.")
-	elif job:
+	elif is_being_repaired():
 		lines.append("Stav: v opravě, netankuje.")
 	if job:
 		lines.append(job.status_text(station.drone))
@@ -419,14 +424,14 @@ func _break_down() -> void:
 	damaged = true
 	_update_looks()
 	_bubble.say(Lines.pick(Lines.ANDROID_DAMAGED))
-	if nanobot_level == 0 and job == null:
+	if job == null:
 		station.request_repair(self)
 
 
-## Nanoboti opravují bod po bodu. Bez nich zavolá částečně poškozený android dron,
-## až na něj chvíli nikdo nestřílí.
+## Částečné poškození: nanoboti opravují bod po bodu, bez nich android zavolá dron, až na
+## něj chvíli nikdo nestřílí. Rozbitého opraví jen dron (zavolá ho při rozbití).
 func _heal(delta: float) -> void:
-	if health >= max_health():
+	if damaged or health >= max_health():
 		_nanobot_time = 0.0
 		return
 	if nanobot_level > 0:
@@ -434,14 +439,17 @@ func _heal(delta: float) -> void:
 		if _nanobot_time >= NANOBOT_LEVELS[nanobot_level].seconds:
 			_nanobot_time = 0.0
 			health += 1
-			if health >= max_health():
-				finish_repair()
-	elif job == null and not damaged and _since_hit > SAFE_AFTER:
+	elif job == null and _since_hit > SAFE_AFTER:
 		station.request_repair(self)
-		_update_looks()
 
 
 func _update_health_looks() -> void:
+	var label := display_name
+	if damaged:
+		label = "%s · rozbitý" % display_name
+	elif is_being_repaired():
+		label = "%s · v opravě" % display_name
+	_level_label.text = label
 	_health_bar.visible = health < max_health() and not damaged
 	_health_bar.max_value = max_health()
 	_health_bar.value = health
@@ -465,8 +473,8 @@ func _update_looks() -> void:
 	_sprite.modulate = tint * DAMAGED_TINT if damaged else tint
 	_damage_sparks.emitting = damaged
 	if damaged:
-		_level_label.text = "%s · poškozený" % display_name
-	elif job:
+		_level_label.text = "%s · rozbitý" % display_name
+	elif is_being_repaired():
 		_level_label.text = "%s · v opravě" % display_name
 	else:
 		_level_label.text = display_name

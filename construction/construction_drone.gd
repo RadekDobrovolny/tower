@@ -31,6 +31,8 @@ var work_level := 1
 var upgrades_available := false
 
 var _jobs: Array[ConstructionJob] = []
+## Zakázka, na které dron právě pracuje (je u cíle), nebo null.
+var _working_job: ConstructionJob
 var _home: Vector2
 var _time := 0.0
 
@@ -49,15 +51,19 @@ func _process(delta: float) -> void:
 	_body.position.y = sin(_time * 4.0) * 2.0
 	_body.rotation = sin(_time * 2.5) * 0.06
 	var working := false
+	_working_job = null
 	if _jobs.is_empty():
 		position = position.move_toward(_home, speed() * delta)
 	else:
 		var job := _jobs[0]
 		var site := (get_parent() as Node2D).to_local(job.target.global_position) + HOVER_OFFSET
-		if position.is_equal_approx(site):
+		if position.distance_to(site) < 2.0:
+			position = site
 			working = true
+			_working_job = job
 			if job.work(delta * work_factor()):
 				_jobs.pop_front()
+				_working_job = null
 		else:
 			position = position.move_toward(site, speed() * delta)
 	_beam.visible = working
@@ -109,6 +115,11 @@ func upgrade_work() -> bool:
 		return false
 	work_level += 1
 	return true
+
+
+## Jestli dron na téhle zakázce právě pracuje (je u cíle).
+func is_working_on(job: ConstructionJob) -> bool:
+	return job != null and _working_job == job
 
 
 ## Jestli zakázka čeká ve frontě (dron zatím pracuje na jiné).
