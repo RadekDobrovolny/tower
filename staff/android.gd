@@ -142,12 +142,6 @@ func is_available() -> bool:
 	return not damaged and _enemy == null and _ships.size() < max_parallel_ships
 
 
-## Jestli android tuhle loď právě tankuje (stojí u ní s napojenou hadicí).
-func is_fueling(ship: Ship) -> bool:
-	var index := _ships.find(ship)
-	return index >= 0 and index < _hoses.size() and _hoses[index].visible
-
-
 ## Jestli se může postavit pirátovi (není poškozený a s nikým jiným nebojuje).
 func can_fight() -> bool:
 	return not damaged and _enemy == null

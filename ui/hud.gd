@@ -67,7 +67,9 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	_roll_credits(delta)
 	_update_pirate_alert()
-	if _galaxin_panel_ready:
+	# Nastavení galaxínu (cena, dodavatel, objednávky) je vidět jen s vybraným zásobníkem.
+	_galaxin_panel.visible = _galaxin_panel_ready and _selected == _campaign.station.tank
+	if _galaxin_panel.visible:
 		_refresh_galaxin_panel()
 	if _info_panel.visible:
 		_refresh_info_panel()
@@ -299,7 +301,6 @@ func _info_bbcode(lines: PackedStringArray) -> String:
 
 func _setup_galaxin_panel(station: Station) -> void:
 	_galaxin_panel_ready = true
-	_galaxin_panel.show()
 	%PriceDown.pressed.connect(func() -> void: station.set_sell_price(station.sell_price - 1))
 	%PriceUp.pressed.connect(func() -> void: station.set_sell_price(station.sell_price + 1))
 	var group := ButtonGroup.new()

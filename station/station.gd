@@ -58,11 +58,51 @@ const START_SLOT_PLOTS := [0, 1, 2]
 const START_SHOP_PLOT := 3
 const START_ENTERTAINMENT_PLOT := 4
 const START_TOWER_PLOT := 5
-const PIPE_SHADER := preload("res://fx/pipe.gdshader")
-const PIPE_TEXTURE := preload("res://fx/soft_light.tres")
-const PIPE_VALVE := preload("res://assets/sprites/station/pipe_valve.png")
-const PIPE_WIDTH := 9.0
-const VALVE_SCALE := 0.3
+## Potrubí: navazující dílek trubky (měď je v textuře přesně 32 px vysoká), kolena a T kusy
+## pro každý směr ramen (všechny nasvícené zleva shora, proto se neotáčejí), příruba
+## u zásobníku, podlahová spojka u čerpadla, průhledítko a tlakoměr.
+const PIPE_TEXTURE := preload("res://assets/sprites/station/pipe_tile.png")
+const PIPE_FLANGE := preload("res://assets/sprites/station/pipe_flange.png")
+const PIPE_FLOOR := preload("res://assets/sprites/station/pipe_floor.png")
+const PIPE_SIGHT := preload("res://assets/sprites/station/pipe_sight.png")
+const PIPE_GAUGE := preload("res://assets/sprites/station/pipe_gauge.png")
+const PIPE_WIDTH := 11.0
+## Kolena a T kusy podle ramen (písmena L, R, U, D seřazená abecedně): textura a kde je
+## v ní střed spojky (vůči středu textury, trubka v textuře je 32 px tlustá).
+const PIPE_FITTINGS := {
+	"DL": [preload("res://assets/sprites/station/pipe_elbow_ld.png"), Vector2(18.1, -17.9)],
+	"RU": [preload("res://assets/sprites/station/pipe_elbow_ur.png"), Vector2(-22.6, 17.0)],
+	"LU": [preload("res://assets/sprites/station/pipe_elbow_ul.png"), Vector2(22.3, 19.4)],
+	"DR": [preload("res://assets/sprites/station/pipe_elbow_rd.png"), Vector2(-17.7, -18.6)],
+	"DLR": [preload("res://assets/sprites/station/pipe_tee_lrd.png"), Vector2(1.4, -19.9)],
+	"LRU": [preload("res://assets/sprites/station/pipe_tee_lru.png"), Vector2(0.1, 18.2)],
+	"DLU": [preload("res://assets/sprites/station/pipe_tee_udl.png"), Vector2(18.4, -0.1)],
+}
+const FITTING_SCALE := PIPE_WIDTH / 32.0
+## Délka ramen spojek od středu spojky po konec objímky (px textury). Trubka se do objímky
+## zasune o FITTING_SOCKET, takže zakryje otvor a kolem ní zůstane vidět jen mosazný kroužek.
+const FITTING_ARMS := {
+	"DL": {"D": 55.0, "L": 55.0},
+	"RU": {"R": 61.0, "U": 54.0},
+	"LU": {"L": 62.0, "U": 59.0},
+	"DR": {"D": 57.0, "R": 54.0},
+	"DLR": {"D": 59.0, "L": 56.0, "R": 54.0},
+	"LRU": {"L": 50.0, "R": 49.0, "U": 55.0},
+	"DLU": {"D": 52.0, "L": 55.0, "U": 52.0},
+}
+const FITTING_SOCKET := 13.0
+## Příruba, spojka, průhledítko a tlakoměr jsou z dřívějšího archu, kde je trubka tlustá
+## 27,7 px. Kde je v nich osa: střed příruby (pahýl doleva) a osa trubky pod tlakoměrem.
+const PART_SCALE := PIPE_WIDTH / 27.66
+const FLANGE_CENTER := Vector2(12.5, 0.0)
+const GAUGE_AXIS := Vector2(0.0, 17.6)
+## Vedení potrubí: poloměr zásobníku a hlavní větev v uličce mezi horními a dolními
+## parcelami (y vůči středu zásobníku). Ze zásobníku vede trubka nahoru do hlavní větve
+## a z ní odbočují T kusy k čerpadlům.
+const TANK_PIPE_RADIUS := 46.0
+const TRUNK_LANE := -68.0
+## Jak daleko od odboček musí být průhledítko nebo tlakoměr na hlavní větvi.
+const DECOR_CLEARANCE := 30.0
 ## Jak blízko (px) k androidovi nebo zásobníku musí hráč kliknout, aby je vybral.
 const ANDROID_PICK_RADIUS := 28.0
 const TANK_PICK_RADIUS := 50.0
@@ -83,8 +123,8 @@ var artifacts_found: Array[String] = []
 var pirate_interval_factor := 1.0
 var loot_bonus := 1.0
 
-## Materiály potrubí k jednotlivým slotům (kvůli pulzu galaxínu).
-var _pipe_materials := {}
+## Sloty napojené potrubím na zásobník (v pořadí napojení).
+var _piped_slots: Array[FuelSlot] = []
 
 ## Prodejní cena galaxínu (kr/j).
 var sell_price := BASE_PRICE
@@ -126,7 +166,6 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	_update_selection_marker()
 	_defend_with_androids()
-	_update_pipe_flow()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -338,31 +377,149 @@ func setup_start_buildings(slots: int, entertainment_level: int, shop_products :
 		(_place_building("tower", plots[START_TOWER_PLOT]) as DefenseTower).set_level(tower_level)
 
 
-## Natáhne potrubí ze zásobníku k čerpacímu slotu (po poslední fázi stavby slotu):
-## měděná trubka (shader fx/pipe.gdshader) s ventilem uprostřed.
+## Napojí čerpací slot potrubím na zásobník (po poslední fázi stavby slotu).
 func connect_pipe(slot: FuelSlot) -> void:
-	if _pipe_materials.has(slot):
+	if _piped_slots.has(slot):
 		return
-	var from := tank.position
-	var to := slot.pipe_position()
+	_piped_slots.append(slot)
+	_rebuild_pipes()
+
+
+## Postaví celé potrubí znovu. Vede jen vodorovně a svisle: čerpadla nad zásobníkem jsou
+## napojená na hlavní větev v uličce (T kusy, na konci větve koleno), ta vede do horní části
+## zásobníku. Čerpadla níž mají vlastní trubku do boku zásobníku.
+## Nejdřív se posbírají úseky, spojky a ostatní díly, pak se kreslí v pořadí spojky, trubky
+## (zasunuté do objímek spojek) a nakonec příruby, podlahové spojky a ozdoby.
+func _rebuild_pipes() -> void:
+	for child in _pipes.get_children():
+		child.queue_free()
+	var plan := {"segments": [], "fittings": {}, "parts": []}
+	var top: Array[FuelSlot] = []
+	for slot in _piped_slots:
+		if slot.pipe_position().y < tank.position.y - TANK_PIPE_RADIUS:
+			top.append(slot)
+		else:
+			_plan_side_pipe(plan, slot)
+	if not top.is_empty():
+		_plan_trunk(plan, top)
+	for at: Vector2 in plan.fittings:
+		var key: String = plan.fittings[at]
+		var fitting := _add_pipe_part(PIPE_FITTINGS[key][0], at, 0.0, -PIPE_FITTINGS[key][1])
+		fitting.scale = Vector2.ONE * FITTING_SCALE
+	for segment in plan.segments:
+		_add_pipe_segment(_socket_end(plan, segment[0], segment[1]), _socket_end(plan, segment[1], segment[0]))
+	for part in plan.parts:
+		_add_pipe_part(part[0], part[1], part[2], part[3])
+
+
+func _plan_side_pipe(plan: Dictionary, slot: FuelSlot) -> void:
+	var foot := slot.pipe_position()
+	var side := signf(foot.x - tank.position.x)
+	var entry := tank.position + Vector2(side * TANK_PIPE_RADIUS, 0)
+	var corner := Vector2(foot.x, entry.y)
+	plan.segments.append([entry, corner])
+	plan.segments.append([corner, foot])
+	_plan_fitting(plan, corner, [entry - corner, foot - corner])
+	plan.parts.append([PIPE_FLANGE, entry, (corner - entry).angle() - PI, -FLANGE_CENTER])
+	plan.parts.append([PIPE_FLOOR, foot, 0.0, Vector2.ZERO])
+
+
+func _plan_trunk(plan: Dictionary, slots: Array[FuelSlot]) -> void:
+	var lane_y := tank.position.y + TRUNK_LANE
+	var hub := Vector2(tank.position.x, lane_y)
+	var surface := Vector2(tank.position.x, tank.position.y - TANK_PIPE_RADIUS)
+	plan.segments.append([surface, hub])
+	plan.parts.append([PIPE_FLANGE, surface, PI / 2.0, -FLANGE_CENTER])
+	var hub_arms: Array[Vector2] = [Vector2.DOWN]
+	for side in [-1.0, 1.0]:
+		var branch: Array[FuelSlot] = []
+		for slot in slots:
+			if signf(slot.pipe_position().x - hub.x) == side:
+				branch.append(slot)
+		if branch.is_empty():
+			continue
+		branch.sort_custom(func(a: FuelSlot, b: FuelSlot) -> bool:
+			return absf(a.pipe_position().x - hub.x) < absf(b.pipe_position().x - hub.x))
+		hub_arms.append(Vector2(side, 0))
+		# Hlavní větev po úsecích mezi spojkami, aby se každý úsek zasunul do objímek.
+		var previous := hub
+		for i in branch.size():
+			var foot := branch[i].pipe_position()
+			var junction := Vector2(foot.x, lane_y)
+			plan.segments.append([previous, junction])
+			plan.segments.append([junction, foot])
+			previous = junction
+			var arms: Array[Vector2] = [Vector2.UP, Vector2(-side, 0)]
+			if i < branch.size() - 1:
+				arms.append(Vector2(side, 0))
+			_plan_fitting(plan, junction, arms)
+			plan.parts.append([PIPE_FLOOR, foot, 0.0, Vector2.ZERO])
+		# Průhledítko (vlevo) nebo tlakoměr (vpravo) doprostřed nejdelšího volného úseku větve.
+		var stops := [hub.x]
+		for slot in branch:
+			stops.append(slot.pipe_position().x)
+		var best_gap := 0.0
+		var best_x := 0.0
+		for i in stops.size() - 1:
+			var gap := absf(stops[i + 1] - stops[i]) - 2.0 * DECOR_CLEARANCE
+			if gap > best_gap:
+				best_gap = gap
+				best_x = (stops[i] + stops[i + 1]) / 2.0
+		if best_gap > 0.0:
+			if side < 0.0:
+				plan.parts.append([PIPE_SIGHT, Vector2(best_x, lane_y), 0.0, Vector2.ZERO])
+			else:
+				plan.parts.append([PIPE_GAUGE, Vector2(best_x, lane_y), 0.0, -GAUGE_AXIS])
+	_plan_fitting(plan, hub, hub_arms)
+
+
+## Koleno nebo T kus v místě, kde se trubky potkávají (podle směrů ramen).
+## Rovný průchod spojku nepotřebuje.
+func _plan_fitting(plan: Dictionary, at: Vector2, arms: Array[Vector2]) -> void:
+	var letters := PackedStringArray()
+	for arm in arms:
+		letters.append(_arm_letter(arm))
+	letters.sort()
+	var key := "".join(letters)
+	if PIPE_FITTINGS.has(key):
+		plan.fittings[at] = key
+
+
+func _arm_letter(direction: Vector2) -> String:
+	return {Vector2.LEFT: "L", Vector2.RIGHT: "R", Vector2.UP: "U", Vector2.DOWN: "D"}[direction.normalized().round()]
+
+
+## Konec úseku: když v něm je spojka, trubka končí uvnitř její objímky, jinak v bodě samém.
+func _socket_end(plan: Dictionary, end: Vector2, other: Vector2) -> Vector2:
+	if not plan.fittings.has(end):
+		return end
+	var arm_length: float = FITTING_ARMS[plan.fittings[end]][_arm_letter(other - end)]
+	return end + (other - end).normalized() * (arm_length - FITTING_SOCKET) * FITTING_SCALE
+
+
+## Rovný úsek trubky. Vodorovné se kreslí zleva doprava a svislé zdola nahoru, aby měla
+## textura lesk vždy na straně ke světlu (nahoře, u svislých vlevo).
+func _add_pipe_segment(from: Vector2, to: Vector2) -> void:
+	var horizontal := absf(to.x - from.x) > absf(to.y - from.y)
+	var swap := (horizontal and from.x > to.x) or (not horizontal and from.y < to.y)
 	var pipe := Line2D.new()
-	pipe.points = PackedVector2Array([from, to])
+	pipe.points = PackedVector2Array([to, from] if swap else [from, to])
 	pipe.width = PIPE_WIDTH
 	pipe.texture = PIPE_TEXTURE
 	pipe.texture_mode = Line2D.LINE_TEXTURE_TILE
-	pipe.begin_cap_mode = Line2D.LINE_CAP_ROUND
-	pipe.end_cap_mode = Line2D.LINE_CAP_ROUND
-	var pipe_material := ShaderMaterial.new()
-	pipe_material.shader = PIPE_SHADER
-	pipe.material = pipe_material
+	pipe.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 	_pipes.add_child(pipe)
-	var valve := Sprite2D.new()
-	valve.texture = PIPE_VALVE
-	valve.scale = Vector2.ONE * VALVE_SCALE
-	valve.position = from.lerp(to, 0.55)
-	valve.rotation = from.angle_to_point(to)
-	_pipes.add_child(valve)
-	_pipe_materials[slot] = pipe_material
+
+
+func _add_pipe_part(texture: Texture2D, at: Vector2, angle: float, offset: Vector2) -> Sprite2D:
+	var part := Sprite2D.new()
+	part.texture = texture
+	part.offset = offset
+	part.position = at
+	part.rotation = angle
+	part.scale = Vector2.ONE * PART_SCALE
+	_pipes.add_child(part)
+	return part
 
 
 ## Zapne ekonomiku galaxínu (omezený zásobník, dodavatelé, vlastní cena) a naplní zásobník.
@@ -660,19 +817,8 @@ func _random_artifact() -> Dictionary:
 	return pool.pick_random()
 
 
-## Galaxín teče potrubím ke slotu, na kterém stojí loď a android ji tankuje.
-func _update_pipe_flow() -> void:
-	for slot: FuelSlot in _pipe_materials:
-		var flowing := slot.occupant != null and slot.occupant.state == Ship.State.LANDED \
-				and slot.occupant.fuel_missing() > 0.0 and _is_being_fueled(slot.occupant)
-		_pipe_materials[slot].set_shader_parameter("flow", 1.0 if flowing else 0.0)
 
 
-func _is_being_fueled(ship: Ship) -> bool:
-	for android in get_androids():
-		if android.is_fueling(ship):
-			return true
-	return false
 
 
 ## Kolik lodí čeká ve frontě.

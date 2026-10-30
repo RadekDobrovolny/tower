@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c83dpj0ted866"
-path="res://.godot/imported/pipe_valve.png-3cbae714dfbceb818ba6cd187c7df4af.ctex"
+uid="uid://dywjklm8sdo6u"
+path="res://.godot/imported/pipe_elbow_ul.png-6d40237b1747713f201eecdf1f8d1962.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/station/pipe_valve.png"
-dest_files=["res://.godot/imported/pipe_valve.png-3cbae714dfbceb818ba6cd187c7df4af.ctex"]
+source_file="res://assets/sprites/station/pipe_elbow_ul.png"
+dest_files=["res://.godot/imported/pipe_elbow_ul.png-6d40237b1747713f201eecdf1f8d1962.ctex"]
 
 [params]
 

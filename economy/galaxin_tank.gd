@@ -144,6 +144,7 @@ func info_lines() -> PackedStringArray:
 		lines.append("Nekvalitní galaxín: %d %% obsahu" % roundi(low_quality_share() * 100.0))
 	if job:
 		lines.append(job.status_text(station.drone))
+	lines.append("Cenu galaxínu, dodavatele a objednávky nastavíš v panelu vlevo.")
 	if station.control_center_cost() >= 0:
 		lines.append("K zásobníku jde přistavět řídící centrum: 3 části, celkem %s kr. Vylepší dodávky a umí objednávat samo."
 				% Game.format_number(_control_center_total()))

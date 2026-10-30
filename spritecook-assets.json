@@ -273,7 +273,112 @@
         {
           "file": "assets/sprites/station/pipe_valve.png",
           "sha12": "af51b6ea9e3c",
+          "cell": "vpravo dole",
+          "note": "nahrazeno díly nasvícenými zleva shora (arch H a I), soubor smazán"
+        }
+      ]
+    },
+    {
+      "asset_id": "670d04e2-7fec-4239-ac4e-add9db620f0e",
+      "label": "Tower – arch F: díly potrubí",
+      "files": [
+        {
+          "file": "assets/sprites/station/pipe_tile.png",
+          "sha12": "b5cabada322e",
+          "cell": "vlevo nahoře",
+          "note": "nahrazeno dílkem z archu I, soubor přepsán"
+        },
+        {
+          "file": "assets/sprites/station/pipe_elbow.png",
+          "sha12": "0eb2e7afcc88",
+          "cell": "vpravo nahoře",
+          "note": "nahrazeno díly nasvícenými zleva shora (arch H a I), soubor smazán"
+        },
+        {
+          "file": "assets/sprites/station/pipe_flange.png",
+          "sha12": "58563a704854",
+          "cell": "vlevo dole"
+        },
+        {
+          "file": "assets/sprites/station/pipe_sight.png",
+          "sha12": "f53f96fd515a",
           "cell": "vpravo dole"
+        }
+      ]
+    },
+    {
+      "asset_id": "8f48f4f2-6b3f-4c02-95fc-e8747c85e431",
+      "label": "Tower – arch G: T kus, kříž, podlahová spojka, tlakoměr",
+      "files": [
+        {
+          "file": "assets/sprites/station/pipe_tee.png",
+          "sha12": "eaa4b9ff55b7",
+          "cell": "vlevo nahoře",
+          "note": "nahrazeno díly nasvícenými zleva shora (arch H a I), soubor smazán"
+        },
+        {
+          "file": "assets/sprites/station/pipe_floor.png",
+          "sha12": "2df66e0bf64b",
+          "cell": "vlevo dole"
+        },
+        {
+          "file": "assets/sprites/station/pipe_gauge.png",
+          "sha12": "26cae237056c",
+          "cell": "vpravo dole"
+        }
+      ],
+      "note": "kříž (vpravo nahoře) se zatím nepoužívá; díly jsou zmenšené tak, aby trubka byla stejně tlustá jako v archu F"
+    },
+    {
+      "asset_id": "745d7bd8-0196-4d4d-8f28-166ef81182db",
+      "label": "Tower – arch H: kolena a T kusy (nahoru+doleva, doprava+dolů, T nahoru, T doleva)",
+      "files": [
+        {
+          "file": "assets/sprites/station/pipe_elbow_ul.png",
+          "sha12": "f30924e6510e",
+          "cell": "vlevo nahoře"
+        },
+        {
+          "file": "assets/sprites/station/pipe_elbow_rd.png",
+          "sha12": "62d814ff372c",
+          "cell": "vpravo nahoře"
+        },
+        {
+          "file": "assets/sprites/station/pipe_tee_lru.png",
+          "sha12": "29b01dd70ae6",
+          "cell": "vlevo dole"
+        },
+        {
+          "file": "assets/sprites/station/pipe_tee_udl.png",
+          "sha12": "f9905469ab87",
+          "cell": "vpravo dole"
+        }
+      ]
+    },
+    {
+      "asset_id": "1e57d434-5820-457b-908e-9e13e545adac",
+      "label": "Tower – arch I: kolena, T kus a rovná trubka (reference arch H, 16 kreditů)",
+      "files": [
+        {
+          "file": "assets/sprites/station/pipe_elbow_ld.png",
+          "sha12": "e2d7695680b5",
+          "cell": "vlevo nahoře"
+        },
+        {
+          "file": "assets/sprites/station/pipe_elbow_ur.png",
+          "sha12": "f813d59a0535",
+          "cell": "vpravo nahoře"
+        },
+        {
+          "file": "assets/sprites/station/pipe_tee_lrd.png",
+          "sha12": "148a498b2c0c",
+          "cell": "vlevo dole"
+        },
+        {
+          "file": "assets/sprites/station/pipe_tile.png",
+          "sha12": "0a70fbd3e887",
+          "cell": "vpravo dole",
+          "note": "měď mezi objímkami, konce prolnuté, aby dílek navazoval"
         }
       ]
     }
