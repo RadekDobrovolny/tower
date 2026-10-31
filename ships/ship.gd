@@ -45,6 +45,8 @@ const FLIGHT_SCALE := 1.35
 const OFFSCREEN_MARGIN := 100.0
 ## Jak dlouho (s) loď vydrží čekat ve frontě, než odletí.
 const PATIENCE := 20.0
+## Jak dlouho (s) nejvýš loď stojí u prázdné pumpy, když k ní žádná cisterna neletí.
+const EMPTY_PUMP_WAIT := 12.0
 const PATIENCE_FULL_COLOR := Color(1.0, 0.85, 0.3)
 const PATIENCE_EMPTY_COLOR := Color(1.0, 0.3, 0.25)
 ## Jak často loď nechce plnou nádrž, ale galaxín jen za určitou částku.
@@ -251,11 +253,13 @@ func _wait_in_queue(delta: float) -> void:
 
 
 ## Zakotvená loď ztrácí trpělivost jen tehdy, když nedostává galaxín (došel v zásobníku).
+## Když žádná cisterna neletí, nemá na co čekat a zábava ani obchod ji tu nezdrží.
 func _wait_at_slot(delta: float) -> void:
 	if _got_fuel or not station.tank.is_empty():
 		_got_fuel = false
 		return
-	_patience_left -= _patience_drain(delta)
+	var no_tanker := station.supply.state == Supply.State.IDLE
+	_patience_left -= maxf(_patience_drain(delta), delta * PATIENCE / EMPTY_PUMP_WAIT if no_tanker else 0.0)
 	_patience_bar.value = _patience_left
 	_patience_bar.modulate = PATIENCE_EMPTY_COLOR.lerp(PATIENCE_FULL_COLOR, _patience_left / PATIENCE)
 	if _patience_left <= 0.0:

@@ -23,7 +23,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 
 1. Loď přiletí a zakotví u volného čerpacího slotu. Když je všechno obsazené, čeká ve frontě.
 2. Volný zaměstnanec k ní dojde a natankuje ji. Doba tankování závisí na velikosti lodi a dovednosti zaměstnance.
-3. Loď zaplatí a odletí. Když čeká příliš dlouho, odletí bez placení. Když dojde galaxín a lodě u čerpadel to vzdají, odletí všechny včetně fronty. Kdo už tankoval, zaplatí jen to, co dostal, a dýško nedá. Dokud je zásobník prázdný, nové lodě nepřilétají a HUD ukazuje výstrahu.
+3. Loď zaplatí a odletí. Když čeká příliš dlouho, odletí bez placení. Když dojde galaxín a žádná cisterna neletí, lodě u čerpadel to po 12 s vzdají (s cisternou na cestě čekají podle své trpělivosti) a odletí všechny včetně fronty. Kdo už tankoval, zaplatí jen to, co dostal, a dýško nedá. Dokud je zásobník prázdný, nové lodě nepřilétají a HUD ukazuje výstrahu.
 4. Za vydělané peníze hráč kupuje sloty, personál, obranu a upgrady.
 5. Čas od času zaútočí piráti a s postupem levelu jsou útoky silnější.
 
