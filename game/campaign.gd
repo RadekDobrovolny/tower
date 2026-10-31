@@ -22,6 +22,7 @@ var _completed := false
 @onready var station: Station = $Station
 @onready var spawner: ShipSpawner = $ShipSpawner
 @onready var pirate_spawner: PirateSpawner = $PirateSpawner
+@onready var junk_dealer: JunkDealer = $JunkDealer
 @onready var hud: Hud = $HUD
 
 
@@ -36,6 +37,7 @@ func _ready() -> void:
 	station.state_changed.connect(_check_goals, CONNECT_DEFERRED)
 	Game.stats_changed.connect(_check_goals, CONNECT_DEFERRED)
 	hud.setup(self)
+	junk_dealer.arrived.connect(hud.show_junk_dealer.bind(junk_dealer))
 	if free_play:
 		_apply_rules(start)
 		_begin_free_play()

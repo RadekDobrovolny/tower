@@ -559,6 +559,37 @@ func setup_maxed() -> void:
 		android.set_maxed()
 
 
+## Lodě u čerpadel to bez galaxínu vzdaly: odletí všechny, i ty ve frontě a na cestě k plošině.
+## Nové nepřiletí, dokud v zásobníku nic není (hlídá to `ShipSpawner`).
+func send_ships_away_no_fuel() -> void:
+	# Nejdřív fronta, aby se na uvolněné sloty nikdo nezařadil.
+	for ship in _queue.duplicate():
+		ship.leave_without_fuel()
+	for slot in get_slots():
+		if slot.occupant:
+			slot.occupant.leave_without_fuel()
+
+
+## Jestli některá loď u čerpadla ještě zaplatí za natankovaný galaxín.
+func ships_owe_payment() -> bool:
+	return get_slots().any(func(slot: FuelSlot) -> bool: return slot.occupant and slot.occupant.owes_payment())
+
+
+## Všechno, co jde prodat vetešníkovi. Na čem se právě pracuje, se prodat nedá.
+func sale_items() -> Array[ShopItem]:
+	var items: Array[ShopItem] = drone.sale_items()
+	for android in get_androids():
+		items.append_array(android.sale_items())
+	if tank.job == null:
+		items.append_array(tank.sale_items())
+	if control_center and control_center.job == null:
+		items.append_array(control_center.sale_items())
+	for plot in get_plots():
+		if plot.building and plot.building.job == null:
+			items.append_array(plot.building.sale_items())
+	return items
+
+
 func enable_galaxin_economy(initial_amount: float) -> void:
 	galaxin_economy = true
 	_apply_galaxin_economy()

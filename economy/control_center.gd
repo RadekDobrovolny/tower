@@ -131,6 +131,16 @@ func start_upgrade(id: String) -> bool:
 	return true
 
 
+func sale_items() -> Array[ShopItem]:
+	var items: Array[ShopItem] = []
+	for upgrade in UPGRADES:
+		var id: String = upgrade.id
+		if levels[id] > 0:
+			items.append(ShopItem.sale("%s, level %d" % [upgrade.name, levels[id]],
+					upgrade.costs[levels[id] - 1], _lose_level.bind(id)))
+	return items
+
+
 func info_lines() -> PackedStringArray:
 	var lines := PackedStringArray()
 	if not is_operational():
@@ -187,6 +197,11 @@ func _percent_less(factor: float) -> String:
 	if factor <= 0.0:
 		return "nehrozí"
 	return "o %d %% méně často" % roundi((1.0 - factor) * 100.0)
+
+
+func _lose_level(id: String) -> void:
+	levels[id] -= 1
+	_update_construction_looks()
 
 
 func _finish_upgrade(id: String) -> void:

@@ -155,6 +155,12 @@ func _on_bolt_hit(target: Node2D, damage: int) -> void:
 		kills += 1
 
 
+func sale_items() -> Array[ShopItem]:
+	if level <= 1:
+		return []
+	return [ShopItem.sale("Obranná věž, level %d" % level, LEVELS[level - 1].cost, set_level.bind(level - 1))]
+
+
 func _finish_upgrade() -> void:
 	level += 1
 	_update_construction_looks()

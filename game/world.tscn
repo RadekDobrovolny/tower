@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://ships/ship_spawner.gd" id="4_spawner"]
 [ext_resource type="PackedScene" path="res://ui/hud.tscn" id="5_hud"]
 [ext_resource type="Script" path="res://pirates/pirate_spawner.gd" id="6_pirates"]
+[ext_resource type="Script" path="res://economy/junk_dealer.gd" id="7_dealer"]
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_campaign")
@@ -39,5 +40,9 @@ ships_parent = NodePath("../Ships")
 script = ExtResource("6_pirates")
 station = NodePath("../Station")
 pirates_parent = NodePath("../Pirates")
+
+[node name="JunkDealer" type="Node" parent="." node_paths=PackedStringArray("station")]
+script = ExtResource("7_dealer")
+station = NodePath("../Station")
 
 [node name="HUD" parent="." instance=ExtResource("5_hud")]

@@ -83,6 +83,11 @@ func start_next_phase() -> bool:
 	return true
 
 
+## Vylepšení, která jde prodat vetešníkovi. Potomci s vylepšeními přepisují.
+func sale_items() -> Array[ShopItem]:
+	return []
+
+
 ## Postaví budovu hned celou (startovní stav mise).
 func finish_instantly() -> void:
 	complete_phase(build_phases().size())

@@ -40,7 +40,7 @@ var _hint_tween: Tween
 @onready var _info_text: RichTextLabel = %InfoText
 @onready var _info_actions: VBoxContainer = %InfoActions
 @onready var _hint: Label = $HintLabel
-@onready var _pirate_alert: Label = $PirateAlert
+@onready var _alert: Label = $Alert
 @onready var _mission_popup: Control = $MissionPopup
 @onready var _mission_title: Label = %MissionTitle
 @onready var _mission_body: RichTextLabel = %MissionBody
@@ -64,7 +64,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_roll_credits(delta)
-	_update_pirate_alert()
+	_update_alert()
 	# Nastavení galaxínu (cena, dodavatel, objednávky) je vidět jen s vybraným zásobníkem.
 	_galaxin_panel.visible = _galaxin_panel_ready and _selected == _campaign.station.tank
 	if _galaxin_panel.visible:
@@ -114,6 +114,10 @@ func show_mission_popup(title: String, body: String, button_text: String) -> voi
 	_mission_popup.show()
 
 
+func show_junk_dealer(offers: Array[ShopItem], dealer: JunkDealer) -> void:
+	$JunkDealerPopup.open(dealer, offers)
+
+
 func hide_mission_popup() -> void:
 	_mission_popup.hide()
 
@@ -143,12 +147,14 @@ func _dismiss_hint() -> void:
 
 
 ## Varování nahoře bliká, dokud nějaký pirát útočí.
-func _update_pirate_alert() -> void:
-	var attacking := get_tree().get_nodes_in_group("pirates").any(
-			func(pirate: Node) -> bool: return pirate.is_attacking())
-	_pirate_alert.visible = attacking
-	if attacking:
-		_pirate_alert.modulate.a = 0.6 + 0.4 * sin(Time.get_ticks_msec() / 150.0)
+## Blikající výstraha pod tlačítkem Menu: útok pirátů, nebo prázdný zásobník (lodě nepřilétají).
+func _update_alert() -> void:
+	var station := _campaign.station
+	var attacking := station.under_attack()
+	_alert.visible = attacking or station.tank.is_empty()
+	if _alert.visible:
+		_alert.text = "Piráti útočí!" if attacking else "Došel galaxín!"
+		_alert.modulate.a = 0.6 + 0.4 * sin(Time.get_ticks_msec() / 150.0)
 
 
 ## Počítadlo kreditů nedoskočí hned, ale rychle „dojede“ ke skutečné hodnotě.

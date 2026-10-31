@@ -68,6 +68,12 @@ func _process(delta: float) -> void:
 
 
 ## Nastaví level bez placení (startovní stav).
+func sale_items() -> Array[ShopItem]:
+	if level <= 1:
+		return []
+	return [ShopItem.sale("Zásobník, level %d" % level, LEVELS[level - 1].cost, set_level.bind(level - 1))]
+
+
 func set_level(value: int) -> void:
 	level = clampi(value, 1, LEVELS.size())
 	_update_looks()

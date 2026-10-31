@@ -23,7 +23,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 
 1. Loď přiletí a zakotví u volného čerpacího slotu. Když je všechno obsazené, čeká ve frontě.
 2. Volný zaměstnanec k ní dojde a natankuje ji. Doba tankování závisí na velikosti lodi a dovednosti zaměstnance.
-3. Loď zaplatí a odletí. Když čeká příliš dlouho, odletí bez placení.
+3. Loď zaplatí a odletí. Když čeká příliš dlouho, odletí bez placení. Když dojde galaxín a lodě u čerpadel to vzdají, odletí všechny včetně fronty. Kdo už tankoval, zaplatí jen to, co dostal, a dýško nedá. Dokud je zásobník prázdný, nové lodě nepřilétají a HUD ukazuje výstrahu.
 4. Za vydělané peníze hráč kupuje sloty, personál, obranu a upgrady.
 5. Čas od času zaútočí piráti a s postupem levelu jsou útoky silnější.
 
@@ -261,7 +261,13 @@ V misích 1 a 2 je galaxínu neomezeně a stojí pevně 6 kr/j. S misí 3 se zap
 
 ### Cíl a prohra
 - **Výhra:** splnění cíle levelu, například vydělat X kreditů.
-- **Prohra:** zatím otevřené (viz níže).
+- **Prohra:** hra nemá game over, hráč se ale nesmí zaseknout (viz Vesmírný vetešník).
+
+### Vesmírný vetešník
+- Přiletí, když je zásobník prázdný, žádná cisterna není objednaná ani na cestě a hráč nemá ani na 50 j od nejlevnějšího dodavatele (100 kr). Menší dávku vypije jedna loď a stanice se z ní nevzpamatuje. Musí to trvat 4 s, protože kredity ještě může přinést kořist, obchod nebo automaty, a počká i na lodě u čerpadel, které ještě zaplatí za natankovaný galaxín. Během útoku pirátů nepřiletí.
+- Hra se zastaví a vetešník nabídne **3 náhodná vylepšení, která hráč má, za 50 % nákupní ceny**. Prodané vylepšení hráč ztratí (o jeden level zpět) a může si ho později znovu koupit. Prodat jde levely Pumpíka, štíty, nanoboty, Bzučáka, zásobníku, zábavního systému, věží, zboží obchodu, výherní automaty a vylepšení řídícího centra. Budovy samotné ani to, na čem Bzučák právě pracuje, prodat nejde.
+- Hráč může odmítnout („Zatím ne“), vetešník se pak vrátí za 30 s.
+- Kdo už nemá co prodat, dostane almužnu 150 kr, aby se nezasekl.
 
 ## Zvuk
 
@@ -374,7 +380,6 @@ Na stanici začnou útočit piráti, jde stavět obranné věže.
 Jde na ni jen z menu, na misi 5 nenavazuje. Pravidla jsou jako v misi 5 (včetně pirátů), ale nejsou tu žádné cíle a na začátku je všechno hotové: 3 čerpací sloty, obchod s veškerým zbožím, zábavní systém na levelu 5 s výherními automaty, obě věže na levelu 3, řídící centrum se všemi vylepšeními, zásobník na levelu 4 (plný), Pumpík i Bzučák na maximu. Start s 10 000 kr. Artefakty se sbírají až během hry.
 
 ## Otevřené otázky
-- Co způsobí prohru? Zničení jádra nebo hlavní nádrže stanice? Bankrot?
 - Kradou piráti zatím jen kredity. Mají později krást i galaxín, ničit sloty nebo unášet personál?
 - Jak se staví: na pevné pozice, nebo volně na mřížku?
 - Bude stanice mít reputaci, která ovlivní počet zákazníků?

@@ -259,6 +259,34 @@ func upgrade_nanobots() -> bool:
 	return true
 
 
+func sale_items() -> Array[ShopItem]:
+	var items: Array[ShopItem] = []
+	if fuel_level > 1:
+		items.append(ShopItem.sale("%s: tankování, level %d" % [display_name, fuel_level],
+				FUEL_LEVELS[fuel_level - 1].cost, set_levels.bind(fuel_level - 1, walk_level)))
+	if walk_level > 1:
+		items.append(ShopItem.sale("%s: jízda, level %d" % [display_name, walk_level],
+				WALK_LEVELS[walk_level - 1].cost, set_levels.bind(fuel_level, walk_level - 1)))
+	if shield_level > 0:
+		items.append(ShopItem.sale("%s: štíty, level %d" % [display_name, shield_level],
+				SHIELD_LEVELS[shield_level].cost, _lose_shield_level))
+	if nanobot_level > 0:
+		items.append(ShopItem.sale("%s: nanoboti, level %d" % [display_name, nanobot_level],
+				NANOBOT_LEVELS[nanobot_level].cost, _lose_nanobot_level))
+	return items
+
+
+func _lose_shield_level() -> void:
+	shield_level -= 1
+	health = mini(health, max_health())
+	_update_looks()
+
+
+func _lose_nanobot_level() -> void:
+	nanobot_level -= 1
+	_update_looks()
+
+
 ## Přestane obsluhovat loď (např. když to vzdala a odlétá).
 func release_ship(ship: Ship) -> void:
 	if _ships.has(ship):

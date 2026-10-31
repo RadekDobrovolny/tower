@@ -141,6 +141,27 @@ const TANKER_SCARED := [
 	"Zbytek vrátím v kreditech, mizím!",
 ]
 
+## Vesmírný vetešník přiletěl, když hráči došel galaxín i kredity.
+const JUNK_DEALER_OFFER := [
+	"Došel ti galaxín i kredity? Takový žal. Jedno vylepšení odkoupím za půlku ceny, férovka.",
+	"Čuchám prázdný zásobník až z Jupiteru. Vyber si, s čím se rozloučíš. Dám ti za to půlku.",
+	"Nikdo ti teď nepomůže, jen já. Jedno vylepšení za půlku ceny a jsme kamarádi.",
+]
+
+## Vetešník přiletěl, ale hráč už nemá co prodat.
+const JUNK_DEALER_HANDOUT := [
+	"Tady už není co vzít, i krysy odletěly. Tak tady máš něco ode mě, ať se mi klidně spí.",
+	"Tolik bídy jsem neviděl ani na Marsu. Na, vezmi si to, než si to rozmyslím.",
+]
+
+## Loď odlétá, protože na stanici došel galaxín.
+const SHIP_NO_FUEL := [
+	"Čerpací stanice bez galaxínu? Sbohem!",
+	"Prázdná pumpa, to je mi obsluha.",
+	"Tady nic neteče, letím jinam.",
+	"Až budete mít galaxín, ozvěte se!",
+]
+
 ## Android začíná tankovat. Zazní jen někdy.
 const ANDROID_REPLY := [
 	"Hned to bude!",

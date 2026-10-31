@@ -13,6 +13,8 @@ const TANKER_SCENE := preload("res://economy/tanker.tscn")
 const UNLOAD_RATE := 150.0
 const REFUND_COLOR := Color(0.45, 0.95, 0.85)
 const DISPATCH_COLOR := Color(0.55, 0.85, 1.0)
+## Menší dávku vypije jedna loď a z toho se stanice nevzpamatuje.
+const USEFUL_UNITS := 50
 
 ## Dodavatelé: cena za jednotku, velikost cisterny, doba dodání (s), šance a délka
 ## zpoždění (s), šance a rozsah poloprázdné cisterny (podíl objednaného), kvalita a barva.
@@ -97,6 +99,11 @@ func max_order_units() -> int:
 
 func order_cost() -> int:
 	return roundi(order_units() * selected_supplier().price)
+
+
+## Jestli má hráč aspoň na užitečnou dávku od nejlevnějšího dodavatele.
+func can_afford_useful_tanker() -> bool:
+	return SUPPLIERS.any(func(supplier: Dictionary) -> bool: return Game.credits >= supplier.price * USEFUL_UNITS)
 
 
 func can_order() -> bool:

@@ -142,6 +142,13 @@ func add_product(index: int) -> bool:
 	return true
 
 
+func sale_items() -> Array[ShopItem]:
+	var items: Array[ShopItem] = []
+	for index in products:
+		items.append(ShopItem.sale("Obchod: %s" % PRODUCTS[index].name, PRODUCTS[index].cost, _lose_product.bind(index)))
+	return items
+
+
 func info_lines() -> PackedStringArray:
 	var lines := PackedStringArray()
 	if not is_operational():
@@ -180,6 +187,11 @@ func _kinds_text(count: int) -> String:
 	if count == 1:
 		return "1 druh zboží"
 	return "%d %s zboží" % [count, "druhy" if count <= 4 else "druhů"]
+
+
+func _lose_product(index: int) -> void:
+	products.erase(index)
+	_update_construction_looks()
 
 
 func _finish_product(index: int) -> void:

@@ -15,6 +15,11 @@ var buy: Callable
 var kind: Kind
 
 
+## Položka pro vetešníka: `price` je původní cena vylepšení, `undo` ho vrátí o level zpět.
+static func sale(text: String, price: int, undo: Callable) -> ShopItem:
+	return ShopItem.new(func() -> String: return text, func() -> int: return price, undo, Kind.UPGRADE)
+
+
 func _init(label_fn: Callable, cost_fn: Callable, buy_fn: Callable, item_kind := Kind.BUILD) -> void:
 	label = label_fn
 	cost = cost_fn

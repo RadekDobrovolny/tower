@@ -2,7 +2,7 @@ class_name Ship
 extends Node2D
 
 ## Malá loď, která si přiletí natankovat galaxín. Když je slot obsazený, čeká ve frontě,
-## a když čeká příliš dlouho, odletí bez placení.
+## a když čeká příliš dlouho, odletí bez placení. Když dojde galaxín, zaplatí jen to, co dostala.
 
 signal landed(ship: Ship)
 signal gave_up(ship: Ship)
@@ -174,6 +174,11 @@ func add_fuel(amount: float, low_quality_share := 0.0) -> void:
 		_patience_left = PATIENCE
 
 
+## Jestli stojí u čerpadla a ještě nezaplatila za to, co natankovala.
+func owes_payment() -> bool:
+	return state == State.LANDED and fuel > _fuel_on_arrival
+
+
 ## Jestli už má loď natankováno, kolik chtěla.
 func is_refueled() -> bool:
 	return fuel >= _target_fuel
@@ -254,7 +259,28 @@ func _wait_at_slot(delta: float) -> void:
 	_patience_bar.value = _patience_left
 	_patience_bar.modulate = PATIENCE_EMPTY_COLOR.lerp(PATIENCE_FULL_COLOR, _patience_left / PATIENCE)
 	if _patience_left <= 0.0:
-		_give_up()
+		station.send_ships_away_no_fuel()
+
+
+## Zásobník je prázdný: loď odletí, a kdo už tankoval, zaplatí jen to, co dostal.
+func leave_without_fuel() -> void:
+	_pay_for_partial_fill()
+	Game.record_ship_lost()
+	Sfx.play("ship_angry")
+	_bubble.say_now(Lines.pick(Lines.SHIP_NO_FUEL), true)
+	gave_up.emit(self)
+	_depart(ANGRY_DEPARTURE_DELAY)
+
+
+## Galaxín došel dřív, než byla nádrž plná: loď zaplatí, co dostala, ale dýško nedá.
+func _pay_for_partial_fill() -> void:
+	if state != State.LANDED:
+		return
+	var price := roundi((fuel - _fuel_on_arrival) * station.sell_price)
+	if price > 0:
+		Game.add_credits(price)
+		Sfx.play("coin")
+		FloatingText.spawn(get_parent(), global_position + Vector2(70, -6), "+%d kr" % price)
 
 
 func _give_up() -> void:

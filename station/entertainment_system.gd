@@ -143,6 +143,15 @@ func start_slot_machines() -> bool:
 	return true
 
 
+func sale_items() -> Array[ShopItem]:
+	var items: Array[ShopItem] = []
+	if level > 1:
+		items.append(ShopItem.sale("Zábavní systém, level %d" % level, LEVELS[level - 1].cost, _lose_level))
+	if has_slot_machines:
+		items.append(ShopItem.sale("Výherní automaty", SLOTS_COST, _lose_slot_machines))
+	return items
+
+
 func info_lines() -> PackedStringArray:
 	var lines := PackedStringArray()
 	if level == 0:
@@ -192,6 +201,16 @@ func _play_slots(delta: float) -> void:
 		Sfx.play("slots")
 		FloatingText.spawn(station, station.to_local(global_position) + Vector2(0, -70),
 				"+%d kr automaty" % total, SLOTS_COLOR)
+
+
+func _lose_level() -> void:
+	level -= 1
+	_update_construction_looks()
+
+
+func _lose_slot_machines() -> void:
+	has_slot_machines = false
+	_update_construction_looks()
 
 
 func _finish_slot_machines() -> void:

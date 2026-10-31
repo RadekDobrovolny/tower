@@ -2,7 +2,7 @@ class_name ShipSpawner
 extends Node
 
 ## Posílá ke stanici nové lodě, dokud je u ní místo (volný slot nebo místo ve frontě).
-## Když na stanici útočí piráti, žádná nová loď nepřiletí.
+## Když na stanici útočí piráti nebo je prázdný zásobník, žádná nová loď nepřiletí.
 
 const SHIP_SCENE := preload("res://ships/ship.tscn")
 ## Jak daleko za okrajem obrazovky se nová loď objeví.
@@ -21,7 +21,7 @@ var _cooldown := 0.5
 
 func _process(delta: float) -> void:
 	_cooldown -= delta
-	if _cooldown > 0.0 or not station.has_room() or station.under_attack():
+	if _cooldown > 0.0 or not station.has_room() or station.under_attack() or station.tank.is_empty():
 		return
 	_spawn_ship()
 	# Při nízké ceně galaxínu přilétá lodí víc, při vysoké míň.

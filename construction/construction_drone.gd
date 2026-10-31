@@ -108,6 +108,17 @@ func next_work_cost() -> int:
 	return WORK_LEVELS[work_level].cost
 
 
+func sale_items() -> Array[ShopItem]:
+	var items: Array[ShopItem] = []
+	if speed_level > 1:
+		items.append(ShopItem.sale("%s: rychlost letu, level %d" % [display_name, speed_level],
+				SPEED_LEVELS[speed_level - 1].cost, func() -> void: speed_level -= 1))
+	if work_level > 1:
+		items.append(ShopItem.sale("%s: rychlost práce, level %d" % [display_name, work_level],
+				WORK_LEVELS[work_level - 1].cost, func() -> void: work_level -= 1))
+	return items
+
+
 func upgrade_speed() -> bool:
 	var cost := next_speed_cost()
 	if cost < 0 or not Game.spend_credits(cost):
