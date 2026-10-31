@@ -5,6 +5,7 @@ extends Node2D
 ## Když hráč splní cíle mise, hra se zastaví, ukáže shrnutí a další misi a po potvrzení
 ## pokračuje se vším, co hráč do té doby postavil a vydělal. Po poslední misi je volná hra.
 ## Hra může začít od kterékoli mise (výběr v menu); pak se použije startovní stav té mise.
+## Mise Z začíná rovnou volnou hrou se vším na maximu.
 
 signal mission_started(number: int)
 signal mission_completed(number: int)
@@ -25,14 +26,21 @@ var _completed := false
 
 
 func _ready() -> void:
+	var free_play := Game.start_mission == Missions.FREE_PLAY_INDEX
 	var start_index := clampi(Game.start_mission, 0, Missions.ALL.size() - 1)
-	_apply_start_state(Missions.ALL[start_index])
+	var start: Mission = Missions.FREE_PLAY if free_play else Missions.ALL[start_index]
+	_apply_start_state(start)
 	# Odloženě, aby se cíle vyhodnotily až po všech změnách v daném snímku
 	# (např. loď nejdřív zaplatí a teprve pak se započítá jako obsloužená).
 	Game.credits_changed.connect(_check_goals.unbind(1), CONNECT_DEFERRED)
 	station.state_changed.connect(_check_goals, CONNECT_DEFERRED)
 	Game.stats_changed.connect(_check_goals, CONNECT_DEFERRED)
 	hud.setup(self)
+	if free_play:
+		_apply_rules(start)
+		_begin_free_play()
+		_pause_with_popup("Mise Z: %s" % start.title, start.description, "Začít")
+		return
 	_begin_mission(start_index)
 	_pause_with_popup("Mise %d: %s" % [number(), mission.title], _briefing(mission), "Začít")
 
@@ -122,6 +130,9 @@ func _goal(label: String, value: int, target: int) -> Dictionary:
 ## Nastaví stanici do stavu, ve kterém má mise začínat, když se hraje rovnou od ní.
 func _apply_start_state(start: Mission) -> void:
 	Game.reset(start.start_credits)
+	if start.start_maxed:
+		station.setup_maxed()
+		return
 	for android in station.get_androids():
 		android.set_levels(start.start_fuel_level, start.start_walk_level)
 	station.setup_start_buildings(start.start_slots, start.start_entertainment_level,
@@ -134,23 +145,27 @@ func _begin_mission(index: int) -> void:
 	mission_index = index
 	mission = Missions.ALL[index]
 	mission_elapsed = 0.0
-	for android in station.get_androids():
-		android.max_level = mission.max_android_level
-	station.max_slots = mission.max_slots
-	station.entertainment_available = mission.entertainment_available
-	station.shop_available = mission.shop_available
-	station.control_center_available = mission.control_center_available
-	station.tower_available = mission.tower_available
-	station.drone.upgrades_available = mission.drone_upgrades
-	if mission.galaxin_economy and not station.galaxin_economy:
-		station.enable_galaxin_economy(mission.start_galaxin)
-	spawner.min_interval = mission.ship_interval_min
-	spawner.max_interval = mission.ship_interval_max
-	pirate_spawner.min_interval = mission.pirate_interval_min
-	pirate_spawner.max_interval = mission.pirate_interval_max
-	pirate_spawner.enabled = mission.pirates
+	_apply_rules(mission)
 	hud.refresh_mission()
 	mission_started.emit(number())
+
+
+func _apply_rules(rules: Mission) -> void:
+	for android in station.get_androids():
+		android.max_level = rules.max_android_level
+	station.max_slots = rules.max_slots
+	station.entertainment_available = rules.entertainment_available
+	station.shop_available = rules.shop_available
+	station.control_center_available = rules.control_center_available
+	station.tower_available = rules.tower_available
+	station.drone.upgrades_available = rules.drone_upgrades
+	if rules.galaxin_economy and not station.galaxin_economy:
+		station.enable_galaxin_economy(rules.start_galaxin)
+	spawner.min_interval = rules.ship_interval_min
+	spawner.max_interval = rules.ship_interval_max
+	pirate_spawner.min_interval = rules.pirate_interval_min
+	pirate_spawner.max_interval = rules.pirate_interval_max
+	pirate_spawner.enabled = rules.pirates
 
 
 func _begin_free_play() -> void:

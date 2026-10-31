@@ -63,3 +63,5 @@ extends Resource
 @export var start_control_center := 0
 ## 0 = bez obranné věže.
 @export var start_tower_level := 0
+## Všechno postavené a vylepšené na maximum. Levely výše se pak nepoužijí.
+@export var start_maxed := false

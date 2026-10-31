@@ -1,8 +1,9 @@
 class_name Plot
 extends Node2D
 
-## Parcela na stanici, na které jde postavit budovu. Prázdná je skoro neviditelná,
-## po kliknutí nabídne, co tu jde postavit. Běžné parcely jsou pro sloty a budovy,
+## Parcela na stanici, na které jde postavit budovu. Prázdná je vidět jen jako jemný obrys
+## a jde na ni kliknout, jen když na ní jde něco postavit (jinak ji stanice skryje).
+## Po kliknutí nabídne, co tu jde postavit. Běžné parcely jsou pro sloty a budovy,
 ## menší místa na krajích paluby jsou jen pro obranné věže.
 
 enum Kind { BUILDING, TOWER }
@@ -47,14 +48,11 @@ func info_title() -> String:
 
 
 func info_lines() -> PackedStringArray:
-	var price_lines := station.build_price_lines(self)
-	if price_lines.is_empty():
-		return PackedStringArray(["Tady zatím nic nestojí a zatím tu nejde nic postavit."])
 	var lines := PackedStringArray([
 		"Tady zatím nic nestojí. Vyber, co tu postavit. Stavba se platí po částech a staví ji %s."
 				% station.drone.display_name,
 	])
-	lines.append_array(price_lines)
+	lines.append_array(station.build_price_lines(self))
 	return lines
 
 

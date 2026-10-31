@@ -164,6 +164,7 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	_update_plots()
 	_update_selection_marker()
 	_defend_with_androids()
 
@@ -288,6 +289,17 @@ func get_androids() -> Array[Android]:
 func attendant_vocative() -> String:
 	var androids := get_androids()
 	return androids[0].vocative if not androids.is_empty() else ""
+
+
+## Jestli jde na prázdné parcele teď něco začít stavět (podle pravidel mise a limitů;
+## nezávisle na tom, jestli na to hráč zrovna má). Jinak parcela není vidět ani klikatelná.
+func can_build_on(plot: Plot) -> bool:
+	if not plot.is_empty():
+		return false
+	for type in _building_types(plot):
+		if _build_cost(type) >= 0:
+			return true
+	return false
 
 
 ## Co jde postavit na prázdné parcele (položky pro info panel).
@@ -523,6 +535,21 @@ func _add_pipe_part(texture: Texture2D, at: Vector2, angle: float, offset: Vecto
 
 
 ## Zapne ekonomiku galaxínu (omezený zásobník, dodavatelé, vlastní cena) a naplní zásobník.
+## Postaví všechno a vylepší to na maximum (start mise Z).
+func setup_maxed() -> void:
+	setup_start_buildings(START_SLOT_PLOTS.size(), 0, Shop.PRODUCTS.size(), 0, DefenseTower.LEVELS.size())
+	(_place_building("entertainment", get_plots()[START_ENTERTAINMENT_PLOT]) as EntertainmentSystem).set_maxed()
+	var tower_plot := first_empty_plot(Plot.Kind.TOWER)
+	while tower_plot:
+		(_place_building("tower", tower_plot) as DefenseTower).set_level(DefenseTower.LEVELS.size())
+		tower_plot = first_empty_plot(Plot.Kind.TOWER)
+	_place_control_center().set_maxed()
+	tank.set_level(GalaxinTank.LEVELS.size())
+	drone.set_maxed()
+	for android in get_androids():
+		android.set_maxed()
+
+
 func enable_galaxin_economy(initial_amount: float) -> void:
 	galaxin_economy = true
 	_apply_galaxin_economy()
@@ -663,8 +690,20 @@ func _pick(point: Vector2) -> Node:
 		return control_center
 	for plot in get_plots():
 		if plot.rect().has_point(point):
-			return plot.building if plot.building else plot
+			if plot.building:
+				return plot.building
+			return plot if can_build_on(plot) else null
 	return null
+
+
+## Prázdné parcely ukazují obrys, jen když na nich jde stavět. Když přestane jít stavět na
+## vybrané parcele (např. se zaplnil limit slotů), výběr se zruší.
+func _update_plots() -> void:
+	for plot in get_plots():
+		if plot.is_empty():
+			plot.set_outline_visible(can_build_on(plot))
+	if selected is Plot and not can_build_on(selected):
+		select(null)
 
 
 func _update_selection_marker() -> void:
@@ -769,9 +808,13 @@ func _defend_with_androids() -> void:
 
 ## Pirát začal útočit: část lodí, které čekají ve frontě, dostane strach a uteče.
 func on_pirate_attack() -> void:
+	# Nejdřív fronta, aby se na sloty uvolněné útěkem nikdo nezařadil.
 	for ship in _queue.duplicate():
-		if randf() < Ship.FLEE_CHANCE:
-			ship.flee()
+		ship.flee()
+	for slot in get_slots():
+		if slot.occupant:
+			slot.occupant.flee()
+	supply.abort_delivery()
 
 
 ## Ze sestřeleného piráta občas vypadne kořist a stavební dron ji sebere.

@@ -37,10 +37,13 @@ const WALK_LEVELS := [
 const REPLY_CHANCE := 0.5
 ## Jak moc se barva levelu promítne do chromu.
 const LEVEL_TINT := 0.12
-## Animace (pásy po 8 snímcích ze SpriteCooku): klid a tankování (zepředu) a jízda do čtyř stran.
+## Animace (pásy po 8 snímcích ze SpriteCooku): klid (zepředu), jízda a tankování do čtyř stran.
 const ANIMATIONS := {
 	"idle": preload("res://assets/sprites/staff/pumpik_idle.png"),
-	"pump": preload("res://assets/sprites/staff/pumpik_pump.png"),
+	"pump_down": preload("res://assets/sprites/staff/pumpik_pump.png"),
+	"pump_up": preload("res://assets/sprites/staff/pumpik_pump_up.png"),
+	"pump_left": preload("res://assets/sprites/staff/pumpik_pump_left.png"),
+	"pump_right": preload("res://assets/sprites/staff/pumpik_pump_right.png"),
 	"drive_down": preload("res://assets/sprites/staff/pumpik_drive_down.png"),
 	"drive_up": preload("res://assets/sprites/staff/pumpik_drive_up.png"),
 	"drive_left": preload("res://assets/sprites/staff/pumpik_drive_left.png"),
@@ -73,9 +76,12 @@ const NANOBOT_LEVELS := [
 ## Za jak dlouho po posledním zásahu zavolá částečně poškozený android dron na opravu.
 const SAFE_AFTER := 4.0
 const HIT_FLASH_TIME := 0.15
-const BLAST_TIME := 0.12
-## Ústí tankovací pistole vůči středu androida (odtud letí laser).
-const NOZZLE := Vector2(-25, -13)
+const BOLT_LENGTH := 52.0
+## Ústí tankovací pistole vůči středu androida podle směru, kam je natočený
+## (odtud vede hadice k lodi a letí laser).
+const NOZZLES := {
+	"down": Vector2(-25, -13), "up": Vector2(25, -21), "left": Vector2(-29, -17), "right": Vector2(28, -16),
+}
 ## Jak moc poškozený android ztmavne.
 const DAMAGED_TINT := Color(0.55, 0.5, 0.5)
 
@@ -109,10 +115,11 @@ var _animation_time := 0.0
 ## Jestli se android v tomto snímku pohnul a kterým směrem (pro animaci jízdy).
 var _moved := false
 var _move_direction := Vector2.ZERO
+## Kam je natočený při tankování a střelbě (down, up, left, right).
+var _facing := "down"
 ## Pirát, se kterým android bojuje, nebo null.
 var _enemy: Pirate
 var _shot_cooldown := 0.0
-var _blast_left := 0.0
 var _hit_flash := 0.0
 var _since_hit := 0.0
 var _nanobot_time := 0.0
@@ -121,7 +128,6 @@ var _nanobot_time := 0.0
 @onready var _hoses: Array[Line2D] = [$Hose1, $Hose2]
 @onready var _level_label: Label = $LevelLabel
 @onready var _bubble: SpeechBubble = $SpeechBubble
-@onready var _blaster: Line2D = $Blaster
 @onready var _damage_sparks: CPUParticles2D = $DamageSparks
 @onready var _health_bar: ProgressBar = $HealthBar
 
@@ -132,8 +138,6 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	_blast_left -= delta
-	_blaster.visible = _blast_left > 0.0
 	_hit_flash -= delta
 	_since_hit += delta
 	_heal(delta)
@@ -266,6 +270,14 @@ func serve(ship: Ship) -> void:
 
 
 ## Nastaví levely bez placení (startovní stav mise).
+## Všechna vylepšení na maximum (start mise Z).
+func set_maxed() -> void:
+	shield_level = SHIELD_LEVELS.size() - 1
+	nanobot_level = NANOBOT_LEVELS.size() - 1
+	health = max_health()
+	set_levels(FUEL_LEVELS.size(), WALK_LEVELS.size())
+
+
 func set_levels(fuel: int, walk: int) -> void:
 	fuel_level = clampi(fuel, 1, FUEL_LEVELS.size())
 	walk_level = clampi(walk, 1, WALK_LEVELS.size())
@@ -384,11 +396,14 @@ func _service_position() -> Vector2:
 
 
 func _update_hoses(connected: bool) -> void:
+	# Při tankování stojí čelem k lodi (u dvou lodí k té první).
+	if connected and not _ships.is_empty():
+		_facing = _direction_name(_ships[0].global_position - global_position)
 	for i in _hoses.size():
 		var hose := _hoses[i]
 		hose.visible = connected and i < _ships.size()
 		if hose.visible:
-			hose.points = PackedVector2Array([NOZZLE, to_local(_ships[i].global_position)])
+			hose.points = PackedVector2Array([NOZZLES[_facing], to_local(_ships[i].global_position)])
 
 
 func _walk_to(target: Vector2, delta: float) -> bool:
@@ -400,35 +415,34 @@ func _walk_to(target: Vector2, delta: float) -> bool:
 	return global_position.is_equal_approx(target)
 
 
-## Jízda ve směru pohybu, když se hýbe; tankování (i střelba z pistole), když má napojenou
-## hadici nebo bojuje; jinak klid (poškozený jen pomalu). Stojí vždy čelem k hráči.
+## Jízda ve směru pohybu, když se hýbe; tankování (i střelba z pistole) čelem k lodi nebo
+## pirátovi, když má napojenou hadici nebo bojuje; jinak klid zepředu (poškozený jen pomalu).
 func _animate(delta: float) -> void:
 	if _moved:
-		_play(_drive_animation(), walk_speed() / WALK_STRIDE * ANIMATION_FRAMES, delta)
+		_play("drive_" + _direction_name(_move_direction), walk_speed() / WALK_STRIDE * ANIMATION_FRAMES, delta)
 	elif _hoses[0].visible or _enemy:
-		_play("pump", PUMP_FPS, delta)
+		_play("pump_" + _facing, PUMP_FPS, delta)
 	else:
 		_play("idle", IDLE_FPS * (0.4 if damaged else 1.0), delta)
 
 
-## Animace jízdy podle toho, kterým směrem se pohybuje víc.
-func _drive_animation() -> String:
-	if absf(_move_direction.x) > absf(_move_direction.y):
-		return "drive_right" if _move_direction.x > 0.0 else "drive_left"
-	return "drive_down" if _move_direction.y > 0.0 else "drive_up"
+## Který ze čtyř směrů je k danému vektoru nejblíž.
+func _direction_name(direction: Vector2) -> String:
+	if absf(direction.x) > absf(direction.y):
+		return "right" if direction.x > 0.0 else "left"
+	return "down" if direction.y > 0.0 else "up"
 
 
 func _fight(delta: float) -> void:
 	if not is_instance_valid(_enemy) or not _enemy.is_attacking():
 		_enemy = null
 		return
+	_facing = _direction_name(_enemy.global_position - global_position)
 	_shot_cooldown -= delta
 	if _shot_cooldown > 0.0:
 		return
 	_shot_cooldown = SHOT_INTERVAL
-	_blaster.points = PackedVector2Array([NOZZLE, to_local(_enemy.global_position)])
-	_blast_left = BLAST_TIME
-	_enemy.hit(SHOT_DAMAGE)
+	LaserBolt.fire(station, to_global(NOZZLES[_facing]), _enemy, LaserBolt.GOLD, _enemy.hit.bind(SHOT_DAMAGE), BOLT_LENGTH)
 
 
 ## Odolnost klesla na nulu: android je rozbitý a čeká na opravu (bez nanobotů ho opraví dron).

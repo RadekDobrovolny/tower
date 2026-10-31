@@ -4,6 +4,7 @@ extends Node2D
 ## Objednávky galaxínu od dodavatelů. Hráč zaplatí cisternu předem, ta po čase přiletí
 ## k zásobníku a přečerpá galaxín. Za to, co nedoveze nebo co se nevejde, vrátí peníze.
 ## Řídící centrum u zásobníku dodávky vylepšuje a s dispečinkem objednává cisterny samo.
+## Když útočí piráti, cisterny nelétají: objednávka se zruší a cisterna u stanice odletí.
 
 enum State { IDLE, ORDERED, ARRIVING, UNLOADING }
 
@@ -99,7 +100,8 @@ func order_cost() -> int:
 
 
 func can_order() -> bool:
-	return state == State.IDLE and order_units() > 0 and Game.credits >= order_cost()
+	return state == State.IDLE and order_units() > 0 and Game.credits >= order_cost() \
+			and not station.under_attack()
 
 
 ## Objedná a předem zaplatí cisternu u vybraného dodavatele. Vrátí, jestli se to povedlo.
@@ -124,6 +126,18 @@ func order() -> bool:
 	return true
 
 
+## Začal útok pirátů: objednávka se zruší a peníze se vrátí. Cisterna, která už je tady,
+## odletí a vrátí peníze za to, co nestihla přečerpat.
+func abort_delivery() -> void:
+	match state:
+		State.ORDERED:
+			_refund(tank.position + Vector2(0, -60))
+			state = State.IDLE
+		State.ARRIVING, State.UNLOADING:
+			_tanker.say_scared(Lines.pick(Lines.TANKER_SCARED))
+			_finish_delivery()
+
+
 ## Stav objednávky pro HUD.
 func status_text() -> String:
 	match state:
@@ -135,6 +149,8 @@ func status_text() -> String:
 			return "Cisterna přilétá"
 		State.UNLOADING:
 			return "Přečerpávání: %d / %d j" % [roundi(_delivered), _ordered_units]
+	if station and station.under_attack():
+		return "Piráti útočí, cisterny nelétají"
 	if station and station.has_dispatch():
 		return "Dispečink hlídá zásobník"
 	return "Žádná cisterna na cestě"
@@ -162,13 +178,18 @@ func _on_tanker_docked() -> void:
 
 
 func _finish_delivery() -> void:
-	var refund := roundi((_ordered_units - _delivered) * _supplier.price)
-	if refund > 0:
-		Game.add_credits(refund)
-		FloatingText.spawn(self, _tanker.position + Vector2(0, -40), "+%d kr vráceno" % refund, REFUND_COLOR)
+	_refund(_tanker.position + Vector2(0, -84))
 	_tanker.leave()
 	_tanker = null
 	state = State.IDLE
+
+
+## Vrátí peníze za to, co se nepřečerpalo.
+func _refund(at: Vector2) -> void:
+	var refund := roundi((_ordered_units - _delivered) * _supplier.price)
+	if refund > 0:
+		Game.add_credits(refund)
+		FloatingText.spawn(self, at, "+%d kr vráceno" % refund, REFUND_COLOR)
 
 
 ## Účinek vylepšení řídícího centra (bez centra jako bez vylepšení).

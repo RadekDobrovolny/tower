@@ -22,7 +22,7 @@ const LEVELS := [
 const TURN_SPEED := 7.0
 ## O kolik (rad) smí kanón mířit vedle, aby už vystřelil.
 const AIM_TOLERANCE := 0.12
-const BEAM_TIME := 0.08
+const BOLT_LENGTH := 76.0
 const SINGLE_TEXTURE := preload("res://assets/sprites/defense/turret.png")
 const TWIN_TEXTURE := preload("res://assets/sprites/defense/turret_twin.png")
 ## Kde je osa otáčení a ústí hlavní v textuře kanónu (px textury vůči jejímu středu).
@@ -37,22 +37,16 @@ var level := 0
 var kills := 0
 
 var _cooldown := 0.0
-var _beam_left := 0.0
 var _barrel := 0
 
 @onready var _base: Sprite2D = $Base
 @onready var _pedestal: Sprite2D = $Pedestal
 @onready var _turret: Sprite2D = $Turret
-@onready var _beam: Line2D = $Beam
-@onready var _flash: PointLight2D = $Flash
 @onready var _label: Label = $Label
 
 
 func _process(delta: float) -> void:
 	super(delta)
-	_beam_left -= delta
-	_beam.visible = _beam_left > 0.0
-	_flash.visible = _beam.visible
 	if level == 0:
 		return
 	_cooldown -= delta
@@ -153,10 +147,11 @@ func _fire(target: Node2D) -> void:
 	var muzzles := TWIN_MUZZLES if current.barrels > 1 else SINGLE_MUZZLES
 	_barrel = (_barrel + 1) % muzzles.size()
 	var muzzle := _turret.to_global(muzzles[_barrel] + _turret.offset)
-	_beam.points = PackedVector2Array([to_local(muzzle), to_local(target.global_position)])
-	_flash.global_position = muzzle
-	_beam_left = BEAM_TIME
-	if target.hit(current.damage):
+	LaserBolt.fire(station, muzzle, target, LaserBolt.GOLD, _on_bolt_hit.bind(target, current.damage), BOLT_LENGTH)
+
+
+func _on_bolt_hit(target: Node2D, damage: int) -> void:
+	if target.hit(damage):
 		kills += 1
 
 

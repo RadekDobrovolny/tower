@@ -19,7 +19,7 @@ const KINDS := {
 	},
 	"gunship": {
 		"texture": preload("res://assets/sprites/pirates/gunship.png"), "scale": 0.42,
-		"hp": 10, "speed": 170.0,
+		"hp": 15, "speed": 170.0,
 	},
 }
 const TURN_SPEED := 3.5
@@ -31,7 +31,10 @@ const STEAL_SHARE_MIN := 0.03
 const STEAL_SHARE_MAX := 0.08
 ## Po tolika krádežích pirát odletí.
 const MAX_STEALS := 5
-const LASER_TIME := 0.15
+const BOLT_LENGTH := 64.0
+## Mezera mezi trupem a ukazatelem životů nad lodí.
+const HEALTH_BAR_GAP := 12.0
+const HEALTH_BAR_HEIGHT := 5.0
 const HIT_FLASH_TIME := 0.12
 const OFFSCREEN_MARGIN := 140.0
 const STEAL_COLOR := Color(1.0, 0.35, 0.35)
@@ -51,7 +54,6 @@ var _hp := 0
 var _speed := 0.0
 var _steal_timer := 1.2
 var _steals := 0
-var _laser_left := 0.0
 var _hit_flash := 0.0
 var _time := randf() * 10.0
 var _leave_angle := 0.0
@@ -59,7 +61,7 @@ var _leave_angle := 0.0
 @onready var _body: Node2D = $Body
 @onready var _sprite: Sprite2D = $Body/Sprite
 @onready var _engine: EngineFlame = $Body/EngineFlame
-@onready var _laser: Line2D = $Laser
+@onready var _health_bar: ProgressBar = $HealthBar
 @onready var _hit_sparks: CPUParticles2D = $HitSparks
 @onready var _explosion: CPUParticles2D = $Explosion
 @onready var _blast_light: PointLight2D = $BlastLight
@@ -74,13 +76,15 @@ func _ready() -> void:
 	_sprite.scale = Vector2.ONE * data.scale
 	var half_length: float = data.texture.get_width() * data.scale / 2.0
 	_engine.position.x = -half_length + 6.0
+	_health_bar.max_value = data.hp
+	_health_bar.value = data.hp
+	_health_bar.size = Vector2(half_length * 1.6, HEALTH_BAR_HEIGHT)
+	_health_bar.position = Vector2(-half_length * 0.8, -half_length - HEALTH_BAR_GAP)
 	_body.rotation = global_position.direction_to(attack_point).angle()
 
 
 func _process(delta: float) -> void:
 	_time += delta
-	_laser_left -= delta
-	_laser.visible = _laser_left > 0.0
 	_hit_flash -= delta
 	_sprite.modulate = Color(2.0, 1.6, 1.6) if _hit_flash > 0.0 else Color.WHITE
 	match state:
@@ -109,6 +113,7 @@ func hit(damage: int) -> bool:
 	if state == State.DESTROYED:
 		return false
 	_hp -= damage
+	_health_bar.value = _hp
 	_hit_flash = HIT_FLASH_TIME
 	_hit_sparks.restart()
 	if _hp > 0:
@@ -140,8 +145,7 @@ func _attack(delta: float) -> void:
 		return
 	_steal_timer = STEAL_INTERVAL
 	if target:
-		_fire_at(target.global_position)
-		target.take_hit()
+		_fire_at(target, target.take_hit)
 		return
 	_steal()
 	if _steals >= MAX_STEALS:
@@ -156,22 +160,24 @@ func _android_target() -> Android:
 	return null
 
 
-func _fire_at(target: Vector2) -> void:
+func _fire_at(target: Node2D, on_hit: Callable) -> void:
 	var nose := _body.to_global(Vector2(_sprite.texture.get_width() * _sprite.scale.x * 0.45, 0.0))
-	_laser.points = PackedVector2Array([to_local(nose), to_local(target)])
-	_laser_left = LASER_TIME
+	LaserBolt.fire(station, nose, target, LaserBolt.RED, on_hit, BOLT_LENGTH)
 
 
-## Vystřelí po zásobníku a ukradne část kreditů z pokladny.
+## Vystřelí po zásobníku. Když střela dopadne, ukradne část kreditů z pokladny.
 func _steal() -> void:
 	_steals += 1
-	_fire_at(station.tank.global_position)
+	_fire_at(station.tank, _rob_credits)
+	if _steals == 2:
+		_bubble.say(Lines.pick(Lines.PIRATE_TAUNT), true)
+
+
+func _rob_credits() -> void:
 	var amount := roundi(maxi(Game.credits, 0) * randf_range(STEAL_SHARE_MIN, STEAL_SHARE_MAX))
 	if amount > 0:
 		Game.add_credits(-amount)
 		FloatingText.spawn(station, station.tank.position + Vector2(0, -60), "-%d kr ukradeno" % amount, STEAL_COLOR)
-	if _steals == 2:
-		_bubble.say(Lines.pick(Lines.PIRATE_TAUNT), true)
 
 
 func _leave() -> void:
@@ -196,7 +202,7 @@ func _destroy() -> void:
 	remove_from_group("pirates")
 	Game.record_pirate_shot()
 	_body.hide()
-	_laser.hide()
+	_health_bar.hide()
 	_explosion.restart()
 	_blast_light.show()
 	create_tween().tween_property(_blast_light, "energy", 0.0, 0.6).from(3.0)

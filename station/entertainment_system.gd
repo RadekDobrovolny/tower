@@ -92,6 +92,12 @@ func set_level(value: int) -> void:
 	_update_construction_looks()
 
 
+## Postaví systém na nejvyšším levelu i s výherními automaty (start mise Z).
+func set_maxed() -> void:
+	has_slot_machines = true
+	set_level(LEVELS.size())
+
+
 ## Jak rychle ubývá trpělivost lodím ve frontě (1 = normálně).
 func patience_drain() -> float:
 	return 1.0 if level == 0 else LEVELS[level - 1].patience_drain

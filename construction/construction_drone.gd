@@ -81,6 +81,12 @@ func add_job(job: ConstructionJob, urgent := false) -> void:
 		_jobs.append(job)
 
 
+## Všechna vylepšení na maximum (start mise Z).
+func set_maxed() -> void:
+	speed_level = SPEED_LEVELS.size()
+	work_level = WORK_LEVELS.size()
+
+
 func speed() -> float:
 	return SPEED_LEVELS[speed_level - 1].speed
 
@@ -137,14 +143,14 @@ func info_lines() -> PackedStringArray:
 	])
 	if _jobs.is_empty():
 		lines.append("Teď nemá práci, odpočívá u zásobníku.")
-	if upgrades_available or speed_level > 1 or work_level > 1:
-		lines.append("Let: level %d (%d px/s), práce: level %d (%d %% rychlosti)" % [
-			speed_level, roundi(speed()), work_level, roundi(work_factor() * 100.0)])
 	else:
 		var job := _jobs[0]
 		lines.append("Pracuje na: %s, %s" % [job.target.info_title(), job.status_text(self).to_lower()])
 		if _jobs.size() > 1:
 			lines.append("Ve frontě čeká zakázek: %d" % (_jobs.size() - 1))
+	if upgrades_available or speed_level > 1 or work_level > 1:
+		lines.append("Let: level %d (%d px/s), práce: level %d (%d %% rychlosti)" % [
+			speed_level, roundi(speed()), work_level, roundi(work_factor() * 100.0)])
 	var station := get_parent() as Station
 	if station and not station.artifacts_found.is_empty():
 		lines.append("Nalezené artefakty: %s" % ", ".join(station.artifacts_found))

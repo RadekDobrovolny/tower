@@ -28,6 +28,13 @@ func say(text: String, angry := false) -> void:
 		_show_next()
 
 
+## Přeruší, co bublina právě říká, a hned ukáže novou hlášku.
+func say_now(text: String, angry := false) -> void:
+	_queue.clear()
+	_queue.append({"text": text, "angry": angry})
+	_show_next()
+
+
 func _show_next() -> void:
 	if _queue.is_empty():
 		hide()

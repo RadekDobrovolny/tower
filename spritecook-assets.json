@@ -454,6 +454,36 @@
           "sha12": "0424de5830c2"
         }
       ]
+    },
+    {
+      "asset_id": "13d112a7-b8de-4906-a452-5c8fadef1394",
+      "label": "Pumpík robot – pump_up (frame-engine-v1.1, 8 snímků, 20 kreditů)",
+      "files": [
+        {
+          "file": "assets/sprites/staff/pumpik_pump_up.png",
+          "sha12": "4880ad95a85c"
+        }
+      ]
+    },
+    {
+      "asset_id": "cd900827-4cb7-4cb8-a0cf-c12879452e0d",
+      "label": "Pumpík robot – pump_left (frame-engine-v1.1, 8 snímků, 20 kreditů)",
+      "files": [
+        {
+          "file": "assets/sprites/staff/pumpik_pump_left.png",
+          "sha12": "436ace3c743e"
+        }
+      ]
+    },
+    {
+      "asset_id": "6cef8ea8-c2a8-4b5d-b2b9-f300d31bdbd6",
+      "label": "Pumpík robot – pump_right (frame-engine-v1.1, 8 snímků, 20 kreditů)",
+      "files": [
+        {
+          "file": "assets/sprites/staff/pumpik_pump_right.png",
+          "sha12": "f4e9d70dbb47"
+        }
+      ]
     }
   ]
 }

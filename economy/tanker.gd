@@ -74,8 +74,15 @@ func say(text: String) -> void:
 	_bubble.say(text)
 
 
+## Hláška při útěku před piráty, přeruší to, co cisterna právě říká.
+func say_scared(text: String) -> void:
+	_bubble.say_now(text, true)
+
+
 func leave() -> void:
 	_hose.hide()
 	_exit_angle = randf_range(EXIT_ANGLE_MIN, EXIT_ANGLE_MAX)
+	# Cisterna, která ještě přilétala (útok pirátů), odlétá bez zastavení.
+	_speed = _current_speed if state == State.ARRIVING else 0.0
 	_current_speed = 0.0
 	state = State.LEAVING

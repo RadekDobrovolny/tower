@@ -26,6 +26,7 @@ var _shown_credits := 0.0
 var _last_credits := 0
 ## Řádky cílů: {"icon": TextureRect, "label": RichTextLabel, "value": Label, "bar": ProgressBar, "done": bool}.
 var _goal_rows: Array[Dictionary] = []
+var _hint_tween: Tween
 
 @onready var _coin_icon: TextureRect = %CoinIcon
 @onready var _credits_label: Label = %CreditsLabel
@@ -59,9 +60,6 @@ var _goal_rows: Array[Dictionary] = []
 func _ready() -> void:
 	_coin_icon.pivot_offset = _coin_icon.custom_minimum_size / 2.0
 	_order_button.setup(preload("res://assets/ui/icons/tanker.svg"), "")
-	var hint_tween := create_tween().set_loops()
-	hint_tween.tween_property(_hint, "modulate:a", 0.45, 1.6).set_trans(Tween.TRANS_SINE)
-	hint_tween.tween_property(_hint, "modulate:a", 1.0, 1.6).set_trans(Tween.TRANS_SINE)
 
 
 func _process(delta: float) -> void:
@@ -86,6 +84,7 @@ func setup(campaign: Campaign) -> void:
 	campaign.station.selection_changed.connect(_on_selection_changed)
 	%InfoClose.pressed.connect(campaign.station.select.bind(null))
 	$PauseButton.pressed.connect(_pause_menu.open)
+	_show_hint(Game.start_mission == 0)
 	_mission_button.pressed.connect(campaign.continue_game)
 
 
@@ -95,7 +94,7 @@ func refresh_mission() -> void:
 		_goals_kicker.text = "Mise %d / %d" % [_campaign.number(), Missions.ALL.size()]
 		_goals_title.text = _campaign.mission.title
 	else:
-		_goals_kicker.text = "Všechny mise splněné"
+		_goals_kicker.text = "Mise Z" if Game.start_mission == Missions.FREE_PLAY_INDEX else "Všechny mise splněné"
 		_goals_title.text = "Volná hra"
 	for child in _goals_list.get_children():
 		child.queue_free()
@@ -124,6 +123,23 @@ func _on_credits_changed(credits: int) -> void:
 		_pulse_credits(credits > _last_credits)
 	_last_credits = credits
 	_request_refresh()
+
+
+## Nápověda dole je jen pro začátek hry od první mise a pomalu pulzuje.
+func _show_hint(show_it: bool) -> void:
+	_hint.visible = show_it
+	if show_it:
+		_hint_tween = create_tween().set_loops()
+		_hint_tween.tween_property(_hint, "modulate:a", 0.45, 1.6).set_trans(Tween.TRANS_SINE)
+		_hint_tween.tween_property(_hint, "modulate:a", 1.0, 1.6).set_trans(Tween.TRANS_SINE)
+
+
+## Hráč poprvé na něco klikl, nápověda už není potřeba.
+func _dismiss_hint() -> void:
+	if _hint_tween:
+		_hint_tween.kill()
+		_hint_tween = null
+	_hint.hide()
 
 
 ## Varování nahoře bliká, dokud nějaký pirát útočí.
@@ -232,7 +248,8 @@ func _on_selection_changed(object: Node) -> void:
 	var changed := object != _selected
 	_selected = object
 	_info_panel.visible = object != null
-	_hint.visible = object == null
+	if object:
+		_dismiss_hint()
 	_rebuild_action_buttons()
 	if object:
 		_refresh_info_panel()
@@ -359,6 +376,10 @@ func _refresh_galaxin_panel() -> void:
 	_supplier_info.text = supplier.info
 	if supply.state != Supply.State.IDLE:
 		_order_button.set_label("Cisterna je objednaná")
+		_order_button.set_cost(-1)
+		_order_button.set_enabled(false)
+	elif station.under_attack():
+		_order_button.set_label("Piráti útočí")
 		_order_button.set_cost(-1)
 		_order_button.set_enabled(false)
 	elif supply.max_order_units() <= 0:

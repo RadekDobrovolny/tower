@@ -8,7 +8,8 @@ signal landed(ship: Ship)
 signal gave_up(ship: Ship)
 
 enum State { QUEUED, TO_SLOT, LANDED, DEPARTING }
-## Běžná loď, velká nákladní loď (2× větší nádrž) a turistická loď (v obchodě utratí 20× víc).
+## Běžná loď, velká nákladní loď (2× větší nádrž) a turistická loď (o 30 % větší nádrž,
+## v obchodě utratí 20× víc, přilétá jen ke stanici s hotovým obchodem).
 enum Kind { REGULAR, FREIGHTER, TOURIST }
 
 ## Vzhledy raket zákazníků. Každá loď dostane náhodně jeden z nich.
@@ -26,13 +27,12 @@ const HOVER_THROTTLE := 0.3
 const FREIGHTER_CHANCE := 0.1
 const TOURIST_CHANCE := 0.08
 const FREIGHTER_TANK := 2.0
+const TOURIST_TANK := 1.3
 const TOURIST_SHOPPING := 20.0
 const FREIGHTER_TEXTURE := preload("res://assets/sprites/ships/freighter.png")
 const TOURIST_TEXTURE := preload("res://assets/sprites/ships/tourist.png")
 const FREIGHTER_SCALE := 0.5
 const TOURIST_SCALE := 0.45
-## S jakou šancí loď čekající ve frontě uteče, když začnou útočit piráti.
-const FLEE_CHANCE := 0.5
 
 const MAX_SPEED := 260.0
 const ACCELERATION := 220.0
@@ -112,9 +112,9 @@ func _ready() -> void:
 	var roll := randf()
 	if roll < FREIGHTER_CHANCE:
 		kind = Kind.FREIGHTER
-	elif roll < FREIGHTER_CHANCE + TOURIST_CHANCE:
+	elif roll < FREIGHTER_CHANCE + TOURIST_CHANCE and station.shop_products() >= 0:
 		kind = Kind.TOURIST
-	tank_capacity = randf_range(40.0, 100.0) * (FREIGHTER_TANK if kind == Kind.FREIGHTER else 1.0)
+	tank_capacity = randf_range(40.0, 100.0) * _tank_factor()
 	fuel = tank_capacity * randf_range(0.05, 0.3)
 	if kind == Kind.REGULAR:
 		_choose_order()
@@ -201,6 +201,15 @@ func leave_paid() -> int:
 	return tip
 
 
+func _tank_factor() -> float:
+	match kind:
+		Kind.FREIGHTER:
+			return FREIGHTER_TANK
+		Kind.TOURIST:
+			return TOURIST_TANK
+	return 1.0
+
+
 func _choose_order() -> void:
 	if randf() >= AMOUNT_ORDER_CHANCE:
 		return
@@ -250,10 +259,11 @@ func _give_up() -> void:
 	_depart(ANGRY_DEPARTURE_DELAY)
 
 
-## Uteče z fronty, protože útočí piráti (počítá se jako loď, která odletěla bez placení).
+## Uteče ze stanice, protože útočí piráti: z fronty i od čerpadla, a to, co natankovala,
+## nezaplatí (počítá se jako loď, která odletěla bez placení).
 func flee() -> void:
 	Game.record_ship_lost()
-	_say(Lines.SHIP_SCARED, true)
+	_bubble.say_now(Lines.pick(Lines.SHIP_SCARED), true)
 	gave_up.emit(self)
 	_depart(0.3)
 

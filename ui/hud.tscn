@@ -451,6 +451,7 @@ layout_mode = 2
 theme_override_constants/separation = 5
 
 [node name="HintLabel" type="Label" parent="."]
+visible = false
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -463,7 +464,7 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_type_variation = &"HudKicker"
 theme_override_font_sizes/font_size = 11
-text = "Klikni na Pumpíka, budovu, zásobník nebo prázdnou parcelu"
+text = "Klikni na Pumpíka, budovu nebo zásobník"
 horizontal_alignment = 1
 uppercase = true
 

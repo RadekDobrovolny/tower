@@ -93,6 +93,14 @@ func set_ready(with_dispatch: bool) -> void:
 	_update_construction_looks()
 
 
+## Postaví centrum hned se všemi vylepšeními na maximu (start mise Z).
+func set_maxed() -> void:
+	finish_instantly()
+	for upgrade in UPGRADES:
+		levels[upgrade.id] = upgrade.costs.size()
+	_update_construction_looks()
+
+
 func rect() -> Rect2:
 	return Rect2(position - SIZE / 2.0, SIZE)
 

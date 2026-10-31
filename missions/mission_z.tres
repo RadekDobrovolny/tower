@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="Mission" format=3]
+
+[ext_resource type="Script" path="res://missions/mission.gd" id="1_mission"]
+
+[resource]
+script = ExtResource("1_mission")
+title = "Volná hra"
+description = "Stanice je hotová a všechno na ní je vylepšené na maximum: budovy, věže, řídící centrum, Pumpík i Bzučák. Žádné cíle, jen provoz a občasní piráti. Hraj, jak dlouho chceš."
+max_android_level = 6
+entertainment_available = true
+drone_upgrades = true
+max_slots = 3
+galaxin_economy = true
+start_galaxin = 1800
+ship_interval_min = 2.0
+ship_interval_max = 5.0
+shop_available = true
+control_center_available = true
+tower_available = true
+pirates = true
+pirate_interval_min = 40.0
+pirate_interval_max = 70.0
+start_credits = 10000
+start_maxed = true

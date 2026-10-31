@@ -134,6 +134,13 @@ const TANKER_SHORT := [
 	"Zbytek vrátím v kreditech.",
 ]
 
+## Cisterna odlétá, protože útočí piráti.
+const TANKER_SCARED := [
+	"Piráti? Tak to teda ne!",
+	"Za tohle mi neplatí!",
+	"Zbytek vrátím v kreditech, mizím!",
+]
+
 ## Android začíná tankovat. Zazní jen někdy.
 const ANDROID_REPLY := [
 	"Hned to bude!",
