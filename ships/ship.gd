@@ -12,15 +12,23 @@ enum State { QUEUED, TO_SLOT, LANDED, DEPARTING }
 ## v obchodě utratí 20× víc, přilétá jen ke stanici s hotovým obchodem).
 enum Kind { REGULAR, FREIGHTER, TOURIST }
 
-## Vzhledy raket zákazníků. Každá loď dostane náhodně jeden z nich.
-const HULL_TEXTURES := [
-	preload("res://assets/sprites/ships/rocket.png"),
-	preload("res://assets/sprites/ships/rocket_cargo.png"),
-	preload("res://assets/sprites/ships/rocket_racer.png"),
-	preload("res://assets/sprites/ships/rocket_workhorse.png"),
+## Vzhledy běžných raket. Každá loď dostane náhodně jeden z nich. `brightness` je zjasnění (černá
+## závodní raketa by jinak v temném vesmíru zanikla), `scale` měřítko a `lines` vlastní hlášky
+## při přistání (bez nich mluví jako každá loď).
+const HULLS := [
+	{"texture": preload("res://assets/sprites/ships/rocket.png")},
+	{"texture": preload("res://assets/sprites/ships/rocket_cargo.png")},
+	{"texture": preload("res://assets/sprites/ships/rocket_racer.png"), "brightness": 1.7},
+	{"texture": preload("res://assets/sprites/ships/rocket_workhorse.png"), "brightness": 1.1},
+	{"texture": preload("res://assets/sprites/ships/rocket_courier.png"), "lines": Lines.SHIP_COURIER},
+	{"texture": preload("res://assets/sprites/ships/rocket_date.png"), "lines": Lines.SHIP_DATE},
+	{"texture": preload("res://assets/sprites/ships/rocket_van.png"), "lines": Lines.SHIP_VAN, "scale": 0.42},
+	{"texture": preload("res://assets/sprites/ships/rocket_taxi.png"), "lines": Lines.SHIP_TAXI},
+	{"texture": preload("res://assets/sprites/ships/rocket_nomad.png"), "lines": Lines.SHIP_NOMAD, "scale": 0.42},
+	{"texture": preload("res://assets/sprites/ships/rocket_family.png"), "lines": Lines.SHIP_FAMILY, "scale": 0.42},
+	{"texture": preload("res://assets/sprites/ships/rocket_limo.png"), "lines": Lines.SHIP_LIMO, "brightness": 1.3, "scale": 0.5},
+	{"texture": preload("res://assets/sprites/ships/rocket_redneck.png"), "lines": Lines.SHIP_REDNECK, "scale": 0.42},
 ]
-## Zjasnění jednotlivých vzhledů (stejné pořadí). Černá závodní raketa by jinak v temném vesmíru zanikla.
-const HULL_BRIGHTNESS := [1.0, 1.0, 1.7, 1.1]
 ## Tah motoru, když loď jen visí ve vzduchu (ve frontě). S rychlostí roste až na 1.
 const HOVER_THROTTLE := 0.3
 ## Jak často přiletí nákladní a turistická loď, jejich vzhled a měřítko spritu.
@@ -91,6 +99,7 @@ var order_amount := 0
 var _target: Vector2
 var _patience_left := PATIENCE
 var _complained := false
+var _hull_lines: Array = []
 var _fuel_on_arrival: float
 var _target_fuel: float
 ## Kolik z natankovaného galaxínu bylo nekvalitního.
@@ -315,10 +324,12 @@ func _setup_hull() -> void:
 			_sprite.texture = TOURIST_TEXTURE
 			_sprite.scale = Vector2.ONE * TOURIST_SCALE
 		_:
-			var hull := randi() % HULL_TEXTURES.size()
-			_sprite.texture = HULL_TEXTURES[hull]
+			var hull: Dictionary = HULLS.pick_random()
+			_sprite.texture = hull.texture
+			_sprite.scale = Vector2.ONE * hull.get("scale", _sprite.scale.x)
+			_hull_lines = hull.get("lines", [])
 			# Jemně jiný jas, aby dvě stejné rakety nevypadaly úplně stejně.
-			brightness *= HULL_BRIGHTNESS[hull]
+			brightness *= hull.get("brightness", 1.0)
 	_sprite.modulate = Color(brightness, brightness, brightness)
 	_engine.position.x = -_sprite.texture.get_width() * _sprite.scale.x / 2.0 + 2.0
 
@@ -341,6 +352,8 @@ func _land() -> void:
 		_say(Lines.FREIGHTER_ORDER)
 	elif order_amount > 0:
 		_say(Lines.ORDER_AMOUNT)
+	elif not _hull_lines.is_empty():
+		_say(_hull_lines)
 	else:
 		_say(Lines.ORDER_FULL)
 	state = State.LANDED

@@ -109,7 +109,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 ## Systémy
 
 ### Lodě (zákazníci)
-- **Druhy lodí:** běžné rakety (4 vzhledy), občas **nákladní loď** (10 %, 2× větší nádrž, objedná vždy plnou) a **turistická loď** (8 %, jen když stojí hotový obchod, o 30 % větší nádrž, v obchodě nakupuje ochotněji a utratí 20× víc, nad obchodem se ukáže „+… kr turisté“).
+- **Druhy lodí:** běžné rakety (12 vzhledů: 4 obyčejné a kurýrní služba, romantická na rande, dodávka, žluté taxi, nomádská, rodinná, luxusní limuzína a redneck, ti poslední mají vlastní hlášky při přistání a jinak se chovají stejně), občas **nákladní loď** (10 %, 2× větší nádrž, objedná vždy plnou) a **turistická loď** (8 %, jen když stojí hotový obchod, o 30 % větší nádrž, v obchodě nakupuje ochotněji a utratí 20× víc, nad obchodem se ukáže „+… kr turisté“).
 - **Strach z pirátů:** když pirát dorazí ke stanici a začne útočit, všechny lodě ve frontě i u čerpadel utečou („Piráti! Mizím!“). Natankovaný galaxín nezaplatí a počítají se mezi lodě, které odletěly bez placení. Dokud útok trvá, žádná nová loď nepřiletí.
 - **Cisterny při útoku:** objednaná cisterna, která ještě neletí, se zruší a peníze se vrátí. Cisterna, která už je na obrazovce, odletí i uprostřed přečerpávání: co přečerpala, zůstane v zásobníku, za zbytek vrátí peníze. Dokud útok trvá, nejde objednat novou (ani dispečinkem).
 - Loď chce buď plnou nádrž, nebo galaxín jen za určitou částku („Chci galaxínu za 100 kreditů“).

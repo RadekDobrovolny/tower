@@ -589,6 +589,52 @@
           "note": "nepoužito, prázdné sloty skladiště nemají obrázek, soubor smazán"
         }
       ]
+    },
+    {
+      "asset_id": "7b82ed6b-49cb-4147-9d55-6153d1f5d815",
+      "label": "Tower – arch L: osm druhů běžných raket (reference arch 2, 16 kreditů)",
+      "files": [
+        {
+          "file": "assets/sprites/ships/rocket_courier.png",
+          "sha12": "e864bb08dff8",
+          "cell": "řádek 1, vlevo"
+        },
+        {
+          "file": "assets/sprites/ships/rocket_date.png",
+          "sha12": "84d79e3b93fc",
+          "cell": "řádek 1, uprostřed"
+        },
+        {
+          "file": "assets/sprites/ships/rocket_van.png",
+          "sha12": "ac9a3ccd0e27",
+          "cell": "řádek 1, vpravo"
+        },
+        {
+          "file": "assets/sprites/ships/rocket_taxi.png",
+          "sha12": "773a79def694",
+          "cell": "řádek 2, vlevo"
+        },
+        {
+          "file": "assets/sprites/ships/rocket_nomad.png",
+          "sha12": "41f56fbc2bdb",
+          "cell": "řádek 2, uprostřed"
+        },
+        {
+          "file": "assets/sprites/ships/rocket_family.png",
+          "sha12": "b11f0f1d3a38",
+          "cell": "řádek 2, vpravo"
+        },
+        {
+          "file": "assets/sprites/ships/rocket_limo.png",
+          "sha12": "86f7e79507c0",
+          "cell": "řádek 3, vlevo"
+        },
+        {
+          "file": "assets/sprites/ships/rocket_redneck.png",
+          "sha12": "8844107bcfdf",
+          "cell": "řádek 3, uprostřed"
+        }
+      ]
     }
   ]
 }

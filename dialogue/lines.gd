@@ -154,6 +154,48 @@ const JUNK_DEALER_HANDOUT := [
 	"Tolik bídy jsem neviděl ani na Marsu. Na, vezmi si to, než si to rozmyslím.",
 ]
 
+## Hlášky raket podle druhu.
+const SHIP_COURIER := [
+	"Balík nepočká, tankuj!",
+	"Mám to doručit včera.",
+	"Expres, zákazník čeká na Saturnu.",
+]
+const SHIP_DATE := [
+	"Pšt, máme tu rande.",
+	"Natankuj nás, ať nezůstaneme trčet někde, kde nechceme.",
+	"Miláčku, ten android má krásný knír.",
+]
+const SHIP_VAN := [
+	"Střední náklad, střední spěch.",
+	"Stěhuju celou garsonku z Marsu.",
+	"Kde se tady dá zacouvat?",
+]
+const SHIP_TAXI := [
+	"Taxametr běží, tak šup.",
+	"Pasažér spěchá, já ne.",
+	"Znáte zkratku přes pás asteroidů?",
+]
+const SHIP_NOMAD := [
+	"Doma jsme všude, kde teče galaxín.",
+	"Vyměníš galaxín za koberec?",
+	"Cesta je cíl, ale bez galaxínu je jen cesta.",
+]
+const SHIP_FAMILY := [
+	"Děti, na to nesahejte!",
+	"Ptají se, jestli už tam budem, od Jupiteru.",
+	"Natankuj, než se vzadu poperou.",
+]
+const SHIP_LIMO := [
+	"Plnou, a pozor na lak.",
+	"Šofér se o vše postará.",
+	"Doufám, že galaxín je vyzrálý.",
+]
+const SHIP_REDNECK := [
+	"Narvi to tam, kámo.",
+	"To paroží? Srazil jsem ho u Saturnu.",
+	"Tahle kára je po dědovi, drží jen na drátech.",
+]
+
 ## Loď odlétá, protože na stanici došel galaxín.
 const SHIP_NO_FUEL := [
 	"Čerpací stanice bez galaxínu? Sbohem!",
