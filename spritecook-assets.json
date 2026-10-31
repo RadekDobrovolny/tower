@@ -511,6 +511,32 @@
           "cell": "vpravo dole"
         }
       ]
+    },
+    {
+      "asset_id": "8fc99b33-d119-4c27-8a81-a3815abadeea",
+      "label": "Tower – Pumpík, obličeje pro dialogy, 4 emoce (reference Pumpík robot, 16 kreditů)",
+      "files": [
+        {
+          "file": "assets/sprites/portraits/pumpik_neutral.png",
+          "sha12": "8c716ed4a7dc",
+          "cell": "vlevo nahoře"
+        },
+        {
+          "file": "assets/sprites/portraits/pumpik_happy.png",
+          "sha12": "17090ee20227",
+          "cell": "vpravo nahoře"
+        },
+        {
+          "file": "assets/sprites/portraits/pumpik_worried.png",
+          "sha12": "850c2c5950d3",
+          "cell": "vlevo dole"
+        },
+        {
+          "file": "assets/sprites/portraits/pumpik_angry.png",
+          "sha12": "f30a2f612025",
+          "cell": "vpravo dole"
+        }
+      ]
     }
   ]
 }

@@ -5,7 +5,6 @@
 [resource]
 script = ExtResource("1_mission")
 title = "Piráti"
-description = "Bohatá stanice přitahuje nezvané hosty. Piráti přiletí, ostřelují zásobník a kradou kredity, dokud je nesestřelíš nebo neodletí. Bez obranné věže se jim postaví Pumpík: jednoho piráta zvládne, ale pak je poškozený a netankuje, dokud ho Bzučák neopraví. Na krajích paluby jsou místa pro obranné věže."
 max_android_level = 6
 entertainment_available = true
 drone_upgrades = true

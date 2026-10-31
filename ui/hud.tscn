@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" path="res://assets/ui/icons/pause.svg" id="8_pause"]
 [ext_resource type="Script" path="res://ui/sound_button.gd" id="20_sound"]
 [ext_resource type="Script" path="res://ui/junk_dealer_popup.gd" id="21_dealer"]
+[ext_resource type="Script" path="res://ui/dialogue_box.gd" id="22_dialogue"]
 [ext_resource type="Texture2D" path="res://assets/ui/icons/close.svg" id="9_close"]
 [ext_resource type="Texture2D" path="res://assets/ui/icons/galaxin.svg" id="10_galaxin"]
 [ext_resource type="Texture2D" path="res://assets/ui/icons/tank.svg" id="11_tank"]
@@ -694,3 +695,72 @@ layout_mode = 2
 size_flags_horizontal = 8
 focus_mode = 0
 text = "Zatím ne"
+
+[node name="DialogueBox" type="ColorRect" parent="."]
+process_mode = 3
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.01, 0.04, 0.4)
+script = ExtResource("22_dialogue")
+
+[node name="Panel" type="PanelContainer" parent="DialogueBox"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -196.0
+offset_right = -24.0
+offset_bottom = -18.0
+script = ExtResource("3_panel")
+
+[node name="Margin" type="MarginContainer" parent="DialogueBox/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 226
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 14
+
+[node name="VBox" type="VBoxContainer" parent="DialogueBox/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="DialogueName" type="Label" parent="DialogueBox/Panel/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HudTitle"
+theme_override_font_sizes/font_size = 20
+text = "Pumpík"
+
+[node name="DialogueText" type="RichTextLabel" parent="DialogueBox/Panel/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_font_sizes/normal_font_size = 17
+bbcode_enabled = true
+scroll_active = false
+
+[node name="Buttons" type="HBoxContainer" parent="DialogueBox/Panel/Margin/VBox"]
+layout_mode = 2
+alignment = 2
+
+[node name="DialogueOk" type="Button" parent="DialogueBox/Panel/Margin/VBox/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 36)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"PrimaryButton"
+text = "OK"
+
+[node name="DialoguePortrait" type="TextureRect" parent="DialogueBox"]
+unique_name_in_owner = true
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = -262.0
+offset_right = 240.0
+offset_bottom = -12.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5

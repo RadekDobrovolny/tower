@@ -14,7 +14,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 | Pohled | Shora. Stanice je plošina, lodě přilétají z okolního vesmíru. |
 | Tankování | Lodě obsluhuje **personál**: zaměstnanec dojde k zakotvené lodi a natankuje ji. |
 | Boj | **Nepřímý**: věže a ochranka bojují samy, hráč staví a vylepšuje obranu předem i během útoku. |
-| Struktura | Hra je **kontinuální**: stanice běží pořád dál a **mise** (úkoly) jdou jedna za druhou. Kredity, vylepšení, sloty i zásobník se přenášejí do další mise. Každá mise začíná úvodním oknem s cíli, po splnění se hra pozastaví, ukáže shrnutí a úvod další mise. Po poslední misi pokračuje volná hra bez cílů. Mise 1 je krátký úvod na pár minut, další mise by měly trvat **aspoň 20 minut**. |
+| Struktura | Hra je **kontinuální**: stanice běží pořád dál a **mise** (úkoly) jdou jedna za druhou. Kredity, vylepšení, sloty i zásobník se přenášejí do další mise. Každá mise začíná rozhovorem, ve kterém Pumpík řekne zadání, po splnění se hra pozastaví, ukáže shrnutí a další mise začne svým rozhovorem. Po poslední misi pokračuje volná hra bez cílů. Mise 1 je krátký úvod na pár minut, další mise by měly trvat **aspoň 20 minut**. |
 | Ovládání | Hráč kliká na objekty (Pumpík, budovy, zásobník, stavební dron Bzučák, prázdné parcely). Vpravo se otevře info panel s popisem, stavem a tlačítky na vylepšení nebo stavbu. Zobrazují se jen věci, které jde právě koupit. Na co hráč nemá dost kreditů, je vidět, ale šedé. Klik do prázdna panel zavře. |
 | Stavění | Nepostavené budovy nejsou vidět, jen velmi jemný obrys prázdné parcely. Po kliknutí na parcelu si hráč vybere, co postavit. Stavba se **platí po částech**: hráč zaplatí část, stavební dron **Bzučák** ji postaví a pak hráč zaplatí další. Budova začne fungovat až po poslední části. Vylepšení budov se platí najednou a Bzučák je pak chvíli staví. |
 | Menu | Hra začíná menu, kde jde vybrat, od které mise začít (hodí se hlavně pro testování); pak se použije startovní stav té mise. Poslední volba je **Mise Z**: volná hra bez cílů, kde je všechno postavené a vylepšené na maximum. Pod misemi je **Centrum zvuků**. Během hry jde hru pozastavit tlačítkem „Menu“ nebo klávesou Esc (pokračovat, začít znovu, hlavní menu). |
@@ -268,6 +268,14 @@ V misích 1 a 2 je galaxínu neomezeně a stojí pevně 6 kr/j. S misí 3 se zap
 - Hra se zastaví a vetešník nabídne **3 náhodná vylepšení, která hráč má, za 50 % nákupní ceny**. Prodané vylepšení hráč ztratí (o jeden level zpět) a může si ho později znovu koupit. Prodat jde levely Pumpíka, štíty, nanoboty, Bzučáka, zásobníku, zábavního systému, věží, zboží obchodu, výherní automaty a vylepšení řídícího centra. Budovy samotné ani to, na čem Bzučák právě pracuje, prodat nejde.
 - Hráč může odmítnout („Zatím ne“), vetešník se pak vrátí za 30 s.
 - Kdo už nemá co prodat, dostane almužnu 150 kr, aby se nezasekl.
+
+## Příběh a rozhovory
+
+Postavy mluví v dialogovém okně ve spodní části obrazovky: vlevo detailní obličej s emocí, vedle jméno a text, který se postupně vypisuje. Dokud je okno vidět, hra stojí. Tlačítko OK (nebo Enter a mezerník) nejdřív dopíše rozepsaný text, pak přejde na další repliku. Později půjde přidat i tlačítka s výběrem možností.
+
+- Zadání každé mise říká **Pumpík** v rozhovoru místo modálního okna. Cíle jsou vidět vpravo nahoře. Okno se shrnutím po splnění mise zůstává.
+- Pumpík má čtyři emoce: klidný, nadšený, ustaraný a naštvaný (`neutral`, `happy`, `worried`, `angry`).
+- Rozhovory jsou v `dialogue/story.gd`.
 
 ## Zvuk
 

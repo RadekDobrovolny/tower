@@ -41,6 +41,7 @@ var _hint_tween: Tween
 @onready var _info_actions: VBoxContainer = %InfoActions
 @onready var _hint: Label = $HintLabel
 @onready var _alert: Label = $Alert
+@onready var dialogue: DialogueBox = $DialogueBox
 @onready var _mission_popup: Control = $MissionPopup
 @onready var _mission_title: Label = %MissionTitle
 @onready var _mission_body: RichTextLabel = %MissionBody

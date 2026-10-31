@@ -6,8 +6,6 @@ extends Resource
 ## rovnou od téhle mise (výběr v menu, hodí se pro testování).
 
 @export var title := ""
-## Úvodní text mise, ukáže se v okně na začátku mise.
-@export_multiline var description := ""
 
 @export_group("Pravidla")
 ## Nejvyšší level, na který jde vylepšit androida (tankování i jízdu).

@@ -5,7 +5,6 @@
 [resource]
 script = ExtResource("1_mission")
 title = "Obchod a logistika"
-description = "Stanice se rozrůstá. Posádky lodí by si rády něco koupily, než jim Pumpík natankuje, tak jim postav obchod a rozšiř nabídku. K zásobníku na levelu 3 jde přistavět řídící centrum: vylepší dodávky galaxínu a s automatickým dispečinkem bude cisterny objednávat samo."
 max_android_level = 6
 entertainment_available = true
 drone_upgrades = true

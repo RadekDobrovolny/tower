@@ -41,10 +41,10 @@ func _ready() -> void:
 	if free_play:
 		_apply_rules(start)
 		_begin_free_play()
-		_pause_with_popup("Mise Z: %s" % start.title, start.description, "Začít")
+		hud.dialogue.play(Story.FREE_PLAY_INTRO)
 		return
 	_begin_mission(start_index)
-	_pause_with_popup("Mise %d: %s" % [number(), mission.title], _briefing(mission), "Začít")
+	hud.dialogue.play(Story.MISSION_INTROS[start_index])
 
 
 func _exit_tree() -> void:
@@ -60,16 +60,22 @@ func number() -> int:
 	return mission_index + 1 if mission else 0
 
 
-## Zavře okno mise (úvod nebo shrnutí) a pokračuje ve hře, případně další misí.
+## Zavře, co je zrovna otevřené (rozhovor, nebo okno se shrnutím mise), a pokračuje ve hře,
+## případně další misí s jejím úvodem.
 func continue_game() -> void:
-	if _completed:
-		_completed = false
-		if mission_index + 1 < Missions.ALL.size():
-			_begin_mission(mission_index + 1)
-		else:
-			_begin_free_play()
+	if hud.dialogue.is_open():
+		hud.dialogue.close()
+		return
 	hud.hide_mission_popup()
 	get_tree().paused = false
+	if not _completed:
+		return
+	_completed = false
+	if mission_index + 1 < Missions.ALL.size():
+		_begin_mission(mission_index + 1)
+		hud.dialogue.play(Story.MISSION_INTROS[mission_index])
+	else:
+		_begin_free_play()
 
 
 ## Všechno, co jde teď koupit (vylepšení objektů a stavby na první prázdné parcele).
@@ -185,28 +191,6 @@ func _pause_with_popup(title: String, body: String, button_text: String) -> void
 	hud.show_mission_popup(title, body, button_text)
 
 
-## Úvodní text mise se seznamem cílů.
-func _briefing(briefed: Mission) -> String:
-	var lines := PackedStringArray([briefed.description, "", "Cíle:"])
-	if briefed.goal_credits > 0:
-		lines.append("- Naspořit %s kr" % Game.format_number(briefed.goal_credits))
-	if briefed.goal_fuel_level > 0:
-		lines.append("- %s: tankování na levelu %d" % [_android_name(), briefed.goal_fuel_level])
-	if briefed.goal_entertainment_level > 0:
-		lines.append("- Zábavní systém na levelu %d" % briefed.goal_entertainment_level)
-	if briefed.goal_tank_level > 0:
-		lines.append("- Zásobník na levelu %d" % briefed.goal_tank_level)
-	if briefed.goal_shop_products > 0:
-		lines.append("- Obchod a v něm %d nové druhy zboží" % briefed.goal_shop_products)
-	if briefed.goal_dispatch:
-		lines.append("- Řídící centrum s automatickým dispečinkem")
-	if briefed.goal_tower_level > 0:
-		lines.append("- Obranná věž na levelu %d" % briefed.goal_tower_level)
-	if briefed.goal_pirates_shot > 0:
-		lines.append("- Sestřelit %d pirátů" % briefed.goal_pirates_shot)
-	return "\n".join(lines)
-
-
 func _android_name() -> String:
 	var androids := station.get_androids()
 	return androids[0].display_name if not androids.is_empty() else "Android"
@@ -233,7 +217,7 @@ func _check_goals() -> void:
 	if mission_index + 1 < Missions.ALL.size():
 		var next: Mission = Missions.ALL[mission_index + 1]
 		_pause_with_popup("Mise %d splněna!" % number(),
-				"%s\n\nDalší mise %d: %s\n%s" % [summary, number() + 1, next.title, _briefing(next)],
+				"%s\n\nDalší mise %d: %s" % [summary, number() + 1, next.title],
 				"Pokračovat")
 	else:
 		_pause_with_popup("Mise %d splněna!" % number(),

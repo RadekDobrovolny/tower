@@ -5,7 +5,6 @@
 [resource]
 script = ExtResource("1_mission")
 title = "Pumpík se učí tankovat"
-description = "Právě jsi převzal malou čerpací stanici na okraji galaxie. Máš jeden čerpací slot a androida Pumpíka. Vydělej první peníze a vylepši Pumpíkovi tankování, ať stíhá obsluhovat. Na Pumpíka i na budovy můžeš kliknout."
 max_android_level = 3
 max_slots = 1
 ship_interval_min = 3.0

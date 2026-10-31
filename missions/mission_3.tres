@@ -5,7 +5,6 @@
 [resource]
 script = ExtResource("1_mission")
 title = "Vlastní galaxín"
-description = "Dosavadní dodavatel s tebou končí. Od teď si galaxín objednáváš sám a sám určuješ jeho cenu. Do zásobníku dostáváš první várku 300 j zdarma. Pozor na levné dodavatele, za nekvalitní galaxín hrozí pokuty."
 max_android_level = 6
 entertainment_available = true
 drone_upgrades = true

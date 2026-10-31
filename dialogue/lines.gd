@@ -109,7 +109,7 @@ const QUALITY_COMPLAINT := [
 ## Pumpíkovi došel galaxín v zásobníku.
 const ANDROID_EMPTY := [
 	"Došel galaxín!",
-	"Zásobník je prázdný, šéfe!",
+	"Zásobník je prázdný, šéfiku!",
 	"Objednej cisternu!",
 ]
 
