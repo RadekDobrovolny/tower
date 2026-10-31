@@ -537,6 +537,58 @@
           "cell": "vpravo dole"
         }
       ]
+    },
+    {
+      "asset_id": "aca6ff8b-1f8b-4aa4-bb58-ce7afca39aa1",
+      "label": "Tower – arch K: skladiště a artefakty, 3×3 (reference arch A, 16 kreditů)",
+      "files": [
+        {
+          "file": "assets/sprites/warehouse/warehouse.png",
+          "sha12": "666f080e1630",
+          "cell": "řádek 1, vlevo"
+        },
+        {
+          "file": "assets/sprites/warehouse/warehouse_frame.png",
+          "sha12": "4e6dcb16be4a",
+          "cell": "řádek 1, uprostřed"
+        },
+        {
+          "file": "assets/sprites/artifacts/compass.png",
+          "sha12": "4031f7d7fa59",
+          "cell": "řádek 1, vpravo"
+        },
+        {
+          "file": "assets/sprites/artifacts/whisky.png",
+          "sha12": "3e58109a9a44",
+          "cell": "řádek 2, vlevo"
+        },
+        {
+          "file": "assets/sprites/artifacts/skull.png",
+          "sha12": "2e4ebaebe929",
+          "cell": "řádek 2, uprostřed"
+        },
+        {
+          "file": "assets/sprites/artifacts/crystal.png",
+          "sha12": "76658a7410bc",
+          "cell": "řádek 2, vpravo"
+        },
+        {
+          "file": "assets/sprites/artifacts/radio.png",
+          "sha12": "b783f19583b2",
+          "cell": "řádek 3, vlevo"
+        },
+        {
+          "file": "assets/sprites/artifacts/map.png",
+          "sha12": "f74ca1f48323",
+          "cell": "řádek 3, uprostřed"
+        },
+        {
+          "file": "assets/sprites/artifacts/crate.png",
+          "sha12": "fa5b814efaf8",
+          "cell": "řádek 3, vpravo",
+          "note": "nepoužito, prázdné sloty skladiště nemají obrázek, soubor smazán"
+        }
+      ]
     }
   ]
 }

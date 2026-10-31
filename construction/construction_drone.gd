@@ -164,8 +164,6 @@ func info_lines() -> PackedStringArray:
 		lines.append("Let: level %d (%d px/s), práce: level %d (%d %% rychlosti)" % [
 			speed_level, roundi(speed()), work_level, roundi(work_factor() * 100.0)])
 	var station := get_parent() as Station
-	if station and not station.artifacts_found.is_empty():
-		lines.append("Nalezené artefakty: %s" % ", ".join(station.artifacts_found))
 	return lines
 
 

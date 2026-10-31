@@ -30,6 +30,7 @@ const BUILD_LABELS := {
 	"shop": "Začít stavět obchod", "tower": "Začít stavět obrannou věž",
 }
 const CONTROL_CENTER_SCENE := preload("res://economy/control_center.tscn")
+const WAREHOUSE_SCENE := preload("res://station/warehouse.tscn")
 const LOOT_SCENE := preload("res://loot/loot.tscn")
 ## Kořist ze sestřelených pirátů: šance, že něco vypadne, šance na truhlu s artefaktem
 ## (jinak trosky) a kolik kreditů trosky vynesou. První hodnota platí pro nájezdníka,
@@ -40,16 +41,47 @@ const WRECKAGE_CREDITS := [Vector2i(150, 400), Vector2i(400, 900)]
 ## Artefakty z pirátských truhel. Ty s cenou se prodají, ostatní mají trvalý účinek
 ## a najdou se jen jednou (`unique`).
 const ARTIFACTS := [
-	{"id": "compass", "name": "Rezavý pirátský kompas", "credits": 1200},
-	{"id": "whisky", "name": "Láhev staré galaxínové whisky", "credits": 1800},
-	{"id": "skull", "name": "Zlatá lebka", "credits": 2500},
-	{"id": "crystal", "name": "Krystal čistého galaxínu", "credits": 0,
-			"effect": "doplní do zásobníku 400 j galaxínu"},
-	{"id": "radio", "name": "Pirátská vysílačka", "credits": 0, "unique": true,
-			"effect": "odposlech pirátů, útočí o 20 % méně často"},
-	{"id": "map", "name": "Mapa pirátských skrýší", "credits": 0, "unique": true,
-			"effect": "trosky z pirátů vynesou o 50 % víc"},
+	{
+		"id": "compass", "name": "Rezavý pirátský kompas", "credits": 1200,
+		"icon": preload("res://assets/sprites/artifacts/compass.png"),
+		"about": "Nikdy neukazuje na sever, zato spolehlivě na nejbližšího dlužníka.",
+		"info": "Sběratelská cennost, nemá žádný účinek.",
+	},
+	{
+		"id": "whisky", "name": "Láhev staré galaxínové whisky", "credits": 1800,
+		"icon": preload("res://assets/sprites/artifacts/whisky.png"),
+		"about": "Pečeť drží už tři sta let. Chutná prý jako horoucí nebe.",
+		"info": "Sběratelská cennost, nemá žádný účinek.",
+	},
+	{
+		"id": "skull", "name": "Zlatá lebka", "credits": 2500,
+		"icon": preload("res://assets/sprites/artifacts/skull.png"),
+		"about": "Nikdo neví, čí byla. Ani jestli si pro ni někdo nepřijde.",
+		"info": "Sběratelská cennost, nemá žádný účinek.",
+	},
+	{
+		"id": "crystal", "name": "Krystal čistého galaxínu", "credits": 1500,
+		"icon": preload("res://assets/sprites/artifacts/crystal.png"),
+		"about": "Galaxín ztuhlý do krystalu. Svítí i v naprosté tmě.",
+		"info": "Dokud je ve skladišti: zásobník pojme o %d j víc." % CRYSTAL_CAPACITY,
+	},
+	{
+		"id": "radio", "name": "Pirátská vysílačka", "credits": 3000,
+		"icon": preload("res://assets/sprites/artifacts/radio.png"),
+		"about": "Pořád naladěná na pirátskou frekvenci. Sem tam z ní zazní i píseň.",
+		"info": "Dokud je ve skladišti: díky odposlechu útočí piráti o 20 % méně často.",
+	},
+	{
+		"id": "map", "name": "Mapa pirátských skrýší", "credits": 3000,
+		"icon": preload("res://assets/sprites/artifacts/map.png"),
+		"about": "Ohořelá mapa skrýší. Víme teď, kde se trosky nejlíp prodají.",
+		"info": "Dokud je ve skladišti: trosky z pirátů vynesou o 50 % víc.",
+	},
 ]
+## O kolik víc pojme zásobník, když je krystal ve skladišti, a jak působí vysílačka a mapa.
+const CRYSTAL_CAPACITY := 400
+const RADIO_INTERVAL_FACTOR := 1.25
+const MAP_LOOT_BONUS := 1.5
 ## Od jakého levelu zásobníku jde k němu přistavět řídící centrum.
 const CONTROL_CENTER_TANK_LEVEL := 3
 ## Na které parcely (indexy) se ve startovním stavu mise staví čerpací sloty, zábavní systém,
@@ -112,14 +144,18 @@ const DRONE_PICK_RADIUS := 18.0
 ## Pravidla aktuální mise (nastavuje kampaň).
 var max_slots := 1
 var entertainment_available := false
+var dual_hose_available := false
+var warehouse_available := false
 var shop_available := false
 var tower_available := false
 var control_center_available := false
 var galaxin_economy := false
 ## Řídící centrum u zásobníku (i rozestavěné), nebo null.
 var control_center: ControlCenter
+## Skladiště u obchodu, nebo null.
+var warehouse: Warehouse
 ## Názvy nalezených artefaktů (v pořadí nálezu).
-var artifacts_found: Array[String] = []
+var stored_artifacts: Array[Dictionary] = []
 ## Účinky artefaktů: násobek prodlevy mezi útoky pirátů a násobek ceny trosek.
 var pirate_interval_factor := 1.0
 var loot_bonus := 1.0
@@ -352,6 +388,25 @@ func control_center_cost() -> int:
 	return ControlCenter.PHASES[0].cost
 
 
+## Cena první části skladiště, nebo -1, když ho teď postavit nejde
+## (není povolené misí, chybí hotový obchod, nebo už stojí).
+func warehouse_cost() -> int:
+	if not warehouse_available or warehouse != null or shop_products() < 0:
+		return -1
+	return Warehouse.PHASES[0].cost
+
+
+## Začne stavět skladiště vedle obchodu. Vrátí, jestli se to povedlo.
+func build_warehouse() -> bool:
+	var cost := warehouse_cost()
+	if cost < 0 or Game.credits < cost:
+		return false
+	_place_warehouse().start_next_phase()
+	select(warehouse)
+	state_changed.emit()
+	return true
+
+
 ## Začne stavět řídící centrum vedle zásobníku. Vrátí, jestli se to povedlo.
 func build_control_center() -> bool:
 	var cost := control_center_cost()
@@ -553,6 +608,7 @@ func setup_maxed() -> void:
 		(_place_building("tower", tower_plot) as DefenseTower).set_level(DefenseTower.LEVELS.size())
 		tower_plot = first_empty_plot(Plot.Kind.TOWER)
 	_place_control_center().set_maxed()
+	_place_warehouse().finish_instantly()
 	tank.set_level(GalaxinTank.LEVELS.size())
 	drone.set_maxed()
 	for android in get_androids():
@@ -568,6 +624,11 @@ func send_ships_away_no_fuel() -> void:
 	for slot in get_slots():
 		if slot.occupant:
 			slot.occupant.leave_without_fuel()
+
+
+## Druhá hadice pro androida se otevře, když ji mise povolí a stojí aspoň dva sloty.
+func dual_hose_unlocked() -> bool:
+	return dual_hose_available and get_slots().size() >= 2
 
 
 ## Jestli některá loď u čerpadla ještě zaplatí za natankovaný galaxín.
@@ -659,6 +720,16 @@ func _place_control_center() -> ControlCenter:
 	return control_center
 
 
+func _place_warehouse() -> Warehouse:
+	warehouse = WAREHOUSE_SCENE.instantiate()
+	warehouse.station = self
+	warehouse.position = shop().plot.position + shop().plot.annex_offset
+	add_child(warehouse)
+	# Pod androidem a dronem, nad parcelami.
+	move_child(warehouse, tank.get_index() + 1)
+	return warehouse
+
+
 func _place_building(type: String, plot: Plot) -> Building:
 	var building: Building = BUILDING_SCENES[type].instantiate()
 	building.station = self
@@ -729,6 +800,8 @@ func _pick(point: Vector2) -> Node:
 		return tank
 	if control_center and control_center.rect().has_point(point):
 		return control_center
+	if warehouse and warehouse.rect().has_point(point):
+		return warehouse
 	for plot in get_plots():
 		if plot.rect().has_point(point):
 			if plot.building:
@@ -869,9 +942,10 @@ func spawn_loot(at: Vector2, gunship: bool) -> void:
 		return
 	var loot: Loot = LOOT_SCENE.instantiate()
 	loot.station = self
-	if randf() < CHEST_CHANCE[tier]:
+	var artifact := _random_artifact() if randf() < CHEST_CHANCE[tier] else {}
+	if not artifact.is_empty():
 		loot.kind = Loot.Kind.CHEST
-		loot.artifact = _random_artifact()
+		loot.artifact = artifact
 	else:
 		var credit_range: Vector2i = WRECKAGE_CREDITS[tier]
 		loot.credits = roundi(randi_range(credit_range.x, credit_range.y) * loot_bonus)
@@ -881,28 +955,45 @@ func spawn_loot(at: Vector2, gunship: bool) -> void:
 	loot.global_position = at.clamp(screen.position + Vector2(40, 40), screen.end - Vector2(40, 40))
 
 
-## Dron přivezl artefakt: prodá se, nebo začne platit jeho účinek.
-func add_artifact(artifact: Dictionary) -> void:
-	artifacts_found.append(artifact.name)
-	if artifact.credits > 0:
+## Dron přivezl artefakt. Hotové skladiště ho uloží a začne platit jeho účinek, bez něj (nebo
+## když už ho hráč má) se hned prodá. Vrátí, jestli se uložil.
+func add_artifact(artifact: Dictionary) -> bool:
+	var keep := has_warehouse() and not stored_artifacts.has(artifact) and stored_artifacts.size() < Warehouse.SLOTS
+	if keep:
+		stored_artifacts.append(artifact)
+		_apply_artifacts()
+	else:
 		Game.add_credits(artifact.credits)
-	match artifact.id:
-		"crystal":
-			if galaxin_economy:
-				tank.fill(400.0, 0.0)
-			else:
-				Game.add_credits(800)
-		"radio":
-			pirate_interval_factor = 1.25
-		"map":
-			loot_bonus = 1.5
+	state_changed.emit()
+	return keep
+
+
+## Prodá artefakt ze skladiště. Jeho účinek skončí a znovu může vypadnout z pirátů.
+func sell_artifact(artifact: Dictionary) -> void:
+	stored_artifacts.erase(artifact)
+	Game.add_credits(artifact.credits)
+	Sfx.play("coin")
+	_apply_artifacts()
 	state_changed.emit()
 
 
+func has_warehouse() -> bool:
+	return warehouse != null and warehouse.is_operational()
+
+
+## Účinky platí, jen dokud je artefakt ve skladišti.
+func _apply_artifacts() -> void:
+	var stored := stored_artifacts.map(func(artifact: Dictionary) -> String: return artifact.id)
+	pirate_interval_factor = RADIO_INTERVAL_FACTOR if stored.has("radio") else 1.0
+	loot_bonus = MAP_LOOT_BONUS if stored.has("map") else 1.0
+	tank.bonus_capacity = CRYSTAL_CAPACITY if stored.has("crystal") else 0.0
+	tank.amount = minf(tank.amount, tank.capacity())
+
+
+## Co hráč ve skladišti už má, z pirátů znovu nevypadne. Prázdné = všechno už má.
 func _random_artifact() -> Dictionary:
-	var pool := ARTIFACTS.filter(func(artifact: Dictionary) -> bool:
-		return not (artifact.get("unique", false) and artifacts_found.has(artifact.name)))
-	return pool.pick_random()
+	var pool := ARTIFACTS.filter(func(artifact: Dictionary) -> bool: return not stored_artifacts.has(artifact))
+	return {} if pool.is_empty() else pool.pick_random()
 
 
 

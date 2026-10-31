@@ -124,13 +124,14 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 - Při vylepšování budova dál funguje na původním levelu. Vylepšení Pumpíka je okamžité.
 
 ### Čerpací sloty
+- Čerpadlo stojí na opačné straně plošiny než Pumpík. V horní řadě má Pumpík strany natočené k sobě, aby obsloužil dva sloty najednou. Dolní parcely mají čerpadlo u zásobníku, aby potrubí nevedlo pod plošinou.
 - Kolik slotů smí stanice mít celkem (včetně těch ve stavbě), určuje mise.
 - Části stavby (celkem 8 000 kr a 18 s): základová deska (1 500 kr, 4 s), přistávací plocha (2 500 kr, 5 s), čerpadlo (2 500 kr, 5 s), napojení na potrubí (1 500 kr, 4 s). Po poslední části se ze zásobníku natáhne potrubí.
 - Upgrady zvyšují rychlost čerpadla a případně umožní obsluhovat větší lodě (zatím není).
 
 ### Personál
 - **Androidi** (tankovači) obsluhují lodě.
-- Android zvládne tankovat **2 lodě najednou**: postaví se mezi dva sloty a ke každé lodi natáhne hadici. Každou loď tankuje plnou rychlostí.
+- Android tankuje jednu loď. S vylepšením **Druhá hadice** (3 000 kr) zvládne **2 lodě najednou**: postaví se mezi dva sloty a ke každé lodi natáhne hadici, každou tankuje plnou rychlostí. Vylepšení se otevře v Misi 2, jakmile stojí druhý čerpací slot, a Pumpík o něm řekne v rozhovoru. Při startu od Mise 3 ho už má.
 - Pumpíkovi se zvlášť vylepšuje **tankování** a **jízda**. Do jakého levelu jde vylepšovat, určuje mise. Barva těla odpovídá levelu tankování.
 
 | Level | Tankování | Cena | Barva |
@@ -246,22 +247,27 @@ V misích 1 a 2 je galaxínu neomezeně a stojí pevně 6 kr/j. S misí 3 se zap
 
 - **Kořist:** ze sestřeleného nájezdníka s šancí 60 % (z dělové lodi vždy) vypadne kořist a zůstane se vznášet na místě. Bzučák pro ni doletí a za 2 s ji sebere (zařadí se do jeho fronty zakázek).
   - **Trosky** vynesou 150–400 kr (z dělové lodi 400–900 kr).
-  - **Truhla s artefaktem** (šance 20 %, z dělové lodi 45 %). Nalezené artefakty vypíše Bzučákův info panel.
+  - **Truhla s artefaktem** (šance 20 %, z dělové lodi 45 %). Bez skladiště se artefakt hned prodá za svou cenu. Se skladištěm se uloží a začne působit. Co hráč ve skladišti má, z pirátů znovu nevypadne. Když je tam všechno, vypadnou místo truhly trosky.
 
-| Artefakt | Co přinese |
-|---|---|
-| Rezavý pirátský kompas | prodá se za 1 200 kr |
-| Láhev staré galaxínové whisky | 1 800 kr |
-| Zlatá lebka | 2 500 kr |
-| Krystal čistého galaxínu | doplní do zásobníku 400 j galaxínu |
-| Pirátská vysílačka (jen jednou) | piráti útočí o 20 % méně často |
-| Mapa pirátských skrýší (jen jednou) | trosky vynesou o 50 % víc |
+| Artefakt | Cena | Ve skladišti |
+|---|---|---|
+| Rezavý pirátský kompas | 1 200 kr | sběratelská cennost |
+| Láhev staré galaxínové whisky | 1 800 kr | sběratelská cennost |
+| Zlatá lebka | 2 500 kr | sběratelská cennost |
+| Krystal čistého galaxínu | 1 500 kr | zásobník pojme o 400 j víc |
+| Pirátská vysílačka | 3 000 kr | piráti útočí o 20 % méně často |
+| Mapa pirátských skrýší | 3 000 kr | trosky vynesou o 50 % víc |
 
 - Původní nápad na pozdější fázi: piráti vystoupí z lodi a útočí na stanici pěšky.
 
 ### Cíl a prohra
 - **Výhra:** splnění cíle levelu, například vydělat X kreditů.
 - **Prohra:** hra nemá game over, hráč se ale nesmí zaseknout (viz Vesmírný vetešník).
+
+### Skladiště (od mise 5)
+- Přistavuje se k hotovému obchodu akcí v jeho nabídce, podobně jako řídící centrum k zásobníku. Staví se ve 3 částech (celkem 3 000 kr): základy (800 kr, 3 s), ocelová konstrukce (1 200 kr, 4 s), stěny a vrata (1 000 kr, 4 s). V Misi Z už stojí.
+- Hotové skladiště je inventář se **6 sloty**: kliknutí na něj zastaví hru a ukáže, co v něm je. Prázdné sloty jsou prázdné. Po kliknutí na artefakt se ukáže popis, účinek a tlačítko **Prodat** za jeho plnou cenu.
+- Účinek artefaktu platí, jen dokud je ve skladišti. Po prodeji skončí a artefakt může z pirátů vypadnout znovu.
 
 ### Vesmírný vetešník
 - Přiletí, když je zásobník prázdný, žádná cisterna není objednaná ani na cestě a hráč nemá ani na 50 j od nejlevnějšího dodavatele (100 kr). Menší dávku vypije jedna loď a stanice se z ní nevzpamatuje. Musí to trvat 4 s, protože kredity ještě může přinést kořist, obchod nebo automaty, a počká i na lodě u čerpadel, které ještě zaplatí za natankovaný galaxín. Během útoku pirátů nepřiletí.
@@ -339,7 +345,7 @@ Mise jsou zdroje `missions/mission_*.tres` (dají se upravovat v inspektoru Godo
 
 **Cíl:** postavit **zábavní systém** a vylepšit ho na **level 3**.
 
-**Co jde dělat:** postavit zábavní systém a druhý **čerpací slot za 8 000 kr** (na libovolné prázdné parcele), vylepšovat Pumpíka až do levelu 6. Slot není nutný ke splnění cíle, ale Pumpík pak tankuje dvě lodě najednou.
+**Co jde dělat:** postavit zábavní systém a druhý **čerpací slot za 8 000 kr** (na libovolné prázdné parcele), vylepšovat Pumpíka až do levelu 6. Slot není nutný ke splnění cíle. Jakmile stojí, Pumpík se ozve v rozhovoru a otevře se mu vylepšení **Druhá hadice** (3 000 kr), se kterým tankuje dvě lodě najednou.
 
 **Lodě** přilétají častěji než v misi 1, každé 2–5 s. Jeden slot je nestíhá, takže se vyplatí zábavní systém i druhý slot. Ostatní ekonomika je stejná jako v misi 1.
 

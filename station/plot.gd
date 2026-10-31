@@ -11,8 +11,12 @@ enum Kind { BUILDING, TOWER }
 @export var kind := Kind.BUILDING
 @export var size := Vector2(170, 120)
 ## Z které strany čerpadla stojí android, když tu bude čerpací slot: -1 vlevo, 1 vpravo.
-## Sousední parcely mají stranu natočenou k sobě, aby android obsloužil oba sloty najednou.
+## Čerpadlo stojí na opačné straně než android. Horní parcely mají android natočený k sobě, aby
+## obsloužil oba sloty najednou. Dolní mají čerpadlo u zásobníku, aby potrubí nevedlo pod plošinou.
 @export_enum("Vlevo:-1", "Vpravo:1") var service_side := -1
+
+## Kde vůči parcele stojí přístavba budovy (skladiště u obchodu).
+@export var annex_offset := Vector2(0, 66)
 
 var building: Building
 var station: Station

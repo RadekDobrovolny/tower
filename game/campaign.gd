@@ -18,6 +18,7 @@ var mission_elapsed := 0.0
 
 ## Mise je splněná a hra čeká, až hráč potvrdí okno se shrnutím.
 var _completed := false
+var _dual_hose_told := false
 
 @onready var station: Station = $Station
 @onready var spawner: ShipSpawner = $ShipSpawner
@@ -35,6 +36,7 @@ func _ready() -> void:
 	# (např. loď nejdřív zaplatí a teprve pak se započítá jako obsloužená).
 	Game.credits_changed.connect(_check_goals.unbind(1), CONNECT_DEFERRED)
 	station.state_changed.connect(_check_goals, CONNECT_DEFERRED)
+	station.state_changed.connect(_check_dual_hose_story, CONNECT_DEFERRED)
 	Game.stats_changed.connect(_check_goals, CONNECT_DEFERRED)
 	hud.setup(self)
 	junk_dealer.arrived.connect(hud.show_junk_dealer.bind(junk_dealer))
@@ -91,6 +93,8 @@ func get_shop_items() -> Array[ShopItem]:
 	items.append_array(station.drone.info_actions())
 	if station.control_center:
 		items.append_array(station.control_center.info_actions())
+	if station.warehouse:
+		items.append_array(station.warehouse.info_actions())
 	for kind in Plot.Kind.values():
 		var empty_plot := station.first_empty_plot(kind)
 		if empty_plot:
@@ -147,6 +151,7 @@ func _apply_start_state(start: Mission) -> void:
 		return
 	for android in station.get_androids():
 		android.set_levels(start.start_fuel_level, start.start_walk_level)
+		android.set_dual_hose(start.start_dual_hose)
 	station.setup_start_buildings(start.start_slots, start.start_entertainment_level,
 			start.start_shop_products, start.start_control_center, start.start_tower_level)
 	station.tank.set_level(start.start_tank_level)
@@ -166,10 +171,12 @@ func _apply_rules(rules: Mission) -> void:
 	for android in station.get_androids():
 		android.max_level = rules.max_android_level
 	station.max_slots = rules.max_slots
+	station.dual_hose_available = rules.dual_hose_available
 	station.entertainment_available = rules.entertainment_available
 	station.shop_available = rules.shop_available
 	station.control_center_available = rules.control_center_available
 	station.tower_available = rules.tower_available
+	station.warehouse_available = rules.warehouse_available
 	station.drone.upgrades_available = rules.drone_upgrades
 	if rules.galaxin_economy and not station.galaxin_economy:
 		station.enable_galaxin_economy(rules.start_galaxin)
@@ -189,6 +196,16 @@ func _begin_free_play() -> void:
 func _pause_with_popup(title: String, body: String, button_text: String) -> void:
 	get_tree().paused = true
 	hud.show_mission_popup(title, body, button_text)
+
+
+## Když se otevře druhá hadice, Pumpík o ní hráči řekne (jen jednou za hru).
+func _check_dual_hose_story() -> void:
+	if _dual_hose_told or _completed or hud.dialogue.is_open() or not station.dual_hose_unlocked():
+		return
+	if station.get_androids().all(func(android: Android) -> bool: return android.has_dual_hose()):
+		return
+	_dual_hose_told = true
+	hud.dialogue.play(Story.DUAL_HOSE_UNLOCKED)
 
 
 func _android_name() -> String:

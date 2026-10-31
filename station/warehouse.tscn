@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://station/warehouse.gd" id="1_warehouse"]
+[ext_resource type="Texture2D" path="res://assets/sprites/construction/foundation.png" id="2_foundation"]
+[ext_resource type="Texture2D" path="res://assets/sprites/warehouse/warehouse.png" id="3_body"]
+[ext_resource type="Texture2D" path="res://assets/sprites/warehouse/warehouse_frame.png" id="4_frame"]
+
+[node name="Warehouse" type="Node2D"]
+script = ExtResource("1_warehouse")
+
+[node name="Base" type="Sprite2D" parent="."]
+visible = false
+scale = Vector2(0.28, 0.28)
+texture = ExtResource("2_foundation")
+
+[node name="Frame" type="Sprite2D" parent="."]
+visible = false
+scale = Vector2(0.46, 0.46)
+texture = ExtResource("4_frame")
+
+[node name="Body" type="Sprite2D" parent="."]
+visible = false
+scale = Vector2(0.46, 0.46)
+texture = ExtResource("3_body")

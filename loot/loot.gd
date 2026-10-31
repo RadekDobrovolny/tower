@@ -59,7 +59,7 @@ func collect() -> void:
 		Game.add_credits(credits)
 		FloatingText.spawn(station, at, "+%d kr trosky" % credits, CREDITS_COLOR)
 	else:
-		station.add_artifact(artifact)
-		var reward: String = "+%s kr" % Game.format_number(artifact.credits) if artifact.credits > 0 else artifact.effect
+		var stored := station.add_artifact(artifact)
+		var reward: String = "do skladiště" if stored else "+%s kr" % Game.format_number(artifact.credits)
 		FloatingText.spawn(station, at, "%s: %s" % [artifact.name, reward], ARTIFACT_COLOR)
 	queue_free()

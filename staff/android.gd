@@ -61,6 +61,8 @@ const SHOT_DAMAGE := 1
 const REPAIR_TIME := 10.0
 ## Kolik zásahů od pirátů vydrží bez štítů.
 const BASE_HEALTH := 3
+## Cena druhé hadice, se kterou zvládne tankovat dvě lodě najednou.
+const DUAL_HOSE_COST := 3000
 ## Štíty: kolik zásahů přidají a cena levelu. Nanoboti: za kolik sekund opraví jeden bod
 ## odolnosti (jen u částečného poškození, rozbitého neopraví) a cena levelu. Level 0 = bez vylepšení.
 const SHIELD_LEVELS := [
@@ -88,8 +90,8 @@ const DAMAGED_TINT := Color(0.55, 0.5, 0.5)
 @export var display_name := "Pumpík"
 ## Jméno v 5. pádě, kterým ho oslovují lodě.
 @export var vocative := "Pumpíku"
-## Kolik lodí zvládne tankovat najednou.
-@export var max_parallel_ships := 2
+## Kolik lodí zvládne tankovat najednou. Druhá hadice je vylepšení.
+@export var max_parallel_ships := 1
 
 var fuel_level := 1
 var walk_level := 1
@@ -240,6 +242,32 @@ func next_nanobot_cost() -> int:
 	return NANOBOT_LEVELS[nanobot_level + 1].cost
 
 
+## Cena druhé hadice, nebo -1 (už ji má, nebo se ještě neotevřela).
+func next_dual_hose_cost() -> int:
+	if has_dual_hose() or not station.dual_hose_unlocked():
+		return -1
+	return DUAL_HOSE_COST
+
+
+func has_dual_hose() -> bool:
+	return max_parallel_ships > 1
+
+
+func upgrade_dual_hose() -> bool:
+	var cost := next_dual_hose_cost()
+	if cost < 0 or not Game.spend_credits(cost):
+		return false
+	set_dual_hose(true)
+	_on_upgraded()
+	# Loď, která už čeká u druhého slotu, se hned dočká.
+	free_for_ship.emit(self)
+	return true
+
+
+func set_dual_hose(value: bool) -> void:
+	max_parallel_ships = 2 if value else 1
+
+
 func upgrade_shields() -> bool:
 	var cost := next_shield_cost()
 	if cost < 0 or not Game.spend_credits(cost):
@@ -273,6 +301,8 @@ func sale_items() -> Array[ShopItem]:
 	if nanobot_level > 0:
 		items.append(ShopItem.sale("%s: nanoboti, level %d" % [display_name, nanobot_level],
 				NANOBOT_LEVELS[nanobot_level].cost, _lose_nanobot_level))
+	if has_dual_hose():
+		items.append(ShopItem.sale("%s: druhá hadice" % display_name, DUAL_HOSE_COST, set_dual_hose.bind(false)))
 	return items
 
 
@@ -305,6 +335,7 @@ func serve(ship: Ship) -> void:
 func set_maxed() -> void:
 	shield_level = SHIELD_LEVELS.size() - 1
 	nanobot_level = NANOBOT_LEVELS.size() - 1
+	set_dual_hose(true)
 	health = max_health()
 	set_levels(FUEL_LEVELS.size(), WALK_LEVELS.size())
 
@@ -361,7 +392,7 @@ func info_title() -> String:
 
 func info_lines() -> PackedStringArray:
 	var lines := PackedStringArray([
-		"Android, který tankuje lodě. Zvládne obsluhovat dvě lodě najednou.",
+		"Android, který tankuje lodě.",
 		"Tankování: level %d (%d j/s)" % [fuel_level, roundi(fuel_rate())],
 		"Jízda: level %d (%d px/s)" % [walk_level, roundi(walk_speed())],
 		"Právě obsluhuje lodí: %d / %d" % [_ships.size(), max_parallel_ships],
@@ -388,6 +419,8 @@ func info_actions() -> Array[ShopItem]:
 		ShopItem.new(_shield_upgrade_label, next_shield_cost, upgrade_shields, ShopItem.Kind.UPGRADE),
 		ShopItem.new(func() -> String: return "Nanoboti: level %d (samooprava)" % (nanobot_level + 1),
 				next_nanobot_cost, upgrade_nanobots, ShopItem.Kind.UPGRADE),
+		ShopItem.new(func() -> String: return "Druhá hadice",
+				next_dual_hose_cost, upgrade_dual_hose, ShopItem.Kind.UPGRADE),
 	]
 	return actions
 

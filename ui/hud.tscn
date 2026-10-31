@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://ui/sound_button.gd" id="20_sound"]
 [ext_resource type="Script" path="res://ui/junk_dealer_popup.gd" id="21_dealer"]
 [ext_resource type="Script" path="res://ui/dialogue_box.gd" id="22_dialogue"]
+[ext_resource type="Script" path="res://ui/inventory_popup.gd" id="23_inventory"]
 [ext_resource type="Texture2D" path="res://assets/ui/icons/close.svg" id="9_close"]
 [ext_resource type="Texture2D" path="res://assets/ui/icons/galaxin.svg" id="10_galaxin"]
 [ext_resource type="Texture2D" path="res://assets/ui/icons/tank.svg" id="11_tank"]
@@ -695,6 +696,94 @@ layout_mode = 2
 size_flags_horizontal = 8
 focus_mode = 0
 text = "Zatím ne"
+
+[node name="InventoryPopup" type="ColorRect" parent="."]
+process_mode = 3
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.01, 0.04, 0.72)
+script = ExtResource("23_inventory")
+
+[node name="Center" type="CenterContainer" parent="InventoryPopup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="InventoryPopup/Center"]
+layout_mode = 2
+script = ExtResource("3_panel")
+
+[node name="Margin" type="MarginContainer" parent="InventoryPopup/Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 20
+
+[node name="VBox" type="VBoxContainer" parent="InventoryPopup/Center/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="InventoryPopup/Center/Panel/Margin/VBox"]
+layout_mode = 2
+theme_type_variation = &"HudTitle"
+theme_override_font_sizes/font_size = 24
+text = "Skladiště"
+uppercase = true
+
+[node name="Row" type="HBoxContainer" parent="InventoryPopup/Center/Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="InventorySlots" type="GridContainer" parent="InventoryPopup/Center/Panel/Margin/VBox/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 3
+
+[node name="Detail" type="VBoxContainer" parent="InventoryPopup/Center/Panel/Margin/VBox/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="InventoryPicture" type="TextureRect" parent="InventoryPopup/Center/Panel/Margin/VBox/Row/Detail"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="InventoryName" type="Label" parent="InventoryPopup/Center/Panel/Margin/VBox/Row/Detail"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+
+[node name="InventoryAbout" type="Label" parent="InventoryPopup/Center/Panel/Margin/VBox/Row/Detail"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+theme_type_variation = &"HudDim"
+autowrap_mode = 3
+
+[node name="InventoryEffect" type="Label" parent="InventoryPopup/Center/Panel/Margin/VBox/Row/Detail"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.45, 1)
+autowrap_mode = 3
+
+[node name="InventoryClose" type="Button" parent="InventoryPopup/Center/Panel/Margin/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 36)
+layout_mode = 2
+size_flags_horizontal = 8
+focus_mode = 0
+text = "Zavřít"
 
 [node name="DialogueBox" type="ColorRect" parent="."]
 process_mode = 3

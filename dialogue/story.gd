@@ -28,7 +28,7 @@ const MISSION_INTROS := [
 	[
 		{"speaker": PUMPIK, "mood": "worried", "text": "Šéfiku, lodí přibývá a fronty se prodlužují. Posádky začínají být nervózní."},
 		{"speaker": PUMPIK, "mood": "neutral", "text": "Klikni na prázdnou parcelu a postav zábavní systém. Autokino pro rakety, u filmu jim čekání uteče."},
-		{"speaker": PUMPIK, "mood": "happy", "text": "A dva sloty najednou zvládnu, takže si můžeš postavit i druhý čerpací slot."},
+		{"speaker": PUMPIK, "mood": "neutral", "text": "A kdyby lodí pořád přibývalo, postav druhý čerpací slot. Parcel máme dost."},
 	],
 	[
 		{"speaker": PUMPIK, "mood": "angry", "text": "Šéfiku, dosavadní dodavatel s námi končí! Od teď si galaxín objednáváš sám."},
@@ -45,7 +45,15 @@ const MISSION_INTROS := [
 		{"speaker": PUMPIK, "mood": "angry", "text": "Piráti! Přiletí, střílí a kradou kredity, dokud je nesestřelíme nebo neodletí."},
 		{"speaker": PUMPIK, "mood": "worried", "text": "Bez obranné věže se jim postavím sám. Když mě rozbijí, nebudu tankovat, dokud mě Bzučák neopraví."},
 		{"speaker": PUMPIK, "mood": "neutral", "text": "Na krajích paluby jsou místa pro obranné věže. Radši je postav."},
+		{"speaker": PUMPIK, "mood": "happy", "text": "A z pirátských truhel občas vypadne artefakt. Bez skladiště ho jen prodáme, tak si ho přistav k obchodu."},
 	],
+]
+
+## Stojí druhý slot, takže se otevřela druhá hadice.
+const DUAL_HOSE_UNLOCKED := [
+	{"speaker": PUMPIK, "mood": "happy", "text": "Šéfiku, druhý slot stojí! Vypadá skvěle."},
+	{"speaker": PUMPIK, "mood": "worried", "text": "Jenže mám jen jednu hadici, takže tankuju lodě po jedné a druhá čeká."},
+	{"speaker": PUMPIK, "mood": "neutral", "text": "Pořiď mi druhou hadici a zvládnu dvě lodě najednou. Najdeš ji, když na mě klikneš."},
 ]
 
 const FREE_PLAY_INTRO := [

@@ -43,16 +43,20 @@ position = Vector2(0, -80)
 [node name="Plot2" parent="Plots" instance=ExtResource("2_plot")]
 position = Vector2(-200, -80)
 service_side = 1
+annex_offset = Vector2(-62, 66)
 
 [node name="Plot3" parent="Plots" instance=ExtResource("2_plot")]
 position = Vector2(200, -80)
+annex_offset = Vector2(62, 66)
 
 [node name="Plot4" parent="Plots" instance=ExtResource("2_plot")]
 position = Vector2(-230, 85)
-service_side = 1
+annex_offset = Vector2(124, 28)
 
 [node name="Plot5" parent="Plots" instance=ExtResource("2_plot")]
 position = Vector2(230, 85)
+service_side = 1
+annex_offset = Vector2(62, -66)
 
 [node name="TowerPlot1" parent="Plots" instance=ExtResource("2_plot")]
 position = Vector2(-322, -72)

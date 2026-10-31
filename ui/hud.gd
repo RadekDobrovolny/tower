@@ -252,6 +252,10 @@ func _update_goal_row(row: Dictionary, goal: Dictionary) -> void:
 
 
 func _on_selection_changed(object: Node) -> void:
+	# Hotové skladiště nemá info panel, rovnou otevře inventář.
+	if object is Warehouse and object.is_operational():
+		$InventoryPopup.open(_campaign.station)
+		return
 	var changed := object != _selected
 	_selected = object
 	_info_panel.visible = object != null

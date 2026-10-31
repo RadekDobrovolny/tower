@@ -67,7 +67,8 @@ func _initialize() -> void:
 			best.ids.append(small.id)
 
 	# Pořadí jako v mřížce: po řádcích shora dolů, v řádku zleva doprava.
-	var row_height := h / 2.0
+	# Arch je čtvercová mřížka: 4 objekty = 2 řádky, 9 objektů = 3 řádky.
+	var row_height := float(h) / ceili(sqrt(count))
 	objects.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
 		var row_a := int(a.rect.get_center().y / row_height)
 		var row_b := int(b.rect.get_center().y / row_height)

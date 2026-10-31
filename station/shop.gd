@@ -173,6 +173,8 @@ func info_actions() -> Array[ShopItem]:
 	for i in PRODUCTS.size():
 		actions.append(ShopItem.new(func() -> String: return "Přidat zboží: %s" % PRODUCTS[i].name,
 				product_cost.bind(i), add_product.bind(i), ShopItem.Kind.UPGRADE))
+	actions.append(ShopItem.new(func() -> String: return "Přistavět skladiště",
+			station.warehouse_cost, station.build_warehouse))
 	return actions
 
 

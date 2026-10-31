@@ -28,6 +28,8 @@ var unlimited := true:
 			_update_looks()
 var level := 1
 var amount := 0.0
+## Kapacita navíc od artefaktu ve skladišti.
+var bonus_capacity := 0.0
 ## Stanice, ke které zásobník patří. Nastaví ji stanice.
 var station: Station
 ## Zakázka stavebního drona na rozšíření, nebo null.
@@ -80,7 +82,7 @@ func set_level(value: int) -> void:
 
 
 func capacity() -> float:
-	return LEVELS[level - 1].capacity
+	return LEVELS[level - 1].capacity + bonus_capacity
 
 
 func free_space() -> float:
