@@ -276,12 +276,17 @@ func _rebuild_action_buttons() -> void:
 		_action_labels.append(item.label.call())
 		var button := ActionButton.new()
 		button.setup(UiIcons.action_icon(item.kind), item.label.call())
-		button.pressed.connect(item.buy)
+		button.pressed.connect(_buy.bind(item))
 		_info_actions.add_child(button)
 		_action_buttons.append(button)
 
 
 ## Info panel ukazuje živé hodnoty (průběh stavby, stav slotu), proto se obnovuje každý snímek.
+func _buy(item: ShopItem) -> void:
+	if item.buy.call():
+		Sfx.play("ui_buy")
+
+
 func _refresh_info_panel() -> void:
 	if not is_instance_valid(_selected):
 		_on_selection_changed(null)

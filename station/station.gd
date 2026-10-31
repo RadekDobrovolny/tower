@@ -176,7 +176,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	var click := event as InputEventMouseButton
 	if click == null or not click.pressed or click.button_index != MOUSE_BUTTON_LEFT:
 		return
-	select(_pick(get_local_mouse_position()))
+	var picked := _pick(get_local_mouse_position())
+	if picked:
+		Sfx.play("ui_select")
+	select(picked)
 	get_viewport().set_input_as_handled()
 
 
@@ -367,6 +370,8 @@ func queue_job(target: Node2D, title: String, phases: Array, on_phase_done: Call
 	job.on_phase_done = on_phase_done
 	job.on_done = func() -> void:
 		target.set("job", null)
+		if target is Building or target == tank:
+			Sfx.play("build_done")
 		if on_done.is_valid():
 			on_done.call()
 		state_changed.emit()
@@ -636,6 +641,7 @@ func _place_building(type: String, plot: Plot) -> Building:
 
 ## Budova je postavená celá: zábavní systém se zapne, nový slot si vezme loď z fronty.
 func on_building_finished(building: Building) -> void:
+	Sfx.play("upgrade_done")
 	if building is EntertainmentSystem or building is DefenseTower:
 		building.power_on()
 	elif building is FuelSlot:
@@ -815,6 +821,7 @@ func _defend_with_androids() -> void:
 
 ## Pirát začal útočit: část lodí, které čekají ve frontě, dostane strach a uteče.
 func on_pirate_attack() -> void:
+	Sfx.play("alarm")
 	# Nejdřív fronta, aby se na sloty uvolněné útěkem nikdo nezařadil.
 	for ship in _queue.duplicate():
 		ship.flee()

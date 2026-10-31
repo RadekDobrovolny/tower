@@ -54,6 +54,7 @@ func info_title() -> String:
 ## Dron kořist sebral: hráč dostane kredity, případně artefakt a jeho účinek.
 func collect() -> void:
 	var at := station.to_local(global_position) + Vector2(0, -36)
+	Sfx.play("loot" if artifact.is_empty() else "artifact")
 	if artifact.is_empty():
 		Game.add_credits(credits)
 		FloatingText.spawn(station, at, "+%d kr trosky" % credits, CREDITS_COLOR)

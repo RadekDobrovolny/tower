@@ -4,6 +4,8 @@ extends Node2D
 ## (se startovním stavem té mise), což se hodí hlavně pro testování. Poslední je mise Z:
 ## volná hra se vším na maximu.
 
+const SOUND_CENTER_SCENE := "res://ui/sound_center.tscn"
+
 @onready var _mission_buttons: VBoxContainer = %MissionButtons
 
 
@@ -13,6 +15,7 @@ func _ready() -> void:
 		var mission: Mission = Missions.ALL[i]
 		_add_button("Mise %d\n%s" % [i + 1, mission.title], i)
 	_add_button("Mise Z\n%s" % Missions.FREE_PLAY.title, Missions.FREE_PLAY_INDEX)
+	%SoundCenterButton.pressed.connect(get_tree().change_scene_to_file.bind(SOUND_CENTER_SCENE))
 
 
 func _add_button(text: String, mission_index: int) -> void:

@@ -66,6 +66,7 @@ func _process(delta: float) -> void:
 				_working_job = null
 		else:
 			position = position.move_toward(site, speed() * delta)
+	Sfx.set_loop("weld", working)
 	_beam.visible = working
 	_sparks.visible = working and fmod(_time, 0.3) < 0.15
 	_sparks.rotation = _time * 10.0

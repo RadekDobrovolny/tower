@@ -17,7 +17,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 | Struktura | Hra je **kontinuální**: stanice běží pořád dál a **mise** (úkoly) jdou jedna za druhou. Kredity, vylepšení, sloty i zásobník se přenášejí do další mise. Každá mise začíná úvodním oknem s cíli, po splnění se hra pozastaví, ukáže shrnutí a úvod další mise. Po poslední misi pokračuje volná hra bez cílů. Mise 1 je krátký úvod na pár minut, další mise by měly trvat **aspoň 20 minut**. |
 | Ovládání | Hráč kliká na objekty (Pumpík, budovy, zásobník, stavební dron Bzučák, prázdné parcely). Vpravo se otevře info panel s popisem, stavem a tlačítky na vylepšení nebo stavbu. Zobrazují se jen věci, které jde právě koupit. Na co hráč nemá dost kreditů, je vidět, ale šedé. Klik do prázdna panel zavře. |
 | Stavění | Nepostavené budovy nejsou vidět, jen velmi jemný obrys prázdné parcely. Po kliknutí na parcelu si hráč vybere, co postavit. Stavba se **platí po částech**: hráč zaplatí část, stavební dron **Bzučák** ji postaví a pak hráč zaplatí další. Budova začne fungovat až po poslední části. Vylepšení budov se platí najednou a Bzučák je pak chvíli staví. |
-| Menu | Hra začíná menu, kde jde vybrat, od které mise začít (hodí se hlavně pro testování); pak se použije startovní stav té mise. Poslední volba je **Mise Z**: volná hra bez cílů, kde je všechno postavené a vylepšené na maximum. Během hry jde hru pozastavit tlačítkem „Menu“ nebo klávesou Esc (pokračovat, začít znovu, hlavní menu). |
+| Menu | Hra začíná menu, kde jde vybrat, od které mise začít (hodí se hlavně pro testování); pak se použije startovní stav té mise. Poslední volba je **Mise Z**: volná hra bez cílů, kde je všechno postavené a vylepšené na maximum. Pod misemi je **Centrum zvuků**. Během hry jde hru pozastavit tlačítkem „Menu“ nebo klávesou Esc (pokračovat, začít znovu, hlavní menu). |
 
 ## Herní smyčka
 
@@ -262,6 +262,18 @@ V misích 1 a 2 je galaxínu neomezeně a stojí pevně 6 kr/j. S misí 3 se zap
 ### Cíl a prohra
 - **Výhra:** splnění cíle levelu, například vydělat X kreditů.
 - **Prohra:** zatím otevřené (viz níže).
+
+## Zvuk
+
+Hudba zatím není, přijde později. Zvukové efekty jsou syntéza kódem (`tools/generate_sfx.gd`), retro raypunk: lasery jako theremin, kovové údery, cinkání mincí, klaxon poplachu. Soubory jsou v `assets/sounds/`.
+
+- **Boj:** zlaté a červené střely, dopad, výbuch (dělová loď hlouběji), poplach na začátku útoku, zásah Pumpíka, rozbití, oprava, krádež.
+- **Provoz:** platba (dýško cinkne výš, prodej v obchodě výš a tišeji), pokuta, přistání a odlet, naštvaná loď, dokování cisterny, hotová část stavby, dokončená budova, kořist, artefakt, výhra na automatech.
+- **Rozhraní:** kliknutí na tlačítko, výběr objektu, nákup, splněná mise.
+- **Smyčky:** tankování (jen glo glo), svařování Bzučáka (jen elektrická zapraskání), přečerpávání z cisterny (výrazné hluboké glo glo a tiché tepání čerpadla). Při pauze ztichnou. Stanice žádný trvalý podkres nemá.
+- **Stejné zvuky se nekupí** (nejmenší rozestup mezi přehráními) a mají mírně náhodnou výšku tónu.
+- **Ovládání:** ikonka reproduktoru v HUD a v menu ztlumí zvuky, posuvník v pauze mění hlasitost. Hra si nastavení pamatuje.
+- **Centrum zvuků** v hlavním menu ukáže všechny zvuky po skupinách. Každý jde pustit kliknutím nebo je projít tlačítky Předchozí a Další, hrají stejně hlasitě jako ve hře, ale bez náhodné výšky. Smyčku zastaví druhé kliknutí.
 
 ## Mise
 

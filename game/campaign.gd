@@ -45,6 +45,10 @@ func _ready() -> void:
 	_pause_with_popup("Mise %d: %s" % [number(), mission.title], _briefing(mission), "Začít")
 
 
+func _exit_tree() -> void:
+	Sfx.stop_loops()
+
+
 func _process(delta: float) -> void:
 	mission_elapsed += delta
 
@@ -220,6 +224,7 @@ func _check_goals() -> void:
 		if not goal.done:
 			return
 	_completed = true
+	Sfx.play("mission_done")
 	var seconds := int(mission_elapsed)
 	var summary := "Čas mise: %d:%02d" % [seconds / 60, seconds % 60]
 	mission_completed.emit(number())

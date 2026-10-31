@@ -174,6 +174,7 @@ func _process(delta: float) -> void:
 		_bubble.say(Lines.pick(Lines.ANDROID_EMPTY))
 	_reported_empty = ran_dry
 	_update_hoses(true)
+	Sfx.set_loop("pump", not ran_dry)
 	_animate(delta)
 
 
@@ -201,6 +202,7 @@ func take_hit() -> void:
 	if damaged:
 		return
 	health -= 1
+	Sfx.play("metal_hit")
 	_hit_flash = HIT_FLASH_TIME
 	_since_hit = 0.0
 	if health <= 0:
@@ -218,6 +220,7 @@ func engage(pirate: Pirate) -> void:
 func finish_repair() -> void:
 	health = max_health()
 	damaged = false
+	Sfx.play("repaired")
 	_update_looks()
 	_bubble.say(Lines.pick(Lines.ANDROID_REPAIRED))
 	# Až po snímku: dokud dron dokončuje zakázku, ještě „pracuje“ na androidovi.
@@ -396,6 +399,8 @@ func _service_position() -> Vector2:
 
 
 func _update_hoses(connected: bool) -> void:
+	if not connected:
+		Sfx.set_loop("pump", false)
 	# Při tankování stojí čelem k lodi (u dvou lodí k té první).
 	if connected and not _ships.is_empty():
 		_facing = _direction_name(_ships[0].global_position - global_position)
@@ -449,6 +454,7 @@ func _fight(delta: float) -> void:
 func _break_down() -> void:
 	_enemy = null
 	damaged = true
+	Sfx.play("break_down")
 	_update_looks()
 	_bubble.say(Lines.pick(Lines.ANDROID_DAMAGED))
 	if job == null:

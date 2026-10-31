@@ -43,6 +43,9 @@ const PRODUCTS := [
 const PROP_POSITIONS := [Vector2(-66, 34), Vector2(66, 32), Vector2(-68, -26), Vector2(68, -26)]
 const PROP_SCALE := 0.42
 const SALE_COLOR := Color(0.45, 0.95, 0.85)
+## Prodej v obchodě cinkne výš a tišeji než platba za galaxín.
+const SALE_COIN_PITCH := 1.5
+const SALE_COIN_GAIN_DB := -8.0
 ## Jak tmavě je kiosek vidět ve 2. a 3. části stavby (rozestavěný, bez světel).
 const SHELL_MODULATE := Color(0.3, 0.3, 0.32)
 const NO_NEON_MODULATE := Color(0.65, 0.62, 0.6)
@@ -115,6 +118,7 @@ func serve_customer(ship: Ship) -> void:
 		total = roundi(total * Ship.TOURIST_SHOPPING)
 	revenue += total
 	Game.add_credits(total)
+	Sfx.play("coin", SALE_COIN_PITCH, SALE_COIN_GAIN_DB)
 	FloatingText.spawn(station, station.to_local(global_position) + Vector2(0, -56),
 			"+%d kr %s" % [total, "turisté" if tourists else "obchod"], SALE_COLOR)
 

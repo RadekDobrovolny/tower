@@ -177,6 +177,7 @@ func _rob_credits() -> void:
 	var amount := roundi(maxi(Game.credits, 0) * randf_range(STEAL_SHARE_MIN, STEAL_SHARE_MAX))
 	if amount > 0:
 		Game.add_credits(-amount)
+		Sfx.play("theft")
 		FloatingText.spawn(station, station.tank.position + Vector2(0, -60), "-%d kr ukradeno" % amount, STEAL_COLOR)
 
 
@@ -204,6 +205,7 @@ func _destroy() -> void:
 	_body.hide()
 	_health_bar.hide()
 	_explosion.restart()
+	Sfx.play("explosion", 0.75 if kind == "gunship" else 1.0)
 	_blast_light.show()
 	create_tween().tween_property(_blast_light, "energy", 0.0, 0.6).from(3.0)
 	FloatingText.spawn(get_parent(), global_position + Vector2(0, -40), "Pirát sestřelen!", DOWN_COLOR)

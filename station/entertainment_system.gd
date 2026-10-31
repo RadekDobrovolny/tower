@@ -189,6 +189,7 @@ func _play_slots(delta: float) -> void:
 			total += randi_range(SLOTS_WIN_MIN, SLOTS_WIN_MAX)
 	if total > 0:
 		Game.add_credits(total)
+		Sfx.play("slots")
 		FloatingText.spawn(station, station.to_local(global_position) + Vector2(0, -70),
 				"+%d kr automaty" % total, SLOTS_COLOR)
 

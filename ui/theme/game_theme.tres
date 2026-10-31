@@ -188,6 +188,24 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.54, 0.42, 0.2, 0.7)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slider"]
+content_margin_top = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(1, 1, 1, 0.14)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slider_fill"]
+content_margin_top = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(1, 0.78, 0.35, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
 [resource]
 default_font = ExtResource("1_medium")
 default_font_size = 13
@@ -238,6 +256,9 @@ HudValue/constants/shadow_offset_y = 0
 HudValue/constants/shadow_outline_size = 8
 HudValue/font_sizes/font_size = 20
 HudValue/fonts/font = ExtResource("2_semibold")
+HSlider/styles/grabber_area = SubResource("StyleBoxFlat_slider_fill")
+HSlider/styles/grabber_area_highlight = SubResource("StyleBoxFlat_slider_fill")
+HSlider/styles/slider = SubResource("StyleBoxFlat_slider")
 Label/colors/font_color = Color(0.9, 0.87, 0.82, 1)
 Label/font_sizes/font_size = 13
 Panel/styles/panel = SubResource("StyleBoxFlat_panel")

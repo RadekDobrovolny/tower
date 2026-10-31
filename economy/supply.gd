@@ -168,6 +168,8 @@ func _send_tanker() -> void:
 
 
 func _on_tanker_docked() -> void:
+	Sfx.play("tanker_dock")
+	Sfx.set_loop("unload", true)
 	if _units_to_deliver < _ordered_units:
 		_tanker.say(Lines.pick(Lines.TANKER_SHORT))
 	elif _late:
@@ -179,6 +181,7 @@ func _on_tanker_docked() -> void:
 
 func _finish_delivery() -> void:
 	_refund(_tanker.position + Vector2(0, -84))
+	Sfx.set_loop("unload", false)
 	_tanker.leave()
 	_tanker = null
 	state = State.IDLE

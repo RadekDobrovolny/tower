@@ -53,6 +53,7 @@ static func fire(station: Station, from: Vector2, target: Node2D, color: Color, 
 	bolt.rotation = (target.global_position - from).angle()
 	bolt._color = color
 	station.add_child(bolt)
+	Sfx.play("laser_gold" if color == GOLD else "laser_red")
 
 
 func _ready() -> void:
@@ -100,6 +101,7 @@ func _land() -> void:
 	_streak.hide()
 	_impact.show()
 	_sparks.restart()
+	Sfx.play("bolt_hit")
 	if is_instance_valid(_target) and _on_hit.is_valid():
 		_on_hit.call()
 	var tween := create_tween().set_parallel()

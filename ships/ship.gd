@@ -63,6 +63,8 @@ const TIP_CHANCE := 0.1
 const TIP_SHARE_MIN := 0.1
 const TIP_SHARE_MAX := 0.2
 const TIP_COLOR := Color(0.45, 0.95, 0.85)
+## Mince s dýškem cinkne výš.
+const TIP_COIN_PITCH := 1.26
 ## Pokuta za nekvalitní galaxín. Šance na ni roste s podílem nekvalitního galaxínu v nádrži.
 const FINE := 400
 const MAX_FINE_CHANCE := 0.2
@@ -187,6 +189,9 @@ func leave_paid() -> int:
 		tip = maxi(1, roundi(price * randf_range(TIP_SHARE_MIN, TIP_SHARE_MAX)))
 	Game.record_ship_served()
 	Game.add_credits(price + tip - (FINE if fined else 0))
+	Sfx.play("coin", TIP_COIN_PITCH if tip > 0 else 1.0)
+	if fined:
+		Sfx.play("fine")
 	# Vedle lodi, aby se nepřekrýval s bublinou nad ní.
 	FloatingText.spawn(get_parent(), global_position + Vector2(70, -6), "+%d kr" % price)
 	if fined:
@@ -254,6 +259,7 @@ func _wait_at_slot(delta: float) -> void:
 
 func _give_up() -> void:
 	Game.record_ship_lost()
+	Sfx.play("ship_angry")
 	_say(Lines.ANGRY_LEAVE, true)
 	gave_up.emit(self)
 	_depart(ANGRY_DEPARTURE_DELAY)
@@ -263,6 +269,7 @@ func _give_up() -> void:
 ## nezaplatí (počítá se jako loď, která odletěla bez placení).
 func flee() -> void:
 	Game.record_ship_lost()
+	Sfx.play("ship_angry")
 	_bubble.say_now(Lines.pick(Lines.SHIP_SCARED), true)
 	gave_up.emit(self)
 	_depart(0.3)
@@ -288,6 +295,7 @@ func _setup_hull() -> void:
 
 func _land() -> void:
 	global_position = slot.global_position
+	Sfx.play("ship_land")
 	_body.scale = Vector2.ONE
 	_current_speed = 0.0
 	_fuel_on_arrival = fuel
@@ -351,6 +359,8 @@ func _fly_to(target: Vector2, delta: float, landing: bool) -> bool:
 func _fly_away(delta: float) -> void:
 	if _departure_delay > 0.0:
 		_departure_delay -= delta
+		if _departure_delay <= 0.0:
+			Sfx.play("ship_takeoff")
 		return
 	var target_angle := global_position.direction_to(exit_point).angle()
 	_body.rotation = lerp_angle(_body.rotation, target_angle, minf(TURN_SPEED * delta, 1.0))

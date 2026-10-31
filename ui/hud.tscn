@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" path="res://assets/ui/icons/ship.svg" id="6_ship"]
 [ext_resource type="Texture2D" path="res://assets/ui/icons/ship_lost.svg" id="7_ship_lost"]
 [ext_resource type="Texture2D" path="res://assets/ui/icons/pause.svg" id="8_pause"]
+[ext_resource type="Script" path="res://ui/sound_button.gd" id="20_sound"]
 [ext_resource type="Texture2D" path="res://assets/ui/icons/close.svg" id="9_close"]
 [ext_resource type="Texture2D" path="res://assets/ui/icons/galaxin.svg" id="10_galaxin"]
 [ext_resource type="Texture2D" path="res://assets/ui/icons/tank.svg" id="11_tank"]
@@ -315,6 +316,18 @@ theme_override_constants/icon_max_width = 12
 text = "MENU"
 icon = ExtResource("8_pause")
 
+[node name="SoundButton" type="Button" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 52.0
+offset_top = 14.0
+offset_right = 84.0
+offset_bottom = 44.0
+focus_mode = 0
+theme_override_constants/icon_max_width = 16
+icon_alignment = 1
+script = ExtResource("20_sound")
+
 [node name="PirateAlert" type="Label" parent="."]
 visible = false
 anchor_left = 0.5
@@ -592,3 +605,24 @@ layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
 text = "Hlavní menu"
+
+[node name="SoundRow" type="HBoxContainer" parent="PauseMenu/Center/Panel/Margin/VBox"]
+custom_minimum_size = Vector2(220, 28)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 12
+
+[node name="SoundLabel" type="Label" parent="PauseMenu/Center/Panel/Margin/VBox/SoundRow"]
+layout_mode = 2
+theme_type_variation = &"HudDim"
+text = "Zvuky"
+
+[node name="SoundVolume" type="HSlider" parent="PauseMenu/Center/Panel/Margin/VBox/SoundRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+focus_mode = 0
+max_value = 1.0
+step = 0.05
+value = 1.0
