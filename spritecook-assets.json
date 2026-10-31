@@ -91,7 +91,8 @@
         {
           "file": "assets/sprites/station/entertainment_tv.png",
           "sha12": "cbfd26c2451d",
-          "cell": "vpravo nahoře"
+          "cell": "vpravo nahoře",
+          "note": "nahrazeno autokinem (arch J), soubor smazán"
         },
         {
           "file": "assets/sprites/construction/foundation.png",
@@ -482,6 +483,32 @@
         {
           "file": "assets/sprites/staff/pumpik_pump_right.png",
           "sha12": "f4e9d70dbb47"
+        }
+      ]
+    },
+    {
+      "asset_id": "4700ac82-a599-47cd-8f51-6190fe658a3d",
+      "label": "Tower – arch J: autokino, plátno, konstrukce, promítací budka, neonová šipka (reference arch A, 16 kreditů)",
+      "files": [
+        {
+          "file": "assets/sprites/entertainment/drive_in_screen.png",
+          "sha12": "361857257ae7",
+          "cell": "vlevo nahoře"
+        },
+        {
+          "file": "assets/sprites/entertainment/drive_in_frame.png",
+          "sha12": "41338977fe2f",
+          "cell": "vpravo nahoře"
+        },
+        {
+          "file": "assets/sprites/entertainment/projection_booth.png",
+          "sha12": "a00f350c534a",
+          "cell": "vlevo dole"
+        },
+        {
+          "file": "assets/sprites/entertainment/neon_arrow.png",
+          "sha12": "b9266ef6d5d7",
+          "cell": "vpravo dole"
         }
       ]
     }

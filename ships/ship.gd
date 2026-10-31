@@ -55,7 +55,7 @@ const GREETING_CHANCE := 0.5
 const THANKS_CHANCE := 0.5
 ## Jak často si loď ve frontě postěžuje, když jí dojde půlka trpělivosti.
 const COMPLAINT_CHANCE := 0.6
-## Když stanice má zábavní systém, jak často loď místo stížnosti komentuje televizi.
+## Když stanice má zábavní systém, jak často loď místo stížnosti komentuje, co běží na plátně.
 const TV_COMMENT_CHANCE := 0.5
 ## Jak často loď nechá dýško (bez zábavního systému) a kolik to je z ceny
 ## (náhodně v tomhle rozmezí).
@@ -219,7 +219,7 @@ func _choose_order() -> void:
 		order_amount = affordable.pick_random()
 
 
-## Trpělivost ubývá rychleji, když je galaxín drahý, a pomaleji, když běží televize.
+## Trpělivost ubývá rychleji, když je galaxín drahý, a pomaleji, když běží autokino.
 func _patience_drain(delta: float) -> float:
 	return delta * station.patience_drain() * station.price_patience_factor()
 

@@ -63,7 +63,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 - **Bzučák:** hmyzí stavební dron, vybledlé žluto-černé pruhy, síťované rotory, červené světýlko, jiskry svařování.
 - **Pumpa u slotu:** štíhlý vínový art deco sloup s mosaznými žebry a skleněnou koulí, ve které svítí galaxín.
 - **Zásobník:** zašlá chromová koule s mosaznými obručemi, průzory s růžovým galaxínem, stékající rez.
-- **Zábavní systém:** oválná lounge obrazovka v tmavém lakovaném rámu s mosazným okrajem, hypnotické psychedelické obrazce.
+- **Zábavní systém:** autokino pro rakety. Široké plátno na nýtované ocelové konstrukci s art deco hřebenem a žárovkami, před ním promítací budka a vedle neonová šipka. Na plátně běží hypnotické psychedelické obrazce.
 - **Paluba stanice:** tmavá ocel s panelovými spárami, nýty, rez, olejové skvrny, ošoupané mosazné lemování.
 - **Vesmír:** téměř černý s vínovými a fialovými mlhovinami, tmavá planeta s rudým okrajem světla a prstencem.
 
@@ -73,7 +73,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 - **Plamen motoru** raket i cisterny: plápolající plamen ze shaderu (bílé jádro, oranžová, konec do růžového neonu galaxínu), jiskry a oranžové světlo, které osvětlí loď i palubu pod ní. Délka plamene a síla světla rostou s rychlostí. Loď visící ve frontě má malý plamen, na plošině motor zhasne.
 - **Značky přistávacích plošek** (jantarová světla v rozích) svítí, až je slot hotový. Volná ploška pomalu „dýchá“, když k ní letí loď, světla rychle obíhají dokola (navádění), a když loď stojí na plošce, svítí klidně a slaběji.
 - **Zásobník** barví palubu kolem do růžova. Čím víc galaxínu v něm je, tím víc svítí.
-- **Televize** svítí do okolí v barvě, která zrovna převládá na obrazovce.
+- **Plátno autokina** svítí do okolí v barvě, která zrovna převládá v obraze, a promítací budka na něj hází kužel světla stejné barvy.
 - **Bzučák** svítí tyrkysově na konci svařovacího paprsku.
 - **Skleněné koule pump** jemně září růžovým neonem.
 - **Reflektor nad palubou**: teplé světlo, uprostřed stanice nejsilnější, k okrajům slábne.
@@ -92,13 +92,13 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 - **Hotové sprity** (40 kreditů):
   - Rakety zákazníků: `ships/rocket.png` (ve hře), `rocket_cargo.png`, `rocket_racer.png`, `rocket_workhorse.png`; cisterna `ships/tanker.png`.
   - Pumpík (původně `staff/pumpik.png`, teď nahrazený animacemi níže), Bzučák `construction/bzucak.png`.
-  - Stanice: pumpa `station/pump.png`, zásobník `station/tank.png`, přistávací plocha `station/landing_pad.png`, lounge televize `station/entertainment_tv.png` (prázdná obrazovka, obraz se kreslí v kódu), opakovatelná textura paluby `station/deck.png`.
+  - Stanice: pumpa `station/pump.png`, zásobník `station/tank.png`, přistávací plocha `station/landing_pad.png`, autokino `entertainment/drive_in_screen.png` (prázdné plátno, film kreslí shader `fx/film_screen.gdshader`), holá konstrukce `entertainment/drive_in_frame.png`, promítací budka `entertainment/projection_booth.png` a neonová šipka `entertainment/neon_arrow.png` (16 kreditů, arch s referencí), opakovatelná textura paluby `station/deck.png`.
   - Staveniště pro rozestavěné budovy `construction/foundation.png`, planeta s prstencem do pozadí `space/planet.png`.
 - **Ve hře** jsou zapojené všechny:
   - Lodě dostávají náhodně jednu ze čtyř raket. Cisterna má sprite, do kterého se jemně promítá barva dodavatele.
   - Pumpík je kulatý retro robot na kolech (červený a krémový smalt, skleněná kopule s elektronkami, knír, budík na břiše, láhev s hadicemi na zádech). Má osm snímků na animaci: jízda ve čtyřech směrech (`staff/pumpik_drive_down.png`, `_up`, `_left`, `_right`, čím rychlejší jízda, tím rychleji se točí kola) , tankování ve čtyřech směrech (`pumpik_pump.png` zepředu, `pumpik_pump_up.png`, `_left`, `_right`) a klid zepředu (`pumpik_idle.png`). Při tankování stojí čelem k lodi (u dvou lodí k první), při střelbě k pirátovi. Když jen stojí, je čelem k hráči. S levelem tankování se jen jemně zbarvuje. Bzučák se ve vzduchu kolébá.
   - Paluba má opakovanou texturu a mosazné lemování. Planeta je vpravo dole v pozadí hry i v menu.
-  - Rozestavěné budovy: v 1. části staveniště. Čerpací slot pak má přistávací plochu, art deco pumpu vedle ní a nakonec potrubí k patě pumpy. Zábavní systém ve 2. části ukazuje ztmavenou televizi (rozestavěný rám), ve 3. hotovou televizi a po zapojení elektřiny pohyblivý psychedelický obraz s běžící reklamou.
+  - Rozestavěné budovy: v 1. části staveniště. Čerpací slot pak má přistávací plochu, art deco pumpu vedle ní a nakonec potrubí k patě pumpy. Zábavní systém ve 2. části ukazuje holou ocelovou konstrukci, ve 3. tmavé plátno s promítací budkou a po zapojení elektřiny film s běžícími titulky, kužel projektoru a neonovou šipku.
 - **Nové lodě, kořist a zábava** (16 kreditů, dva archy 2×2): nákladní loď `ships/freighter.png`, turistická `ships/tourist.png`, trosky `loot/wreckage.png`, truhla `loot/chest.png`, výherní automaty, hologram a světla scény v `entertainment/` (ventil potrubí z tohoto archu se nakonec nepoužívá).
 - **Potrubí** (40 kreditů, pět archů 2×2): navazující dílek měděné trubky `station/pipe_tile.png`, kolena `pipe_elbow_*.png` a T kusy `pipe_tee_*.png` pro každý potřebný směr ramen (přípona = směry: l, r, u, d), příruba `pipe_flange.png`, podlahová spojka u čerpadla `pipe_floor.png`, průhledítko s galaxínem `pipe_sight.png` a tlakoměr `pipe_gauge.png`. Všechny díly jsou nasvícené zleva shora a nikdy se neotáčejí, aby stíny byly všude na stejné straně: rovné trubky se kreslí zleva doprava a zdola nahoru (lesk nahoře, u svislých vlevo) a každý směr kolena i T kusu má vlastní obrázek. Potrubí je rozvod, který vede jen vodorovně a svisle: ze zásobníku vede trubka nahoru do hlavní větve v uličce mezi horními a dolními parcelami, z ní k čerpadlům v horní řadě odbočují T kusy (na konci větve je koleno). Čerpadla na dolních parcelách mají vlastní trubku do boku zásobníku. U zásobníku jsou příruby, u čerpadel podlahové spojky, na levé větvi průhledítko a na pravé tlakoměr. Trubky leží nad spojkami a zasouvají se do jejich objímek tak, aby zakryly otvory a kolem trubky zůstal vidět mosazný kroužek. Puls galaxínu v trubkách je vypnutý.
 - **Stavby a piráti** (24 kreditů, tři archy 2×2): obchod `shop/shop.png` a stánky `shop/food_cart.png`, `holonews.png`, `souvenirs.png`, `accessories.png`; řídící centrum `station/control_center.png` a anténa dispečinku `station/radar_dish.png`; obranná věž `defense/tower_base.png` a kanóny `defense/turret.png`, `turret_twin.png` (level 3); piráti `pirates/raider.png` a `pirates/gunship.png`.
@@ -152,10 +152,10 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 - Personál se nabírá a trénuje.
 
 ### Zábavní systém
-- Billboard s televizí na stanici. Běží na něm reklamy a pořady (texty jsou v `dialogue/lines.gd`).
-- Lodím ve frontě pomaleji ubývá trpělivost a pobavení zákazníci častěji nechávají dýško. Lodě ve frontě občas komentují, co běží v televizi.
+- Autokino pro rakety na stanici. Na plátně běží film a ve spodní části titulky s reklamami a pořady (texty jsou v `dialogue/lines.gd`).
+- Lodím ve frontě pomaleji ubývá trpělivost a pobavení zákazníci častěji nechávají dýško. Lodě ve frontě občas komentují, co běží na plátně.
 - Části stavby (celkem 2 000 kr a 15 s): základní deska (300 kr, 3 s), rampa na obrazovku (400 kr, 4 s), instalace obrazovky (900 kr, 5 s), napojení elektřiny (400 kr, 3 s). Bonusy platí až po zapojení elektřiny.
-- Level 4 přidá vedle televize **holoprojekci** (tančící hologram), level 5 **neonovou show** (světla nad televizí).
+- Level 4 přidá vedle plátna **holoprojekci** (tančící hologram), level 5 **neonovou show** (světla nad plátnem).
 - **Výherní automaty** (6 000 kr, instalace 10 s) jdou dokoupit zvlášť: každé 4 s si každá loď ve frontě s šancí 25 % zahraje a stanice vydělá 15–60 kr („+… kr automaty“).
 
 | Level | Cena | Doba vylepšení | Úbytek trpělivosti | Šance na dýško |
@@ -294,7 +294,7 @@ Mise jsou zdroje `missions/mission_*.tres` (dají se upravovat v inspektoru Godo
 | Přistání: pozdrav Pumpíka | loď | 50 % |
 | Přistání: objednávka (plná nádrž nebo částka) | loď | vždy |
 | Pumpík začíná tankovat | Pumpík | 50 % |
-| Ve frontě po polovině trpělivosti | loď | 60 % (se zábavním systémem napůl stížnost, napůl komentář k televizi) |
+| Ve frontě po polovině trpělivosti | loď | 60 % (se zábavním systémem napůl stížnost, napůl komentář k filmu) |
 | Odlet bez placení (červená bublina) | loď | vždy |
 | Odlet po zaplacení: dýško | loď, Pumpík poděkuje | 10 % |
 | Odlet po zaplacení: poděkování (když nebylo dýško) | loď | 50 % |

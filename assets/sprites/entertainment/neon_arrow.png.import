@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://w3drv8ur1etf"
-path="res://.godot/imported/entertainment_tv.png-b43b46a5bd33b435051782ad16bf29f2.ctex"
+uid="uid://cvp5514jdvt2"
+path="res://.godot/imported/neon_arrow.png-7ec33e61d1faa5533f61ce0f42a6125c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/station/entertainment_tv.png"
-dest_files=["res://.godot/imported/entertainment_tv.png-b43b46a5bd33b435051782ad16bf29f2.ctex"]
+source_file="res://assets/sprites/entertainment/neon_arrow.png"
+dest_files=["res://.godot/imported/neon_arrow.png-7ec33e61d1faa5533f61ce0f42a6125c.ctex"]
 
 [params]
 
