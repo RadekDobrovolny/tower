@@ -44,8 +44,8 @@ const MISSION_INTROS := [
 	[
 		{"speaker": PUMPIK, "mood": "worried", "text": "Šéfiku, máme problém. Bohatá stanice přitahuje nezvané hosty."},
 		{"speaker": PUMPIK, "mood": "angry", "text": "Piráti! Přiletí, střílí a kradou kredity, dokud je nesestřelíme nebo neodletí."},
-		{"speaker": PUMPIK, "mood": "worried", "text": "Bez obranné věže se jim postavím sám. Když mě rozbijí, nebudu tankovat, dokud mě Bzučák neopraví."},
-		{"speaker": PUMPIK, "mood": "neutral", "text": "Na krajích paluby jsou místa pro obranné věže. Radši je postav."},
+		{"speaker": PUMPIK, "mood": "worried", "text": "Postavím se jim, šéfiku. Když mě ale rozbijí, nebudu tankovat, dokud mě Bzučák neopraví."},
+		{"speaker": PUMPIK, "mood": "neutral", "text": "Na krajích paluby jsou místa pro obranné věže. Sám je nezvládnu, radši je postav."},
 		{"speaker": PUMPIK, "mood": "happy", "text": "A z pirátských truhel občas vypadne artefakt. Bez skladiště ho jen prodáme, tak si ho přistav k obchodu."},
 	],
 ]

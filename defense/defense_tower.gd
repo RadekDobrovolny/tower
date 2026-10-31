@@ -38,10 +38,12 @@ var kills := 0
 
 var _cooldown := 0.0
 var _barrel := 0
+var _show_range := false
 
 @onready var _base: Sprite2D = $Base
 @onready var _pedestal: Sprite2D = $Pedestal
 @onready var _turret: Sprite2D = $Turret
+@onready var _range_ring: RangeRing = $RangeRing
 @onready var _label: Label = $Label
 
 
@@ -150,6 +152,18 @@ func _fire(target: Node2D) -> void:
 	LaserBolt.fire(station, muzzle, target, LaserBolt.GOLD, _on_bolt_hit.bind(target, current.damage), BOLT_LENGTH)
 
 
+## Ukáže okruh dostřelu, dokud je věž vybraná. Nedostavěná věž ho ukáže, až bude hotová.
+func set_range_visible(value: bool) -> void:
+	_show_range = value
+	_update_range_ring()
+
+
+func _update_range_ring() -> void:
+	_range_ring.visible = _show_range and level > 0
+	if level > 0:
+		_range_ring.radius = stats().range
+
+
 func _on_bolt_hit(target: Node2D, damage: int) -> void:
 	if target.hit(damage):
 		kills += 1
@@ -168,6 +182,7 @@ func _finish_upgrade() -> void:
 
 func _update_construction_looks() -> void:
 	super()
+	_update_range_ring()
 	# Části stavby: staveniště -> podstavec -> tmavý kanón -> zapojená věž.
 	_base.visible = built_phases == 1
 	_pedestal.visible = built_phases >= 2

@@ -234,7 +234,7 @@ V misích 1 a 2 je galaxínu neomezeně a stojí pevně 6 kr/j. S misí 3 se zap
 
 ### Obrana (od mise 5)
 - **Obranná věž** s laserovým kanónem stojí na místě pro věž na kraji paluby (dvě místa). Staví se ve 4 částech (celkem 6 000 kr): základna (1 500 kr, 4 s), věž (1 500 kr, 4 s), laserový kanón (2 000 kr, 5 s), napájení (1 000 kr, 3 s).
-- Sama hledá nejbližšího piráta v dosahu, natočí kanón a střílí zlatými laserovými střelami.
+- Sama hledá nejbližšího piráta v dosahu, natočí kanón a střílí zlatými laserovými střelami. Když je věž vybraná, ukáže se jemný okruh, kam až dostřelí.
 
 | Level | Cena vylepšení | Poškození | Střelba | Dosah |
 |---|---|---|---|---|
@@ -242,7 +242,7 @@ V misích 1 a 2 je galaxínu neomezeně a stojí pevně 6 kr/j. S misí 3 se zap
 | 2 | 4 000 kr, 8 s | 2 | každých 0,75 s | 620 px |
 | 3 | 7 000 kr, 10 s | 2, dvojitá hlaveň | každých 0,45 s | 720 px |
 
-- **Pumpík jako ochranka:** když stanice nemá žádnou hotovou věž, postaví se útočícímu pirátovi Pumpík a střílí po něm zlatými střelami z tankovací pistole (1 poškození za 0,9 s). Během boje netankuje.
+- **Pumpík jako ochranka:** postaví se útočícímu pirátovi i tehdy, když stojí věže (ty dostřelí jen na svůj dosah), a střílí po něm zlatými střelami z tankovací pistole (1 poškození za 0,9 s). Během boje netankuje.
 - **Odolnost Pumpíka:** piráti střílejí přednostně po něm (každých 2,5 s, 1 zásah). Základní odolnost jsou 3 zásahy, nad Pumpíkem je při poškození vidět ukazatel. Když odolnost klesne na nulu, je **rozbitý**: netankuje, nebrání se a lodě na plošinách čekají. Teprve pak piráti střílejí po zásobníku a kradou kredity.
 - **Oprava:** rozbitého Pumpíka opraví Bzučák (10 s při základní rychlosti práce) a dostane plnou odolnost. Částečně poškozeného opraví, až na něj 4 s nikdo nestřílí: Pumpík mezitím pracuje dál a zastaví se, až když k němu Bzučák doletí (nad ním „Pumpík · v opravě“). Rozbitý Pumpík („Pumpík · rozbitý“) jen stojí a čeká. Po opravě se sám vrátí do práce a vezme si i lodě, které mezitím přistály. Oprava má v Bzučákově frontě **přednost** před vším ostatním, rozdělaná stavba si drží postup a počká.
 - **Vylepšení Pumpíka do boje** (od mise 5): **štíty** level 1 za 3 000 kr (odolnost 5), level 2 za 6 000 kr (odolnost 7); **nanoboti** level 1 za 4 000 kr (opraví 1 bod odolnosti za 6 s), level 2 za 7 000 kr (za 3 s). Nanoboti léčí jen částečné poškození a Bzučáka pak Pumpík nevolá. Rozbitého Pumpíka (0 odolnosti) nanoboti neopraví, toho opraví vždy Bzučák.

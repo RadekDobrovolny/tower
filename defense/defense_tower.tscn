@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/construction/foundation.png" id="2_foundation"]
 [ext_resource type="Texture2D" path="res://assets/sprites/defense/tower_base.png" id="3_base"]
 [ext_resource type="Texture2D" path="res://assets/sprites/defense/turret.png" id="4_turret"]
+[ext_resource type="Script" path="res://fx/range_ring.gd" id="5_ring"]
 
 [node name="DefenseTower" type="Node2D"]
 script = ExtResource("1_tower")
@@ -23,6 +24,11 @@ visible = false
 scale = Vector2(0.42, 0.42)
 texture = ExtResource("4_turret")
 offset = Vector2(24, 0)
+
+[node name="RangeRing" type="Node2D" parent="."]
+visible = false
+z_index = 3
+script = ExtResource("5_ring")
 
 [node name="Label" type="Label" parent="."]
 visible = false

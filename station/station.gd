@@ -831,6 +831,10 @@ func _move_selection_glow(object: Node) -> void:
 	_glowing.clear()
 	if is_instance_valid(selected) and selected is Plot:
 		selected.set_highlighted(false)
+	if is_instance_valid(selected) and selected is DefenseTower:
+		selected.set_range_visible(false)
+	if object is DefenseTower:
+		object.set_range_visible(true)
 	if object is Plot:
 		object.set_highlighted(true)
 	elif object:
@@ -913,8 +917,6 @@ func _on_android_free_for_ship(android: Android) -> void:
 ## Bez hotové obranné věže se pirátům, kteří útočí na stanici, postaví android
 ## (jeden android na jednoho piráta). Po boji je poškozený a opraví ho stavební dron.
 func _defend_with_androids() -> void:
-	if not get_towers().is_empty():
-		return
 	for pirate in get_tree().get_nodes_in_group("pirates"):
 		if not pirate.is_attacking() or pirate.fought_by != null:
 			continue
