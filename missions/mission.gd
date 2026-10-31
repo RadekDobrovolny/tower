@@ -31,8 +31,12 @@ extends Resource
 @export var warehouse_available := false
 ## Jestli jde vylepšovat stavební dron (rychlost letu a práce).
 @export var drone_upgrades := false
+## Císařské embargo: galaxín jde objednat jen od Lojzy, a to dráž.
+@export var embargo := false
 ## Jestli v misi proběhne scéna se Zorou. Mise skončí až po ní.
 @export var zora_scene := false
+## Jestli v misi proběhne scéna s císařskou hlídkou. Mise skončí až po ní.
+@export var patrol_scene := false
 ## Jestli na stanici útočí piráti a rozmezí v sekundách mezi útoky.
 @export var pirates := false
 @export var pirate_interval_min := 40.0
@@ -64,6 +68,8 @@ extends Resource
 @export var goal_drone_speed := 0
 ## Na jaký level musí být vylepšená rychlost práce Bzučáka.
 @export var goal_drone_work := 0
+## Na jaký level musí být vylepšené filtry galaxínu.
+@export var goal_purification := 0
 ## Kolik pirátů musí stanice sestřelit (věží i androidem).
 @export var goal_pirates_shot := 0
 

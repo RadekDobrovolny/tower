@@ -38,7 +38,7 @@ const UPGRADES := [
 		"costs": [1500, 3000], "times": [5.0, 7.0], "values": [1.0, 1.6, 2.5],
 	},
 	{
-		"id": "purification", "name": "Čištění galaxínu",
+		"id": "purification", "name": "Filtry galaxínu",
 		"costs": [2000, 3500, 5000], "times": [6.0, 8.0, 10.0], "values": [1.0, 0.6, 0.3, 0.0],
 	},
 	{
@@ -153,9 +153,9 @@ func info_lines() -> PackedStringArray:
 	lines.append("Přečerpávání: %d %% rychlosti" % roundi(value("unloading") * 100.0))
 	var purification: float = value("purification")
 	if purification <= 0.0:
-		lines.append("Čištění: nekvalitní galaxín se vyčistí celý, levný dodavatel bez pokut.")
+		lines.append("Filtry: nekvalitní galaxín se vyčistí celý, levný dodavatel bez pokut.")
 	elif purification < 1.0:
-		lines.append("Čištění: vyčistí %d %% nekvalitního galaxínu." % roundi((1.0 - purification) * 100.0))
+		lines.append("Filtry: vyčistí %d %% nekvalitního galaxínu." % roundi((1.0 - purification) * 100.0))
 	if value("dispatch"):
 		lines.append("Dispečink: objedná cisternu sám, když v zásobníku zbývá méně než %d %%."
 				% roundi(DISPATCH_SHARE * 100.0))

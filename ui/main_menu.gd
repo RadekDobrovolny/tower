@@ -6,7 +6,7 @@ extends Node2D
 
 const NOTEBOOK_SCENE := "res://ui/notebook.tscn"
 
-@onready var _mission_buttons: VBoxContainer = %MissionButtons
+@onready var _mission_buttons: GridContainer = %MissionButtons
 
 
 func _ready() -> void:

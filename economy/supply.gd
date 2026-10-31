@@ -5,6 +5,7 @@ extends Node2D
 ## k zásobníku a přečerpá galaxín. Za to, co nedoveze nebo co se nevejde, vrátí peníze.
 ## Řídící centrum u zásobníku dodávky vylepšuje a s dispečinkem objednává cisterny samo.
 ## Když útočí piráti, cisterny nelétají: objednávka se zruší a cisterna u stanice odletí.
+## Při císařském embargu prodává jen šmelinář Lojza, a to dráž.
 
 enum State { IDLE, ORDERED, ARRIVING, UNLOADING }
 
@@ -42,6 +43,11 @@ const SUPPLIERS := [
 	},
 ]
 
+## Index šmelináře Lojzy v SUPPLIERS: jediný, kdo embargo obchází, a kolik si při něm řekne.
+const BLACK_MARKET := 0
+const EMBARGO_PRICE := 6.0
+const EMBARGO_INFO := "Císařské embargo: zbyl jen Lojza a zdražil. Jeho galaxín je nekvalitní, hrozí pokuty."
+
 ## Kde cisterna zakotví a odkud přilétá (souřadnice stanice).
 @export var dock_position := Vector2(-230, 85)
 @export var spawn_position := Vector2(-780, 60)
@@ -52,8 +58,11 @@ var station: Station
 ## Index vybraného dodavatele v SUPPLIERS.
 var selected := 1
 var state := State.IDLE
+var embargo := false
 
 var _supplier: Dictionary
+## Cena za jednotku v aktuální objednávce, podle ní se vrací peníze.
+var _unit_price := 0.0
 var _ordered_units := 0
 var _units_to_deliver := 0.0
 var _delivered := 0.0
@@ -74,7 +83,7 @@ func _process(delta: float) -> void:
 				_send_tanker()
 		State.UNLOADING:
 			var units := minf(UNLOAD_RATE * _modifier("unloading") * delta, _units_to_deliver - _delivered)
-			# Čištění galaxínu v řídícím centru odstraní část nekvalitního galaxínu.
+			# Filtry v řídícím centru odstraní část nekvalitního galaxínu.
 			var low_quality_share: float = _modifier("purification") if _supplier.low_quality else 0.0
 			var accepted := tank.fill(units, low_quality_share)
 			_delivered += accepted
@@ -86,10 +95,31 @@ func selected_supplier() -> Dictionary:
 	return SUPPLIERS[selected]
 
 
+## Zapne nebo vypne embargo. Při něm jde objednávat jen od Lojzy.
+func set_embargo(value: bool) -> void:
+	embargo = value
+	if embargo:
+		selected = BLACK_MARKET
+
+
+func is_available(index: int) -> bool:
+	return not embargo or index == BLACK_MARKET
+
+
+## Cena za jednotku u dodavatele s tímhle indexem.
+func unit_price(index: int) -> float:
+	return EMBARGO_PRICE if embargo and index == BLACK_MARKET else SUPPLIERS[index].price
+
+
+## Popis vybraného dodavatele pro HUD.
+func info_text() -> String:
+	return EMBARGO_INFO if embargo else selected_supplier().info
+
+
 ## Kolik jednotek by šlo teď objednat: velikost cisterny, ale nejvýš volné místo v zásobníku
 ## a nejvýš tolik, kolik hráč zaplatí (aby se hra nezasekla, když dojde galaxín i kredity).
 func order_units() -> int:
-	return mini(max_order_units(), floori(maxi(Game.credits, 0) / selected_supplier().price))
+	return mini(max_order_units(), floori(maxi(Game.credits, 0) / unit_price(selected)))
 
 
 ## Kolik jednotek by šlo objednat, kdyby na to hráč měl.
@@ -98,12 +128,15 @@ func max_order_units() -> int:
 
 
 func order_cost() -> int:
-	return roundi(order_units() * selected_supplier().price)
+	return roundi(order_units() * unit_price(selected))
 
 
 ## Jestli má hráč aspoň na užitečnou dávku od nejlevnějšího dodavatele.
 func can_afford_useful_tanker() -> bool:
-	return SUPPLIERS.any(func(supplier: Dictionary) -> bool: return Game.credits >= supplier.price * USEFUL_UNITS)
+	for i in SUPPLIERS.size():
+		if is_available(i) and Game.credits >= unit_price(i) * USEFUL_UNITS:
+			return true
+	return false
 
 
 func can_order() -> bool:
@@ -116,6 +149,7 @@ func order() -> bool:
 	if not can_order():
 		return false
 	_supplier = selected_supplier()
+	_unit_price = unit_price(selected)
 	_ordered_units = order_units()
 	Game.spend_credits(order_cost())
 	_units_to_deliver = _ordered_units
@@ -196,7 +230,7 @@ func _finish_delivery() -> void:
 
 ## Vrátí peníze za to, co se nepřečerpalo.
 func _refund(at: Vector2) -> void:
-	var refund := roundi((_ordered_units - _delivered) * _supplier.price)
+	var refund := roundi((_ordered_units - _delivered) * _unit_price)
 	if refund > 0:
 		Game.add_credits(refund)
 		FloatingText.spawn(self, at, "+%d kr vráceno" % refund, REFUND_COLOR)

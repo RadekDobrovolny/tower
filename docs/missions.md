@@ -14,8 +14,9 @@ Ceny vycházejí z konstant v kódu. Když se změní cena nebo cíl mise, je po
 | 4 | Obchod a logistika | postavit obchod, 1 druh zboží, automatický dispečink | **18 000** | 0 | 14 000 + galaxín |
 | 5 | Piráti | postavit skladiště u obchodu, sestřelit 10 pirátů, postavit obrannou věž | **9 000** | 0 | 9 000 + galaxín |
 | 6 | Nečekaná zákaznice | naspořit 6 000 kr, zábavní systém na levelu 3, 2 obranné věže, scéna se Zorou | **14 000** | 6 000 | 20 000 + galaxín |
-| 7 | Plné ruce práce | věž na levelu 2, spolehlivé dodávky na levelu 2, Bzučák rychlost letu i práce na levelu 2 | **14 500** | 0 | 8 500 + galaxín |
-| | **Celkem** | | **71 800** | | **71 800 + galaxín** |
+| 7 | Plné ruce práce | věž na levelu 2, spolehlivé dodávky na levelu 2, Bzučák rychlost letu i práce na levelu 2, scéna s císařskou hlídkou | **14 500** | 0 | 8 500 + galaxín |
+| 8 | Embargo | filtry galaxínu na levelu 3 | **10 500** | 0 | 10 500 + galaxín |
+| | **Celkem** | | **82 300** | | **82 300 + galaxín** |
 
 - **Nutné výdaje:** součet všech povinných nákupů v misi.
 - **Držet na účtu:** kolik kreditů musí hráč mít zároveň, když mise končí. Tyto peníze nejde utratit a zůstávají do další mise.
@@ -149,7 +150,11 @@ Ceny vycházejí z konstant v kódu. Když se změní cena nebo cíl mise, je po
 
 ## Mise 7: Plné ruce práce
 
-**Cíle:** jedna věž na levelu 2, spolehlivé dodávky na levelu 2 (maximum) a rychlost letu i práce Bzučáka na levelu 2.
+**Cíle:** jedna věž na levelu 2, spolehlivé dodávky na levelu 2 (maximum) a rychlost letu i práce Bzučáka na levelu 2. Mise navíc skončí až po scéně s císařskou hlídkou, ta se v cílech neukazuje.
+
+**Přibude:**
+- císařská hlídka: asi 45 s po začátku mise přistane Kobaltový strážce a ptá se na Zoru, o medailonu nemluví
+- první volba v rozhovoru: hráč Zoru prozradí, nebo zatají. Zatím to mění jen repliky a uloží se to pro další příběh
 
 | Nákup | Cena |
 |---|---|
@@ -161,6 +166,25 @@ Ceny vycházejí z konstant v kódu. Když se změní cena nebo cíl mise, je po
 | **Celkem** | **14 500** |
 
 - Z Mise 6 si hráč přinese 6 000 kr, takže musí vydělat **8 500 kr** a k tomu na galaxín.
+
+## Mise 8: Embargo
+
+**Cíl:** filtry galaxínu na levelu 3, to je maximum. Až potom je Lojzův galaxín celý čistý.
+
+**Přibude:**
+- císařské embargo: Galaxis a Orion jsou vypnutí a jde objednávat jen od Lojzy
+- Lojza prodává za 6 kr/j místo 2 kr/j. Stejně jako dřív mešká, vozí méně a jeho galaxín je nekvalitní
+- embargo platí i po misi, dokud ho další mise nevypne
+
+| Nákup | Cena |
+|---|---|
+| Filtry galaxínu, level 1 | 2 000 |
+| Filtry galaxínu, level 2 | 3 500 |
+| Filtry galaxínu, level 3 | 5 000 |
+| **Celkem** | **10 500** |
+
+- Hráč musí vydělat **10 500 kr** a k tomu na galaxín.
+- Při běžné prodejní ceně 6 kr/j galaxín nevydělá nic. Výdělek musí přijít z vyšší prodejní ceny, dýšek, obchodu a zábavy.
 
 ## Mise Z: Volná hra
 
@@ -179,6 +203,7 @@ Když hra začne přímo od mise, dostane hráč pevný startovní stav. Od Mise
 | 5 | 8 000 | 3 sloty, Druhá hadice, tankování 6, jízda 5, zábavní systém 3, zásobník 3, obchod se 2 druhy zboží, řídící centrum s dispečinkem | 1 000 + galaxín |
 | 6 | 8 000 | jako Mise 5, ale zábavní systém 2, věž na levelu 1 a skladiště | 9 000 + galaxín |
 | 7 | 8 000 | jako Mise 6, ale zábavní systém 3 a 2 věže na levelu 1, bez medailonu | 6 500 + galaxín |
+| 8 | 8 000 | jako Mise 7, ale 2 věže na levelu 2 | 2 500 + galaxín |
 
 ## Volitelné nákupy
 
@@ -199,10 +224,9 @@ Nejsou nutné ke splnění žádné mise.
 | Rychlé doručení | 4 | 6 000 |
 | Větší cisterny | 4 | 7 500 |
 | Rychlé přečerpávání | 4 | 4 500 |
-| Čištění galaxínu | 4 | 10 500 |
 | Štíty Pumpíka | 5 | 9 000 |
 | Nanoboti Pumpíka | 5 | 11 000 |
 | První věž na levelu 3 | 5 | 7 000 |
 | Druhá věž na levelu 2 a 3 | 5 | 11 000 (4 000 + 7 000) |
 
-**Všechno na maximum stojí 222 800 kr**, tedy 71 800 kr za nutné nákupy a 151 000 kr za volitelné.
+**Všechno na maximum stojí 222 800 kr**, tedy 82 300 kr za nutné nákupy a 140 500 kr za volitelné.

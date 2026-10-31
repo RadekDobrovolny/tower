@@ -11,6 +11,8 @@ var credits := 0
 var ships_served := 0
 var ships_lost := 0
 var pirates_shot := 0
+## Jestli hráč v Misi 7 prozradil Zoru císařské hlídce.
+var zora_reported := false
 
 
 ## Vynuluje stav na začátku hry. Hráč může začínat s nějakými kredity.
@@ -19,6 +21,7 @@ func reset(start_credits := 0) -> void:
 	ships_served = 0
 	ships_lost = 0
 	pirates_shot = 0
+	zora_reported = false
 	credits_changed.emit(credits)
 	stats_changed.emit()
 

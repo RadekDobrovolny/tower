@@ -1,14 +1,10 @@
 class_name ZoraScene
-extends Node
+extends StoryScene
 
 ## Scéna Mise 6: přiletí Zora, nechá si natankovat plnou nádrž, odmítne zaplatit a pomalu odlétá.
 ## Pumpík po ní vystřelí, raketa se jen otřese a zmizí, ale vypadne z ní truhla s medailonem.
-## Mise skončí až po téhle scéně. Proběhne jen jednou.
 
-signal finished
-
-## Za jak dlouho (s) po začátku mise Zora přiletí a kdy si Pumpík všimne, že odlétá bez placení.
-const ARRIVAL_DELAY := 45.0
+## Za jak dlouho (s) si Pumpík všimne, že Zora odlétá bez placení.
 const NOTICE_DELAY := 2.5
 ## Za jak dlouho (s) po útěku se Pumpík ozve.
 const REPORT_DELAY := 1.4
@@ -17,35 +13,17 @@ const HULL := {
 	"scale": 0.42, "patience": INF, "full_tank": true, "story": true,
 }
 
-@export var station: Station
-@export var spawner: ShipSpawner
-@export var hud: Hud
-
-## Jestli má scéna v téhle misi proběhnout. Nastavuje kampaň.
-var active := false
-var done := false
-
-var _ship: Ship
-var _arrived := false
-var _time := 0.0
-
 
 func _ready() -> void:
 	station.artifact_stored.connect(_on_artifact_stored)
 
 
-func _process(delta: float) -> void:
-	if not active or _arrived:
-		return
-	_time += delta
-	if _time >= ARRIVAL_DELAY and station.has_room() and not station.under_attack():
-		_arrived = true
-		_ship = spawner.spawn_story_ship(HULL)
-		_ship.landed.connect(_on_landed)
-		_ship.skipped_payment.connect(_on_skipped_payment)
+func _hull() -> Dictionary:
+	return HULL
 
 
 func _on_landed(_landed_ship: Ship) -> void:
+	_ship.skipped_payment.connect(_on_skipped_payment)
 	hud.dialogue.play(Story.ZORA_ARRIVES)
 
 
@@ -77,5 +55,4 @@ func _on_artifact_stored(artifact: Dictionary) -> void:
 	if artifact.id != Station.MEDALLION.id:
 		return
 	hud.dialogue.play(Story.ZORA_MEDALLION)
-	done = true
-	finished.emit()
+	_finish()

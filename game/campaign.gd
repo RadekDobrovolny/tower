@@ -25,6 +25,7 @@ var _dual_hose_told := false
 @onready var pirate_spawner: PirateSpawner = $PirateSpawner
 @onready var junk_dealer: JunkDealer = $JunkDealer
 @onready var zora_scene: ZoraScene = $ZoraScene
+@onready var patrol_scene: PatrolScene = $PatrolScene
 @onready var hud: Hud = $HUD
 
 
@@ -39,6 +40,7 @@ func _ready() -> void:
 	station.state_changed.connect(_check_goals, CONNECT_DEFERRED)
 	station.state_changed.connect(_check_dual_hose_story, CONNECT_DEFERRED)
 	zora_scene.finished.connect(_check_goals, CONNECT_DEFERRED)
+	patrol_scene.finished.connect(_check_goals, CONNECT_DEFERRED)
 	Game.stats_changed.connect(_check_goals, CONNECT_DEFERRED)
 	hud.setup(self)
 	junk_dealer.arrived.connect(hud.show_junk_dealer.bind(junk_dealer))
@@ -145,6 +147,9 @@ func get_goals() -> Array[Dictionary]:
 	if mission.goal_reliability > 0:
 		var level: int = station.control_center.levels.reliability if station.control_center else 0
 		goals.append(_goal("Spolehlivé dodávky na levelu %d" % mission.goal_reliability, level, mission.goal_reliability))
+	if mission.goal_purification > 0:
+		var filters: int = station.control_center.levels.purification if station.control_center else 0
+		goals.append(_goal("Filtry galaxínu na levelu %d" % mission.goal_purification, filters, mission.goal_purification))
 	if mission.goal_drone_speed > 0:
 		goals.append(_goal("%s: rychlost letu na levelu %d" % [station.drone.display_name, mission.goal_drone_speed],
 				station.drone.speed_level, mission.goal_drone_speed))
@@ -189,6 +194,7 @@ func _begin_mission(index: int) -> void:
 	mission_elapsed = 0.0
 	_apply_rules(mission)
 	zora_scene.active = mission.zora_scene
+	patrol_scene.active = mission.patrol_scene
 	station.ship_tier = number()
 	hud.refresh_mission()
 	mission_started.emit(number())
@@ -205,6 +211,7 @@ func _apply_rules(rules: Mission) -> void:
 	station.tower_available = rules.tower_available
 	station.warehouse_available = rules.warehouse_available
 	station.drone.upgrades_available = rules.drone_upgrades
+	station.supply.set_embargo(rules.embargo)
 	if rules.galaxin_economy and not station.galaxin_economy:
 		station.enable_galaxin_economy(rules.start_galaxin)
 	spawner.min_interval = rules.ship_interval_min
@@ -251,7 +258,7 @@ func _best_fuel_level() -> int:
 func _check_goals() -> void:
 	if mission == null or _completed or hud.dialogue.is_open():
 		return
-	if mission.zora_scene and not zora_scene.done:
+	if (mission.zora_scene and not zora_scene.done) or (mission.patrol_scene and not patrol_scene.done):
 		return
 	for goal in get_goals():
 		if not goal.done:

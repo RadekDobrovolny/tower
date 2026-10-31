@@ -311,6 +311,12 @@ func sneak_away() -> void:
 	_depart(PAID_DEPARTURE_DELAY)
 
 
+## Loď z příběhu odletí bez tankování.
+func take_off() -> void:
+	gave_up.emit(self)
+	_depart(PAID_DEPARTURE_DELAY)
+
+
 ## Po zásahu se otřese a velmi rychle zmizí.
 func dash_away() -> void:
 	_speed_limit = DASH_SPEED

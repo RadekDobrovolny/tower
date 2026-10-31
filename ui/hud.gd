@@ -6,6 +6,8 @@ extends CanvasLayer
 ## Ceny se ukazují s ikonkou mince místo „kr“ (UiIcons.money_bbcode).
 
 const DONE_COLOR := Color(0.5, 0.94, 0.55)
+## Jak průhledný je dodavatel, od kterého nejde objednávat.
+const SUPPLIER_BLOCKED_ALPHA := 0.35
 const GAIN_FLASH := Color(1.6, 1.4, 0.9)
 const SPEND_FLASH := Color(1.4, 0.6, 0.6)
 ## Kolikrát za sekundu se zobrazené kredity přiblíží ke skutečným (počítadlo „dojíždí“).
@@ -14,6 +16,7 @@ const CREDITS_ROLL_SPEED := 10.0
 const INFO_KEY_MAX_LENGTH := 24
 const INFO_KEY_COLOR := "#9e99a8"
 
+var _supplier_prices: Array[RichTextLabel] = []
 var _campaign: Campaign
 ## Objekt, jehož info panel je otevřený, a tlačítka jeho akcí.
 var _selected: Node
@@ -371,11 +374,23 @@ func _create_supplier_button(supplier: Dictionary) -> Button:
 	price.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	price.add_theme_font_size_override("normal_font_size", 11)
 	price.add_theme_color_override("default_color", Color(1, 0.87, 0.55))
-	price.text = "[center]%s[/center]" % UiIcons.money_bbcode("%d kr/j" % supplier.price, 11)
+	_supplier_prices.append(price)
 	content.add_child(name_label)
 	content.add_child(price)
 	button.add_child(content)
 	return button
+
+
+## Embargo mění ceny a vypíná dodavatele.
+func _refresh_supplier_buttons(supply: Supply) -> void:
+	for i in Supply.SUPPLIERS.size():
+		var button: Button = _supplier_buttons.get_child(i)
+		button.disabled = not supply.is_available(i)
+		button.modulate.a = 1.0 if supply.is_available(i) else SUPPLIER_BLOCKED_ALPHA
+		button.set_pressed_no_signal(i == supply.selected)
+		var text := "[center]%s[/center]" % UiIcons.money_bbcode("%d kr/j" % supply.unit_price(i), 11)
+		if _supplier_prices[i].text != text:
+			_supplier_prices[i].text = text
 
 
 func _refresh_galaxin_panel() -> void:
@@ -388,8 +403,8 @@ func _refresh_galaxin_panel() -> void:
 	if _price_label.text != price:
 		_price_label.text = price
 	_demand_label.text = station.demand_text()
-	var supplier := supply.selected_supplier()
-	_supplier_info.text = supplier.info
+	_refresh_supplier_buttons(supply)
+	_supplier_info.text = supply.info_text()
 	if supply.state != Supply.State.IDLE:
 		_order_button.set_label("Cisterna je objednaná")
 		_order_button.set_cost(-1)

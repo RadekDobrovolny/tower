@@ -73,10 +73,12 @@ text = "Začít od mise"
 uppercase = true
 horizontal_alignment = 1
 
-[node name="MissionButtons" type="VBoxContainer" parent="UI/Center/VBox"]
+[node name="MissionButtons" type="GridContainer" parent="UI/Center/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 2
 
 [node name="NotebookButton" type="Button" parent="UI/Center/VBox"]
 unique_name_in_owner = true

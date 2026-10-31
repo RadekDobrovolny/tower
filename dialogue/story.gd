@@ -6,6 +6,11 @@ extends RefCounted
 
 const PUMPIK := "pumpik"
 const ZORA := "zora"
+const GUARD := "guard"
+
+## Mise 7: hráč Zoru prozradil hlídce.
+const REPORT_ZORA := "report"
+const HIDE_ZORA := "hide"
 
 const SPEAKERS := {
 	PUMPIK: {
@@ -24,6 +29,15 @@ const SPEAKERS := {
 			"happy": preload("res://assets/sprites/portraits/zora_happy.png"),
 			"worried": preload("res://assets/sprites/portraits/zora_worried.png"),
 			"angry": preload("res://assets/sprites/portraits/zora_angry.png"),
+		},
+	},
+	GUARD: {
+		"name": "Kobaltový strážce",
+		"portraits": {
+			"neutral": preload("res://assets/sprites/portraits/guard_neutral.png"),
+			"scornful": preload("res://assets/sprites/portraits/guard_scornful.png"),
+			"scared": preload("res://assets/sprites/portraits/guard_scared.png"),
+			"angry": preload("res://assets/sprites/portraits/guard_angry.png"),
 		},
 	},
 }
@@ -66,8 +80,13 @@ const MISSION_INTROS := [
 	],
 	[
 		{"speaker": PUMPIK, "mood": "worried", "text": "Šéfiku, Bzučák nestíhá. Na stavby, opravy a kořist je sám a pořád lítá sem a tam."},
-		{"speaker": PUMPIK, "mood": "neutral", "text": "Pořiď mu rychlejší let. A dodavatel pořád mešká, chtělo by to spolehlivější dodávky."},
+		{"speaker": PUMPIK, "mood": "neutral", "text": "Pořiď mu rychlejší let i práci. A dodavatel pořád mešká, chtělo by to spolehlivější dodávky."},
 		{"speaker": PUMPIK, "mood": "neutral", "text": "A jednu věž bych vylepšil na level 2. Piráti nám nedají pokoj."},
+	],
+	[
+		{"speaker": PUMPIK, "mood": "worried", "text": "Šéfiku, přišel císařský výnos. Stanice má zákaz dodávek, Galaxis ani Orion nám už nesmějí nic prodat."},
+		{"speaker": PUMPIK, "mood": "angry", "text": "Zbyl jen Lojza. Na výnosy kašle, ale ví, že nemáme na výběr. Chce 6 kr za jednotku a vozí pořád tu samou břečku."},
+		{"speaker": PUMPIK, "mood": "neutral", "text": "Pořiď filtry v řídícím centru, ať s tím nemáme pokuty. A rozmysli si prodejní cenu, za 6 kr na galaxínu nic nevyděláme."},
 	],
 ]
 
@@ -102,6 +121,34 @@ const ZORA_ESCAPED := [
 const ZORA_MEDALLION := [
 	{"speaker": PUMPIK, "mood": "neutral", "text": "Je to starý medailon. Orel s korunou, slunce a půlměsíc. Orla jsem viděl na císařských lodích."},
 	{"speaker": PUMPIK, "mood": "worried", "text": "Co s tím dělá cirkusačka? Dám ho do skladiště. Tohle bych neprodával, šéfiku."},
+]
+
+## Mise 7: císařská hlídka hledá Zoru. Co odpovědět, vybírá hráč.
+const PATROL_ARRIVES := [
+	{"speaker": GUARD, "mood": "scornful", "text": "Kobaltová stráž Jeho Veličenstva. Odložte hadice a poslouchejte."},
+	{"speaker": PUMPIK, "mood": "worried", "text": "Šéfiku, to je císařská stráž. Tihle netankují, tihle se ptají."},
+	{"speaker": GUARD, "mood": "neutral", "text": "Hledáme ženu jménem Zora Zender. Cirkusová artistka, rychlá červená raketa. Viděli jste ji?"},
+	{
+		"speaker": PUMPIK, "mood": "worried", "text": "Šéfiku, co mu mám říct?",
+		"choices": [
+			{
+				"id": REPORT_ZORA, "text": "Byla tu a ujela bez placení",
+				"lines": [
+					{"speaker": PUMPIK, "mood": "angry", "text": "Byla tu, pane strážce! Natankovala do plna a ujela bez placení. Letěla jako blesk."},
+					{"speaker": GUARD, "mood": "scornful", "text": "Výborně. Říše si pamatuje, kdo jí pomohl. Pokračujte v práci."},
+					{"speaker": PUMPIK, "mood": "worried", "text": "Snad jsme udělali dobře, šéfiku. Ale kvůli jedné nádrži by císař stráž neposílal. Co ta holka provedla?"},
+				],
+			},
+			{
+				"id": HIDE_ZORA, "text": "Nikoho takového jsme neviděli",
+				"lines": [
+					{"speaker": PUMPIK, "mood": "neutral", "text": "Nikoho takového jsme neviděli, pane strážce. Létají k nám jen zákazníci a piráti."},
+					{"speaker": GUARD, "mood": "angry", "text": "Lhát císařské stráži se nevyplácí. Dobrá. Ještě se vrátíme."},
+					{"speaker": PUMPIK, "mood": "worried", "text": "Uf. Dluží nám za nádrž a my ji ještě kryjeme, šéfiku. Co ta holka provedla, že ji hledá císařská stráž?"},
+				],
+			},
+		],
+	},
 ]
 
 const FREE_PLAY_INTRO := [

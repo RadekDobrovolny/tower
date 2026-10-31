@@ -3,17 +3,21 @@ extends ColorRect
 
 ## Rozhovor ve spodní části obrazovky: vlevo obličej postavy, vedle její jméno a text, který se
 ## postupně vypisuje. Dokud je vidět, hra stojí a hráč musí repliky odkliknout. Běží i při
-## pauze (process_mode Always).
+## pauze (process_mode Always). Replika s `choices` místo OK nabídne možnosti: každá má `id`,
+## `text` na tlačítku a `lines`, repliky, kterými rozhovor pokračuje.
 
 signal closed
+signal chose(choice_id: String)
 
 ## Kolik znaků za sekundu se vypisuje.
 const REVEAL_SPEED := 60.0
 const MONEY_ICON_SIZE := 17
+const CHOICE_HEIGHT := 36.0
 
 var _lines: Array = []
 var _index := 0
 var _reveal: Tween
+var _choice_buttons: Array[Button] = []
 
 @onready var _portrait: TextureRect = %DialoguePortrait
 @onready var _name: Label = %DialogueName
@@ -27,7 +31,7 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if visible and event.is_action_pressed("ui_accept"):
+	if visible and _ok.visible and event.is_action_pressed("ui_accept"):
 		_advance()
 		get_viewport().set_input_as_handled()
 
@@ -46,6 +50,7 @@ func is_open() -> bool:
 
 
 func close() -> void:
+	_clear_choices()
 	hide()
 	get_tree().paused = false
 	closed.emit()
@@ -73,3 +78,31 @@ func _show_next_line() -> void:
 	_text.visible_ratio = 0.0
 	_reveal = create_tween()
 	_reveal.tween_property(_text, "visible_ratio", 1.0, line.text.length() / REVEAL_SPEED)
+	_show_choices(line.get("choices", []))
+
+
+func _show_choices(choices: Array) -> void:
+	_ok.visible = choices.is_empty()
+	for choice: Dictionary in choices:
+		var button := Button.new()
+		button.text = choice.text
+		button.custom_minimum_size.y = CHOICE_HEIGHT
+		button.focus_mode = Control.FOCUS_NONE
+		button.theme_type_variation = &"PrimaryButton"
+		button.pressed.connect(_choose.bind(choice))
+		_ok.get_parent().add_child(button)
+		_choice_buttons.append(button)
+
+
+func _choose(choice: Dictionary) -> void:
+	_clear_choices()
+	_lines = choice.lines
+	_index = -1
+	chose.emit(choice.id)
+	_show_next_line()
+
+
+func _clear_choices() -> void:
+	for button in _choice_buttons:
+		button.queue_free()
+	_choice_buttons.clear()

@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="Mission" format=3]
+
+[ext_resource type="Script" path="res://missions/mission.gd" id="1_mission"]
+
+[resource]
+script = ExtResource("1_mission")
+title = "Embargo"
+max_android_level = 6
+entertainment_available = true
+drone_upgrades = true
+dual_hose_available = true
+max_slots = 3
+galaxin_economy = true
+start_galaxin = 300
+ship_interval_min = 2.0
+ship_interval_max = 5.0
+shop_available = true
+control_center_available = true
+warehouse_available = true
+embargo = true
+tower_available = true
+pirates = true
+pirate_interval_min = 40.0
+pirate_interval_max = 70.0
+goal_purification = 3
+start_credits = 8000
+start_fuel_level = 6
+start_walk_level = 5
+start_entertainment_level = 3
+start_dual_hose = true
+start_slots = 3
+start_tank_level = 3
+start_shop_products = 2
+start_control_center = 2
+start_tower_level = 2
+start_towers = 2
+start_warehouse = true

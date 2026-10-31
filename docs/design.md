@@ -232,7 +232,7 @@ V misích 1 a 2 je galaxínu neomezeně a stojí pevně 6 kr/j. S misí 3 se zap
 | Rychlé doručení | 2 000 kr, 6 s | 4 000 kr, 8 s | doba dodání (i zpoždění) ×0,7 / ×0,45 |
 | Větší cisterny | 2 500 kr, 6 s | 5 000 kr, 8 s | cisterna ×1,5 / ×2 |
 | Rychlé přečerpávání | 1 500 kr, 5 s | 3 000 kr, 7 s | přečerpávání ×1,6 / ×2,5 |
-| Čištění galaxínu | 2 000 kr, 6 s | 3 500 kr, 8 s | vyčistí 40 % / 70 % nekvalitního galaxínu z dodávky; level 3 (5 000 kr, 10 s) vyčistí všechno, takže levný Lojza je bez pokut |
+| Filtry galaxínu | 2 000 kr, 6 s | 3 500 kr, 8 s | vyčistí 40 % / 70 % nekvalitního galaxínu z dodávky; level 3 (5 000 kr, 10 s) vyčistí všechno, takže levný Lojza je bez pokut |
 | Automatický dispečink | 6 000 kr, 10 s | – | objedná cisternu u vybraného dodavatele sám, když v zásobníku zbývá méně než 40 % (a hráč na ni má) |
 
 ### Obrana (od mise 5)
@@ -301,6 +301,7 @@ Postavy mluví v dialogovém okně ve spodní části obrazovky: vlevo detailní
 
 - Zadání každé mise říká **Pumpík** v rozhovoru místo modálního okna. Cíle jsou vidět vpravo nahoře. Okno se shrnutím po splnění mise zůstává.
 - Pumpík má čtyři emoce: klidný, nadšený, ustaraný a naštvaný (`neutral`, `happy`, `worried`, `angry`).
+- Kobaltový strážce má čtyři emoce: přísný, pohrdavý, vyděšený a naštvaný (`neutral`, `scornful`, `scared`, `angry`).
 - Rozhovory jsou v `dialogue/story.gd`.
 
 ## Zvuk
@@ -436,7 +437,7 @@ První příběhová mise, přichází Zora Zender.
 
 ## Mise 7: Plné ruce práce
 
-Bzučák nestíhá a dodavatel mešká. Standardní mise, příběhová linka se teprve doplní.
+Bzučák nestíhá a dodavatel mešká. Asi 45 s po začátku mise přistane císařská hlídka a Kobaltový strážce se ptá na Zoru. O medailonu nemluví a Pumpík o něm taky nic neřekne. Hráč si vybere, jestli ji prozradí, nebo zatají. Výběr zatím mění jen repliky a pamatuje si ho `Game.zora_reported` pro další příběh. Mise skončí až po téhle scéně.
 
 **Startovní stav** (jen při startu od mise 7): jako v Misi 6, ale zábavní systém na levelu 3 a 2 věže na levelu 1. Medailon při tomhle startu chybí.
 
@@ -444,6 +445,17 @@ Bzučák nestíhá a dodavatel mešká. Standardní mise, příběhová linka se
 - Jedna obranná věž na **levelu 2**.
 - Spolehlivé dodávky na **levelu 2** (maximum).
 - Rychlost letu i práce Bzučáka na **levelu 2**.
+
+## Mise 8: Embargo
+
+Císař stanici zakáže dodávky galaxínu. Objednávat jde jen od šmelináře Lojzy, který toho využije a prodává za 6 kr/j. Jeho galaxín je dál nekvalitní, takže hráč musí koupit filtry. Příběhová linka se teprve doplní.
+
+**Startovní stav** (jen při startu od mise 8): jako v Misi 7, ale obě věže na levelu 2.
+
+**Cíle:**
+- Filtry galaxínu na **levelu 3** (maximum).
+
+Embargo je pravidlo mise (`Mission.embargo`). Platí i ve volné hře po misi a vypne ho až další mise bez tohoto pravidla.
 
 ## Mise Z: Volná hra
 

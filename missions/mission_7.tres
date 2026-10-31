@@ -17,6 +17,7 @@ ship_interval_max = 5.0
 shop_available = true
 control_center_available = true
 warehouse_available = true
+patrol_scene = true
 tower_available = true
 pirates = true
 pirate_interval_min = 40.0

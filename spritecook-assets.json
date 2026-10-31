@@ -737,6 +737,37 @@
           "sha12": "ff133bb14218"
         }
       ]
+    },
+    {
+      "asset_id": "9e4c1f60-dabe-467a-ab8b-d582989e54bb",
+      "label": "Tower – Kobaltový strážce, předloha (obrázek od hráče)",
+      "files": []
+    },
+    {
+      "asset_id": "0165e9d1-d972-4468-8184-2ddface13d97",
+      "label": "Tower – Kobaltový strážce, obličeje pro dialogy, 4 emoce: přísná, pohrdavá, vyděšená, naštvaná (reference předloha, 16 kreditů)",
+      "files": [
+        {
+          "file": "assets/sprites/portraits/guard_neutral.png",
+          "sha12": "c6a17a1b6ec0",
+          "cell": "vlevo nahoře"
+        },
+        {
+          "file": "assets/sprites/portraits/guard_scornful.png",
+          "sha12": "2525033214c3",
+          "cell": "vpravo nahoře"
+        },
+        {
+          "file": "assets/sprites/portraits/guard_scared.png",
+          "sha12": "dcad93011037",
+          "cell": "vlevo dole"
+        },
+        {
+          "file": "assets/sprites/portraits/guard_angry.png",
+          "sha12": "69f7baab9c77",
+          "cell": "vpravo dole"
+        }
+      ]
     }
   ]
 }

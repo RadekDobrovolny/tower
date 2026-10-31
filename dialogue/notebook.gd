@@ -90,6 +90,10 @@ static func _characters() -> Array[Dictionary]:
 			"text": "Cirkusová artistka s rychlou raketou a ještě rychlejšíma nohama. Natankovala do plna a ujela bez placení. Dluží nám.",
 		},
 		{
+			"title": "Kobaltový strážce", "image": Story.SPEAKERS[Story.GUARD].portraits.neutral,
+			"text": "Důstojník císařské stráže ve skleněné přilbě a kobaltové uniformě. Netankuje, jen se ptá. A když se ptá, je lepší stát rovně.",
+		},
+		{
 			"title": "Vesmírný vetešník",
 			"text": "Přiletí, když dojde galaxín i kredity, vždycky ví, kdy je zle. Odkoupí jedno ze tří vylepšení za polovinu ceny. Kdo nemá co prodat, dostane almužnu %s." % _price(JunkDealer.HANDOUT),
 		},
