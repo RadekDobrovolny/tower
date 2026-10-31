@@ -24,6 +24,7 @@ var _dual_hose_told := false
 @onready var spawner: ShipSpawner = $ShipSpawner
 @onready var pirate_spawner: PirateSpawner = $PirateSpawner
 @onready var junk_dealer: JunkDealer = $JunkDealer
+@onready var zora_scene: ZoraScene = $ZoraScene
 @onready var hud: Hud = $HUD
 
 
@@ -37,6 +38,7 @@ func _ready() -> void:
 	Game.credits_changed.connect(_check_goals.unbind(1), CONNECT_DEFERRED)
 	station.state_changed.connect(_check_goals, CONNECT_DEFERRED)
 	station.state_changed.connect(_check_dual_hose_story, CONNECT_DEFERRED)
+	zora_scene.finished.connect(_check_goals, CONNECT_DEFERRED)
 	Game.stats_changed.connect(_check_goals, CONNECT_DEFERRED)
 	hud.setup(self)
 	junk_dealer.arrived.connect(hud.show_junk_dealer.bind(junk_dealer))
@@ -162,6 +164,8 @@ func _apply_start_state(start: Mission) -> void:
 		android.set_dual_hose(start.start_dual_hose)
 	station.setup_start_buildings(start.start_slots, start.start_entertainment_level,
 			start.start_shop_products, start.start_control_center, start.start_tower_level)
+	if start.start_warehouse:
+		station.place_warehouse_ready()
 	station.tank.set_level(start.start_tank_level)
 
 
@@ -171,6 +175,7 @@ func _begin_mission(index: int) -> void:
 	mission = Missions.ALL[index]
 	mission_elapsed = 0.0
 	_apply_rules(mission)
+	zora_scene.active = mission.zora_scene
 	station.ship_tier = number()
 	hud.refresh_mission()
 	mission_started.emit(number())
@@ -231,7 +236,9 @@ func _best_fuel_level() -> int:
 
 
 func _check_goals() -> void:
-	if mission == null or _completed:
+	if mission == null or _completed or hud.dialogue.is_open():
+		return
+	if mission.zora_scene and not zora_scene.done:
 		return
 	for goal in get_goals():
 		if not goal.done:

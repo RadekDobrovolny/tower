@@ -8,6 +8,7 @@ extends Node2D
 
 ## Hráč kliknutím vybral objekt (android, zásobník, budova, prázdná parcela) nebo nic (null).
 signal selection_changed(object: Node)
+signal artifact_stored(artifact: Dictionary)
 ## Něco se postavilo, vylepšilo nebo koupilo (pro cíle misí).
 signal state_changed
 
@@ -82,6 +83,13 @@ const ARTIFACTS := [
 const CRYSTAL_CAPACITY := 400
 const RADIO_INTERVAL_FACTOR := 1.25
 const MAP_LOOT_BONUS := 1.5
+## Medailon, který vypadne ze Zory. Uloží se vždy a nejde prodat.
+const MEDALLION := {
+	"id": "medallion", "name": "Medailon s císařským orlem", "credits": 0, "story": true,
+	"icon": preload("res://assets/sprites/artifacts/medallion.png"),
+	"about": "Vypadl z rakety cirkusačky, která odletěla bez placení. Orel, slunce a půlměsíc.",
+	"info": "Nejde prodat. Pumpík z něj má divný pocit.",
+}
 ## Od jakého levelu zásobníku jde k němu přistavět řídící centrum.
 const CONTROL_CENTER_TANK_LEVEL := 3
 ## Na které parcely (indexy) se ve startovním stavu mise staví čerpací sloty, zábavní systém,
@@ -722,6 +730,11 @@ func _place_control_center() -> ControlCenter:
 	return control_center
 
 
+## Postaví skladiště hned (startovní stav mise).
+func place_warehouse_ready() -> void:
+	_place_warehouse().finish_instantly()
+
+
 func _place_warehouse() -> Warehouse:
 	warehouse = WAREHOUSE_SCENE.instantiate()
 	warehouse.station = self
@@ -959,13 +972,26 @@ func spawn_loot(at: Vector2, gunship: bool) -> void:
 	loot.global_position = at.clamp(screen.position + Vector2(40, 40), screen.end - Vector2(40, 40))
 
 
+## Upustí truhlu s artefaktem z příběhu, Bzučák pro ni doletí jako pro jinou kořist.
+func drop_story_loot(at: Vector2, artifact: Dictionary) -> void:
+	var loot: Loot = LOOT_SCENE.instantiate()
+	loot.station = self
+	loot.kind = Loot.Kind.CHEST
+	loot.artifact = artifact
+	add_child(loot)
+	var screen := Game.visible_world_rect(self)
+	loot.global_position = at.clamp(screen.position + Vector2(40, 40), screen.end - Vector2(40, 40))
+
+
 ## Dron přivezl artefakt. Hotové skladiště ho uloží a začne platit jeho účinek, bez něj (nebo
 ## když už ho hráč má) se hned prodá. Vrátí, jestli se uložil.
 func add_artifact(artifact: Dictionary) -> bool:
-	var keep := has_warehouse() and not stored_artifacts.has(artifact) and stored_artifacts.size() < Warehouse.SLOTS
+	var keep: bool = artifact.has("story") \
+			or (has_warehouse() and not stored_artifacts.has(artifact) and stored_artifacts.size() < Warehouse.SLOTS)
 	if keep:
 		stored_artifacts.append(artifact)
 		_apply_artifacts()
+		artifact_stored.emit(artifact)
 	else:
 		Game.add_credits(artifact.credits)
 	state_changed.emit()

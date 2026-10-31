@@ -12,7 +12,7 @@ const PHASES := [
 	{"name": "Stěny a vrata", "cost": 1000, "duration": 4.0},
 ]
 const SIZE := Vector2(88, 72)
-const SLOTS := 6
+const SLOTS := 8
 
 @onready var _base: Sprite2D = $Base
 @onready var _frame: Sprite2D = $Frame

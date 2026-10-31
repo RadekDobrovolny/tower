@@ -21,7 +21,7 @@ func _ready() -> void:
 func _add_button(text: String, mission_index: int) -> void:
 	var button := Button.new()
 	button.text = text
-	button.custom_minimum_size = Vector2(340, 56)
+	button.custom_minimum_size = Vector2(340, 50)
 	button.focus_mode = Control.FOCUS_NONE
 	button.add_theme_font_size_override("font_size", 15)
 	button.pressed.connect(_start_from.bind(mission_index))

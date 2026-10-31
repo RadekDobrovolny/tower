@@ -5,6 +5,8 @@ extends ColorRect
 ## postupně vypisuje. Dokud je vidět, hra stojí a hráč musí repliky odkliknout. Běží i při
 ## pauze (process_mode Always).
 
+signal closed
+
 ## Kolik znaků za sekundu se vypisuje.
 const REVEAL_SPEED := 60.0
 const MONEY_ICON_SIZE := 17
@@ -46,6 +48,7 @@ func is_open() -> bool:
 func close() -> void:
 	hide()
 	get_tree().paused = false
+	closed.emit()
 
 
 ## OK dopíše rozepsaný text, teprve pak přejde na další repliku.

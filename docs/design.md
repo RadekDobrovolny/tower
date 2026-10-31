@@ -109,7 +109,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 ## Systémy
 
 ### Lodě (zákazníci)
-- **Druhy lodí:** běžné rakety mají 13 vzhledů a odemykají se s misemi, viz tabulka. K nim občas **nákladní loď** (10 %, 2× větší nádrž, objedná vždy plnou) a **turistická loď** (8 %, jen když stojí hotový obchod, o 30 % větší nádrž, v obchodě nakupuje ochotněji a utratí 20× víc, nad obchodem se ukáže „+… kr turisté“). Lodě se otáčejí do všech směrů, proto musí být kreslené přesně shora a souměrné podél osy.
+- **Druhy lodí:** běžné rakety mají 16 vzhledů a odemykají se s misemi, viz tabulka. K nim občas **nákladní loď** (10 %, 2× větší nádrž, objedná vždy plnou) a **turistická loď** (8 %, jen když stojí hotový obchod, o 30 % větší nádrž, v obchodě nakupuje ochotněji a utratí 20× víc, nad obchodem se ukáže „+… kr turisté“). Lodě se otáčejí do všech směrů, proto musí být kreslené přesně shora a souměrné podél osy.
 
 | Raketa | Od mise | Trpělivost | Nádrž | Dýško | Povaha |
 |---|---|---|---|---|---|
@@ -121,6 +121,9 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 | Dodávka | 3 | 100 % | 150 % | běžné | pracovní loď |
 | Nomádská | 4 | 200 % | 120 % | nikdy | nikam nespěchá |
 | Zmrzlinářská | 4 | 120 % | 80 % | 1,5× častěji | veselý obchodník |
+| Odtahovka | 3 | 80 % | 130 % | běžné | spěchá za dalším zákazníkem |
+| Pohřební raketa | 4 | 200 % | 100 % | 3× méně často | pasažér počká |
+| Císařská hlídka | 5 | 60 % | 100 % | nikdy | čekat nebude, vždy plnou nádrž |
 | Luxusní limuzína | 5 | 45 % | 120 % | 4× častěji a 2,5× vyšší | čekat nebude, vždy plnou nádrž |
 | Redneck | 5 | 130 % | 130 % | 3× méně často | šetří každý kredit |
 - **Strach z pirátů:** když pirát dorazí ke stanici a začne útočit, všechny lodě ve frontě i u čerpadel utečou („Piráti! Mizím!“). Natankovaný galaxín nezaplatí a počítají se mezi lodě, které odletěly bez placení. Dokud útok trvá, žádná nová loď nepřiletí.
@@ -279,7 +282,7 @@ V misích 1 a 2 je galaxínu neomezeně a stojí pevně 6 kr/j. S misí 3 se zap
 
 ### Skladiště (od mise 5)
 - Přistavuje se k hotovému obchodu akcí v jeho nabídce, podobně jako řídící centrum k zásobníku. Staví se ve 3 částech (celkem 3 000 kr): základy (800 kr, 3 s), ocelová konstrukce (1 200 kr, 4 s), stěny a vrata (1 000 kr, 4 s). V Misi Z už stojí.
-- Hotové skladiště je inventář se **6 sloty**: kliknutí na něj zastaví hru a ukáže, co v něm je. Prázdné sloty jsou prázdné. Po kliknutí na artefakt se ukáže popis, účinek a tlačítko **Prodat** za jeho plnou cenu.
+- Hotové skladiště je inventář s **8 sloty** (6 artefaktů z pirátů a místo pro artefakty z příběhu): kliknutí na něj zastaví hru a ukáže, co v něm je. Prázdné sloty jsou prázdné. Po kliknutí na artefakt se ukáže popis, účinek a tlačítko **Prodat** za jeho plnou cenu.
 - Účinek artefaktu platí, jen dokud je ve skladišti. Po prodeji skončí a artefakt může z pirátů vypadnout znovu.
 
 ### Vesmírný vetešník
@@ -289,6 +292,10 @@ V misích 1 a 2 je galaxínu neomezeně a stojí pevně 6 kr/j. S misí 3 se zap
 - Kdo už nemá co prodat, dostane almužnu 150 kr, aby se nezasekl.
 
 ## Příběh a rozhovory
+
+**Zora Zender** (přijde v Misi 6): cirkusová artistka s rychlou a obratnou raketou s cirkusovými motivy. Jako malá s ní matka utekla a našla azyl v cirkusu, kde vyrostla. Ve skutečnosti je dcerou galaktického císaře a právoplatnou dědičkou vesmírného trůnu. Hráč se to dozvídá postupně, nesmí to vědět hned. Má stejné čtyři emoce jako Pumpík (`zora_*.png`).
+
+Připravené lodě pro příběh, zatím se ve hře nepoužívají a do běžného provozu nepatří (`assets/sprites/ships/`): Zořina raketa `rocket_zora`, cirkusová maringotka `rocket_circus_wagon`, loď principála `rocket_ringmaster`, císařský kurýr `rocket_imperial_courier`, císařský křižník `rocket_imperial_cruiser` a pirátská vlajková loď `rocket_pirate_flagship`. Křižník a vlajková loď jsou velké jako nákladní loď.
 
 Postavy mluví v dialogovém okně ve spodní části obrazovky: vlevo detailní obličej s emocí, vedle jméno a text, který se postupně vypisuje. Dokud je okno vidět, hra stojí. Tlačítko OK (nebo Enter a mezerník) nejdřív dopíše rozepsaný text, pak přejde na další repliku. Později půjde přidat i tlačítka s výběrem možností.
 
@@ -406,6 +413,26 @@ Na stanici začnou útočit piráti, jde stavět obranné věže.
 - Postavit **skladiště** u obchodu.
 - Sestřelit **10 pirátů** (počítá se věž i Pumpík).
 - Postavit **obrannou věž**.
+
+## Mise 6: Nečekaná zákaznice
+
+První příběhová mise, přichází Zora Zender.
+
+**Startovní stav** (jen při startu od mise 6): jako v Misi 5, ale zábavní systém na levelu 2, obranná věž na levelu 1 a skladiště.
+
+**Cíle:**
+- Mít na účtu **6 000 kr**.
+- Zábavní systém na **levelu 3**.
+- Obranná věž na **levelu 2**.
+- Mise skončí až po scéně se Zorou (v cílech se neukazuje).
+
+**Scéna se Zorou** (`game/zora_scene.gd`):
+1. Asi 45 s po začátku mise přiletí Zora a přistane (jen jednou). Má nekonečnou trpělivost, před piráty neuteče a v dialogu poprosí o plnou nádrž.
+2. Pumpík ji normálně obslouží.
+3. Pumpík v dialogu řekne cenu, Zora odpoví, že musí letět, a Pumpík se naštve. Začne pomalu odlétat (45 px/s).
+4. Pumpík si toho všimne a vystřelí po ní.
+5. Raketa se jen otřese a velmi rychle zmizí, ale vypadne z ní truhla.
+6. Bzučák truhlu sebere a Pumpík v dialogu popíše **Medailon s císařským orlem**: orel s korunou, slunce a půlměsíc. Uloží se do skladiště a nejde prodat.
 
 ## Mise Z: Volná hra
 

@@ -106,6 +106,18 @@ const QUALITY_COMPLAINT := [
 	"Motor mi kašle. Pokuta!",
 ]
 
+## Pumpík si všiml lodi, která odlétá bez placení.
+const ANDROID_NO_PAY := [
+	"Hej! To není zadarmo!",
+	"Stát! Zaplatit!",
+]
+
+## Zora mizí po Pumpíkově výstřelu.
+const ZORA_ESCAPE := [
+	"Pa, knírku!",
+	"Díky za galaxín!",
+]
+
 ## Pumpíkovi došel galaxín v zásobníku.
 const ANDROID_EMPTY := [
 	"Došel galaxín!",
@@ -194,6 +206,21 @@ const SHIP_REDNECK := [
 	"Narvi to tam, kámo.",
 	"To paroží? Srazil jsem ho u Saturnu.",
 	"Tahle kára je po dědovi, drží jen na drátech.",
+]
+const SHIP_TOW := [
+	"Mám na háku Saturn, tak rychle.",
+	"Kdo nemá galaxín, volá mě.",
+	"Odtáhnu cokoli, jen ne tenhle dluh.",
+]
+const SHIP_HEARSE := [
+	"Můj pasažér počká.",
+	"Nikam nespěchám, šéfe.",
+	"Tiše, prosím. Vezeme pána.",
+]
+const SHIP_PATROL := [
+	"Císařská hlídka. Přednost, prosím.",
+	"Natankuj a neptej se.",
+	"Neviděl jsi tu někoho podezřelého?",
 ]
 const SHIP_ICECREAM := [
 	"Natankuj, než mi to roztaje.",

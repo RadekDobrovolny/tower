@@ -5,6 +5,7 @@ extends RefCounted
 ## (klíč do SPEAKERS), `mood` (klíč do `portraits`) a `text`. Přehrává je `DialogueBox`.
 
 const PUMPIK := "pumpik"
+const ZORA := "zora"
 
 const SPEAKERS := {
 	PUMPIK: {
@@ -14,6 +15,15 @@ const SPEAKERS := {
 			"happy": preload("res://assets/sprites/portraits/pumpik_happy.png"),
 			"worried": preload("res://assets/sprites/portraits/pumpik_worried.png"),
 			"angry": preload("res://assets/sprites/portraits/pumpik_angry.png"),
+		},
+	},
+	ZORA: {
+		"name": "Zora Zender",
+		"portraits": {
+			"neutral": preload("res://assets/sprites/portraits/zora_neutral.png"),
+			"happy": preload("res://assets/sprites/portraits/zora_happy.png"),
+			"worried": preload("res://assets/sprites/portraits/zora_worried.png"),
+			"angry": preload("res://assets/sprites/portraits/zora_angry.png"),
 		},
 	},
 }
@@ -48,6 +58,11 @@ const MISSION_INTROS := [
 		{"speaker": PUMPIK, "mood": "neutral", "text": "Na krajích paluby jsou místa pro obranné věže. Sám je nezvládnu, radši je postav."},
 		{"speaker": PUMPIK, "mood": "happy", "text": "A z pirátských truhel občas vypadne artefakt. Bez skladiště ho jen prodáme, tak si ho přistav k obchodu."},
 	],
+	[
+		{"speaker": PUMPIK, "mood": "happy", "text": "Piráty jsme zahnali, šéfiku! O stanici se začíná mluvit po celé galaxii."},
+		{"speaker": PUMPIK, "mood": "neutral", "text": "Chce to dotáhnout rozdělanou práci: autokino na level 3, lepší kanón a něco naspořit."},
+		{"speaker": PUMPIK, "mood": "worried", "text": "A dávej pozor, kdo k nám přilétá. Prý se tu objevují divné lodě."},
+	],
 ]
 
 ## Stojí druhý slot, takže se otevřela druhá hadice.
@@ -55,6 +70,32 @@ const DUAL_HOSE_UNLOCKED := [
 	{"speaker": PUMPIK, "mood": "happy", "text": "Šéfiku, druhý slot stojí! Vypadá skvěle."},
 	{"speaker": PUMPIK, "mood": "worried", "text": "Jenže mám jen jednu hadici, takže tankuju lodě po jedné a druhá čeká."},
 	{"speaker": PUMPIK, "mood": "neutral", "text": "Pořiď mi druhou hadici a zvládnu dvě lodě najednou. Najdeš ji, když na mě klikneš."},
+]
+
+## Mise 6: Zora přistála a chce natankovat.
+const ZORA_ARRIVES := [
+	{"speaker": ZORA, "mood": "happy", "text": "Ahoj, knírku! Pěkná stanička. Ty tu všechno tankuješ sám?"},
+	{"speaker": ZORA, "mood": "neutral", "text": "Plnou nádrž, prosím. A opatrně na lak, tahle kráska je z cirkusu."},
+	{"speaker": PUMPIK, "mood": "happy", "text": "Hned to bude, slečno!"},
+]
+
+## Mise 6: nádrž je plná a Zora nechce platit. `%s` je cena.
+const ZORA_BILL := [
+	{"speaker": PUMPIK, "mood": "happy", "text": "Máte plnou, slečno. Bude to %s kreditů."},
+	{"speaker": ZORA, "mood": "happy", "text": "Promiň, maličký, musím letět!"},
+	{"speaker": PUMPIK, "mood": "angry", "text": "Cože? Hej, počkat! Galaxín není zadarmo!"},
+]
+
+## Mise 6: Zora utekla bez placení.
+const ZORA_ESCAPED := [
+	{"speaker": PUMPIK, "mood": "angry", "text": "Šéfiku, ona ujela bez placení! Trefil jsem ji a raketa se jen otřásla."},
+	{"speaker": PUMPIK, "mood": "worried", "text": "Takovou rychlost jsem ještě neviděl. Něco jí ale vypadlo. Bzučák to donese."},
+]
+
+## Mise 6: Bzučák přinesl medailon.
+const ZORA_MEDALLION := [
+	{"speaker": PUMPIK, "mood": "neutral", "text": "Je to starý medailon. Orel s korunou, slunce a půlměsíc. Orla jsem viděl na císařských lodích."},
+	{"speaker": PUMPIK, "mood": "worried", "text": "Co s tím dělá cirkusačka? Dám ho do skladiště. Tohle bych neprodával, šéfiku."},
 ]
 
 const FREE_PLAY_INTRO := [

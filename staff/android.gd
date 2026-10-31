@@ -511,6 +511,13 @@ func _fight(delta: float) -> void:
 	LaserBolt.fire(station, to_global(NOZZLES[_facing]), _enemy, LaserBolt.GOLD, _enemy.hit.bind(SHOT_DAMAGE), BOLT_LENGTH)
 
 
+## Vystřelí po lodi, která odlétá bez placení.
+func warning_shot(target: Node2D, on_hit: Callable) -> void:
+	_facing = _direction_name(target.global_position - global_position)
+	_bubble.say_now(Lines.pick(Lines.ANDROID_NO_PAY))
+	LaserBolt.fire(station, to_global(NOZZLES[_facing]), target, LaserBolt.GOLD, on_hit, BOLT_LENGTH)
+
+
 ## Odolnost klesla na nulu: android je rozbitý a čeká na opravu (bez nanobotů ho opraví dron).
 func _break_down() -> void:
 	_enemy = null

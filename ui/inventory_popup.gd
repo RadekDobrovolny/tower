@@ -1,8 +1,8 @@
 class_name InventoryPopup
 extends ColorRect
 
-## Inventář skladiště: šest slotů s artefakty, které v něm jsou. Kliknutím se ukáže, co artefakt
-## dělá, a jde ho prodat. Zastaví hru. Běží i při pauze (process_mode Always).
+## Inventář skladiště: sloty s artefakty, které v něm jsou. Kliknutím se ukáže, co artefakt
+## dělá, a jde ho prodat (artefakt z příběhu ne). Zastaví hru. Běží i při pauze (process_mode Always).
 
 const SLOT_SIZE := Vector2(92, 92)
 
@@ -55,7 +55,7 @@ func _select_slot(index: int) -> void:
 	var has_artifact := index < stored.size()
 	_picture.visible = has_artifact
 	_effect.visible = has_artifact
-	_sell_button.visible = has_artifact
+	_sell_button.visible = has_artifact and not stored[index].has("story")
 	if has_artifact:
 		var artifact: Dictionary = stored[index]
 		_picture.texture = artifact.icon

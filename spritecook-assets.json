@@ -645,6 +645,98 @@
           "cell": "řádek 3, vpravo"
         }
       ]
+    },
+    {
+      "asset_id": "7cbeaf61-a37d-4483-b6cf-77eab13db472",
+      "label": "Tower – Zora Zender, předloha (obrázek od hráče)",
+      "files": []
+    },
+    {
+      "asset_id": "e2275227-bbd7-47ff-a106-d57037847933",
+      "label": "Tower – Zora Zender, obličeje pro dialogy, 4 emoce (reference předloha, 16 kreditů)",
+      "files": [
+        {
+          "file": "assets/sprites/portraits/zora_neutral.png",
+          "sha12": "601c978ac599",
+          "cell": "vlevo nahoře"
+        },
+        {
+          "file": "assets/sprites/portraits/zora_happy.png",
+          "sha12": "4bff8661fc2c",
+          "cell": "vpravo nahoře"
+        },
+        {
+          "file": "assets/sprites/portraits/zora_worried.png",
+          "sha12": "40c11170cdf2",
+          "cell": "vlevo dole"
+        },
+        {
+          "file": "assets/sprites/portraits/zora_angry.png",
+          "sha12": "732d4313b6c9",
+          "cell": "vpravo dole"
+        }
+      ]
+    },
+    {
+      "asset_id": "013132f5-f4c2-440e-ba81-42caa1d11a73",
+      "label": "Tower – arch N: lodě pro příběh, Zora, cirkus, císařství, piráti, pohřební a odtahovka (reference arch M, 16 kreditů)",
+      "files": [
+        {
+          "file": "assets/sprites/ships/rocket_zora.png",
+          "sha12": "5fe10e886f85",
+          "cell": "řádek 1, vlevo"
+        },
+        {
+          "file": "assets/sprites/ships/rocket_circus_wagon.png",
+          "sha12": "cf76db83f6ea",
+          "cell": "řádek 1, uprostřed"
+        },
+        {
+          "file": "assets/sprites/ships/rocket_ringmaster.png",
+          "sha12": "caf610dc958c",
+          "cell": "řádek 1, vpravo"
+        },
+        {
+          "file": "assets/sprites/ships/rocket_imperial_patrol.png",
+          "sha12": "3ccae742329e",
+          "cell": "řádek 2, vlevo"
+        },
+        {
+          "file": "assets/sprites/ships/rocket_imperial_courier.png",
+          "sha12": "1713103d6259",
+          "cell": "řádek 2, uprostřed"
+        },
+        {
+          "file": "assets/sprites/ships/rocket_imperial_cruiser.png",
+          "sha12": "eeca6430a2f6",
+          "cell": "řádek 2, vpravo"
+        },
+        {
+          "file": "assets/sprites/ships/rocket_pirate_flagship.png",
+          "sha12": "5a75c80430aa",
+          "cell": "řádek 3, vlevo"
+        },
+        {
+          "file": "assets/sprites/ships/rocket_hearse.png",
+          "sha12": "ea310318359e",
+          "cell": "řádek 3, uprostřed"
+        },
+        {
+          "file": "assets/sprites/ships/rocket_tow.png",
+          "sha12": "f3a89c3c5516",
+          "cell": "řádek 3, vpravo"
+        }
+      ]
+    },
+    {
+      "asset_id": "81e1f37b-ca3d-4a19-8d41-4fe625693ebd",
+      "label": "Tower – medailon s císařským orlem (bez reference, 8 kreditů)",
+      "files": [
+        {
+          "file": "assets/sprites/artifacts/medallion.png",
+          "sha12": "ff133bb14218"
+        }
+      ]
     }
   ]
 }

@@ -6,6 +6,8 @@ extends Node2D
 
 signal landed(ship: Ship)
 signal gave_up(ship: Ship)
+## Loď z příběhu dotankovala a místo placení čeká, co s ní udělá scéna.
+signal skipped_payment(ship: Ship)
 
 enum State { QUEUED, TO_SLOT, LANDED, DEPARTING }
 ## Běžná loď, velká nákladní loď (2× větší nádrž) a turistická loď (o 30 % větší nádrž,
@@ -46,6 +48,15 @@ const HULLS := [
 	# Veselý obchodník, dobře se s ním vychází.
 	{"texture": preload("res://assets/sprites/ships/rocket_icecream.png"), "lines": Lines.SHIP_ICECREAM, "from": 4,
 			"patience": 1.2, "tank": 0.8, "tip": 1.5},
+	# Odtahovka pomáhá ostatním, takže spěchá a nádrž má větší.
+	{"texture": preload("res://assets/sprites/ships/rocket_tow.png"), "lines": Lines.SHIP_TOW, "from": 3,
+			"patience": 0.8, "tank": 1.3, "scale": 0.42},
+	# Pohřební raketa má času dost, jen dýško nedá skoro nikdy.
+	{"texture": preload("res://assets/sprites/ships/rocket_hearse.png"), "lines": Lines.SHIP_HEARSE, "from": 4,
+			"patience": 2.0, "tip": 0.3, "scale": 0.42},
+	# Císařská hlídka je tu pánem: čekat nebude a dýško nedává.
+	{"texture": preload("res://assets/sprites/ships/rocket_imperial_patrol.png"), "lines": Lines.SHIP_PATROL, "from": 5,
+			"patience": 0.6, "tip": 0.0, "full_tank": true, "scale": 0.42},
 	# Velká dýška, ale čekat nebude. Vždy plnou nádrž.
 	{"texture": preload("res://assets/sprites/ships/rocket_limo.png"), "lines": Lines.SHIP_LIMO, "from": 5,
 			"patience": 0.45, "tank": 1.2, "tip": 4.0, "tip_size": 2.5, "full_tank": true,
@@ -78,6 +89,13 @@ const FLIGHT_SCALE := 1.35
 const OFFSCREEN_MARGIN := 100.0
 ## Jak dlouho (s) loď vydrží čekat ve frontě, než odletí.
 const PATIENCE := 20.0
+## Rychlost lodi z příběhu: pomalé odlétání bez placení a útěk.
+const SNEAK_SPEED := 45.0
+const DASH_SPEED := 1500.0
+const DASH_ACCELERATION := 3500.0
+## Jak dlouho (s) a jak silně se loď po zásahu třese.
+const SHAKE_TIME := 0.5
+const SHAKE_SIZE := 4.0
 ## Jak dlouho (s) nejvýš loď stojí u prázdné pumpy, když k ní žádná cisterna neletí.
 const EMPTY_PUMP_WAIT := 12.0
 const PATIENCE_FULL_COLOR := Color(1.0, 0.85, 0.3)
@@ -124,6 +142,8 @@ var order_amount := 0
 var _target: Vector2
 var _patience_left := PATIENCE
 var _complained := false
+## Loď postavy z příběhu (stejné klíče jako HULLS). Neuteče, nezaplatí a čeká, co s ní udělá scéna.
+var story_hull := {}
 ## Druh běžné rakety z HULLS. Nákladní a turistická loď ho nemají.
 var _hull := {}
 var _fuel_on_arrival: float
@@ -133,6 +153,9 @@ var _low_quality_fuel := 0.0
 ## Jestli loď v tomhle snímku dostala nějaký galaxín.
 var _got_fuel := false
 var _speed := 0.0
+var _speed_limit := MAX_SPEED
+var _acceleration := ACCELERATION
+var _shake_left := 0.0
 var _departure_delay := 0.0
 var _takeoff_point: Vector2
 var _takeoff_scale := 1.0
@@ -149,11 +172,13 @@ var _current_speed := 0.0
 
 func _ready() -> void:
 	var roll := randf()
-	if roll < FREIGHTER_CHANCE:
+	if not story_hull.is_empty():
+		_hull = story_hull
+	elif roll < FREIGHTER_CHANCE:
 		kind = Kind.FREIGHTER
 	elif roll < FREIGHTER_CHANCE + TOURIST_CHANCE and station.shop_products() >= 0:
 		kind = Kind.TOURIST
-	if kind == Kind.REGULAR:
+	else:
 		_hull = _random_hull()
 	tank_capacity = randf_range(40.0, 100.0) * _tank_factor()
 	fuel = tank_capacity * randf_range(0.05, 0.3)
@@ -178,6 +203,7 @@ func _process(delta: float) -> void:
 			_wait_at_slot(delta)
 		State.DEPARTING:
 			_fly_away(delta)
+	_shake(delta)
 	var waiting_for_fuel := state == State.LANDED and _patience_left < PATIENCE
 	_patience_bar.visible = state == State.QUEUED or waiting_for_fuel
 	_fuel_bar.visible = state == State.LANDED and not waiting_for_fuel
@@ -225,8 +251,11 @@ func is_refueled() -> bool:
 
 ## Zaplatí za natankovaný galaxín, občas přidá dýško a odletí. Vrátí výši dýška (0 = žádné).
 func leave_paid() -> int:
+	if is_story():
+		skipped_payment.emit(self)
+		return 0
 	var bought := fuel - _fuel_on_arrival
-	var price := order_amount if order_amount > 0 else roundi(bought * station.sell_price)
+	var price := fuel_price()
 	var fined := bought > 0.0 and randf() < _low_quality_fuel / bought * MAX_FINE_CHANCE
 	var tip := 0
 	if not fined and randf() < (TIP_CHANCE + station.tip_bonus()) * _hull.get("tip", 1.0):
@@ -248,6 +277,38 @@ func leave_paid() -> int:
 		_say(Lines.HAPPY_LEAVE)
 	_depart(PAID_DEPARTURE_DELAY)
 	return tip
+
+
+## Kolik loď dluží za natankovaný galaxín.
+func fuel_price() -> int:
+	return order_amount if order_amount > 0 else roundi((fuel - _fuel_on_arrival) * station.sell_price)
+
+
+func is_story() -> bool:
+	return not story_hull.is_empty()
+
+
+## Pomalu odlétá bez placení.
+func sneak_away() -> void:
+	_speed_limit = SNEAK_SPEED
+	_depart(PAID_DEPARTURE_DELAY)
+
+
+## Po zásahu se otřese a velmi rychle zmizí.
+func dash_away() -> void:
+	_speed_limit = DASH_SPEED
+	_acceleration = DASH_ACCELERATION
+	_shake_left = SHAKE_TIME
+	Sfx.play("metal_hit")
+	Sfx.play("ship_takeoff", 1.5)
+	_say(Lines.ZORA_ESCAPE)
+
+
+func _shake(delta: float) -> void:
+	if _shake_left <= 0.0:
+		return
+	_shake_left -= delta
+	_body.position = Vector2.ONE.rotated(randf() * TAU) * SHAKE_SIZE if _shake_left > 0.0 else Vector2.ZERO
 
 
 func _tank_factor() -> float:
@@ -299,7 +360,7 @@ func _wait_at_slot(delta: float) -> void:
 	if _got_fuel or not station.tank.is_empty():
 		_got_fuel = false
 		return
-	var no_tanker := station.supply.state == Supply.State.IDLE
+	var no_tanker := station.supply.state == Supply.State.IDLE and not is_story()
 	_patience_left -= maxf(_patience_drain(delta), delta * PATIENCE / EMPTY_PUMP_WAIT if no_tanker else 0.0)
 	_patience_bar.value = _patience_left
 	_patience_bar.modulate = PATIENCE_EMPTY_COLOR.lerp(PATIENCE_FULL_COLOR, _patience_left / PATIENCE)
@@ -309,6 +370,8 @@ func _wait_at_slot(delta: float) -> void:
 
 ## Zásobník je prázdný: loď odletí, a kdo už tankoval, zaplatí jen to, co dostal.
 func leave_without_fuel() -> void:
+	if is_story():
+		return
 	_pay_for_partial_fill()
 	Game.record_ship_lost()
 	Sfx.play("ship_angry")
@@ -339,6 +402,8 @@ func _give_up() -> void:
 ## Uteče ze stanice, protože útočí piráti: z fronty i od čerpadla, a to, co natankovala,
 ## nezaplatí (počítá se jako loď, která odletěla bez placení).
 func flee() -> void:
+	if is_story():
+		return
 	Game.record_ship_lost()
 	Sfx.play("ship_angry")
 	_bubble.say_now(Lines.pick(Lines.SHIP_SCARED), true)
@@ -374,6 +439,10 @@ func _land() -> void:
 	_target_fuel = tank_capacity
 	if order_amount > 0:
 		_target_fuel = minf(fuel + float(order_amount) / station.sell_price, tank_capacity)
+	if is_story():
+		state = State.LANDED
+		landed.emit(self)
+		return
 	if station.attendant_vocative() and randf() < GREETING_CHANCE:
 		_say(Lines.GREETINGS)
 	if kind == Kind.TOURIST:
@@ -437,7 +506,7 @@ func _fly_away(delta: float) -> void:
 		return
 	var target_angle := global_position.direction_to(exit_point).angle()
 	_body.rotation = lerp_angle(_body.rotation, target_angle, minf(TURN_SPEED * delta, 1.0))
-	_speed = minf(_speed + ACCELERATION * delta, MAX_SPEED)
+	_speed = minf(_speed + _acceleration * delta, _speed_limit)
 	_current_speed = _speed
 	global_position += Vector2.from_angle(_body.rotation) * _speed * delta
 	var lift := clampf(global_position.distance_to(_takeoff_point) / APPROACH_RADIUS, 0.0, 1.0)

@@ -31,6 +31,8 @@ extends Resource
 @export var warehouse_available := false
 ## Jestli jde vylepšovat stavební dron (rychlost letu a práce).
 @export var drone_upgrades := false
+## Jestli v misi proběhne scéna se Zorou. Mise skončí až po ní.
+@export var zora_scene := false
 ## Jestli na stanici útočí piráti a rozmezí v sekundách mezi útoky.
 @export var pirates := false
 @export var pirate_interval_min := 40.0
@@ -73,5 +75,7 @@ extends Resource
 @export var start_control_center := 0
 ## 0 = bez obranné věže.
 @export var start_tower_level := 0
+## Jestli stojí skladiště (hotový obchod je potřeba).
+@export var start_warehouse := false
 ## Všechno postavené a vylepšené na maximum. Levely výše se pak nepoužijí.
 @export var start_maxed := false

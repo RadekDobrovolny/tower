@@ -28,12 +28,19 @@ func _process(delta: float) -> void:
 	_cooldown = randf_range(min_interval, max_interval) / station.demand_factor()
 
 
-func _spawn_ship() -> void:
+## Pošle ke stanici loď postavy z příběhu.
+func spawn_story_ship(hull: Dictionary) -> Ship:
+	return _spawn_ship(hull)
+
+
+func _spawn_ship(story_hull := {}) -> Ship:
 	var ship: Ship = SHIP_SCENE.instantiate()
+	ship.story_hull = story_hull
 	ship.position = _random_point_outside_screen(SPAWN_MARGIN)
 	ship.exit_point = _random_point_outside_screen(EXIT_MARGIN)
 	station.admit(ship)
 	ships_parent.add_child(ship)
+	return ship
 
 
 ## Náhodný bod za horním, levým nebo pravým okrajem obrazovky. Spodní okraj
