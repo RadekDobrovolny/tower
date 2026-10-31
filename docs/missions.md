@@ -13,8 +13,9 @@ Ceny vycházejí z konstant v kódu. Když se změní cena nebo cíl mise, je po
 | 3 | Vlastní galaxín | naspořit 4 000 kr, zásobník na levelu 2, 2 čerpací sloty | **9 500** | 4 000 | 11 500 + galaxín |
 | 4 | Obchod a logistika | postavit obchod, 1 druh zboží, automatický dispečink | **18 000** | 0 | 14 000 + galaxín |
 | 5 | Piráti | postavit skladiště u obchodu, sestřelit 10 pirátů, postavit obrannou věž | **9 000** | 0 | 9 000 + galaxín |
-| 6 | Nečekaná zákaznice | naspořit 6 000 kr, zábavní systém na levelu 3, věž na levelu 2, scéna se Zorou | **12 000** | 6 000 | 18 000 + galaxín |
-| | **Celkem** | | **55 300** | | **61 300 + galaxín** |
+| 6 | Nečekaná zákaznice | naspořit 6 000 kr, zábavní systém na levelu 3, 2 obranné věže, scéna se Zorou | **14 000** | 6 000 | 20 000 + galaxín |
+| 7 | Plné ruce práce | věž na levelu 2, spolehlivé dodávky na levelu 2, Bzučák rychlost letu i práce na levelu 2 | **14 500** | 0 | 8 500 + galaxín |
+| | **Celkem** | | **71 800** | | **71 800 + galaxín** |
 
 - **Nutné výdaje:** součet všech povinných nákupů v misi.
 - **Držet na účtu:** kolik kreditů musí hráč mít zároveň, když mise končí. Tyto peníze nejde utratit a zůstávají do další mise.
@@ -129,7 +130,7 @@ Ceny vycházejí z konstant v kódu. Když se změní cena nebo cíl mise, je po
 
 ## Mise 6: Nečekaná zákaznice
 
-**Cíle:** mít na účtu 6 000 kr, zábavní systém na levelu 3 a obrannou věž na levelu 2. Mise navíc skončí až po scéně se Zorou, ta se v cílech neukazuje.
+**Cíle:** mít na účtu 6 000 kr, zábavní systém na levelu 3 a 2 hotové obranné věže. Mise navíc skončí až po scéně se Zorou, ta se v cílech neukazuje.
 
 **Přibude:**
 - Zora Zender a její scéna: asi 45 s po začátku mise přiletí, nechá si natankovat a odletí bez placení, Pumpík po ní vystřelí a vypadne z ní truhla
@@ -140,11 +141,26 @@ Ceny vycházejí z konstant v kódu. Když se změní cena nebo cíl mise, je po
 |---|---|
 | Zábavní systém na level 2 | 3 000 |
 | Zábavní systém na level 3 | 5 000 |
-| Věž na level 2 | 4 000 |
-| **Celkem** | **12 000** |
+| Druhá obranná věž (4 části) | 6 000 |
+| **Celkem** | **14 000** |
 
-- Hráč začíná s 0 kr, takže musí vydělat 12 000 + 6 000 = **18 000 kr** a k tomu na galaxín.
+- Hráč začíná s 0 kr, takže musí vydělat 14 000 + 6 000 = **20 000 kr** a k tomu na galaxín.
 - Za natankování Zory nikdo nezaplatí. Galaxín na její plnou nádrž je ztráta.
+
+## Mise 7: Plné ruce práce
+
+**Cíle:** jedna věž na levelu 2, spolehlivé dodávky na levelu 2 (maximum) a rychlost letu i práce Bzučáka na levelu 2.
+
+| Nákup | Cena |
+|---|---|
+| Vylepšení věže na level 2 | 4 000 |
+| Spolehlivé dodávky, level 1 | 2 000 |
+| Spolehlivé dodávky, level 2 | 4 000 |
+| Bzučák: rychlost letu na level 2 | 2 000 |
+| Bzučák: rychlost práce na level 2 | 2 500 |
+| **Celkem** | **14 500** |
+
+- Z Mise 6 si hráč přinese 6 000 kr, takže musí vydělat **8 500 kr** a k tomu na galaxín.
 
 ## Mise Z: Volná hra
 
@@ -161,7 +177,8 @@ Když hra začne přímo od mise, dostane hráč pevný startovní stav. Od Mise
 | 3 | 3 000 | 2 sloty, Druhá hadice, tankování 6, jízda 5, zábavní systém 3, zásobník 1 | 2 500 + galaxín |
 | 4 | 6 000 | jako Mise 3 a zásobník 3 | 9 000 + galaxín |
 | 5 | 8 000 | 3 sloty, Druhá hadice, tankování 6, jízda 5, zábavní systém 3, zásobník 3, obchod se 2 druhy zboží, řídící centrum s dispečinkem | 1 000 + galaxín |
-| 6 | 8 000 | jako Mise 5, ale zábavní systém 2, věž na levelu 1 a skladiště | 7 000 + galaxín |
+| 6 | 8 000 | jako Mise 5, ale zábavní systém 2, věž na levelu 1 a skladiště | 9 000 + galaxín |
+| 7 | 8 000 | jako Mise 6, ale zábavní systém 3 a 2 věže na levelu 1, bez medailonu | 6 500 + galaxín |
 
 ## Volitelné nákupy
 
@@ -175,18 +192,17 @@ Nejsou nutné ke splnění žádné mise.
 | Třetí čerpací slot | 4 | 8 000 |
 | Zábavní systém na levelu 4 a 5 | 2 | 20 000 (8 000 + 12 000) |
 | Výherní automaty | 2 | 6 000 |
-| Bzučák: rychlost letu | 2 | 6 000 (2 000 + 4 000) |
-| Bzučák: rychlost práce | 2 | 7 500 (2 500 + 5 000) |
+| Bzučák: rychlost letu na level 3 | 2 | 4 000 |
+| Bzučák: rychlost práce na level 3 | 2 | 5 000 |
 | Zásobník na levelu 4 | 3 | 5 000 |
 | Další zboží: Holonoviny, Suvenýry a Doplňky | 4 | 9 500 (2 500 + 3 000 + 4 000) |
-| Spolehlivé dodávky | 4 | 6 000 |
 | Rychlé doručení | 4 | 6 000 |
 | Větší cisterny | 4 | 7 500 |
 | Rychlé přečerpávání | 4 | 4 500 |
 | Čištění galaxínu | 4 | 10 500 |
 | Štíty Pumpíka | 5 | 9 000 |
 | Nanoboti Pumpíka | 5 | 11 000 |
-| Věž na levelu 3 | 5 | 7 000 |
-| Druhá obranná věž na levelu 3 | 5 | 17 000 (6 000 + 4 000 + 7 000) |
+| První věž na levelu 3 | 5 | 7 000 |
+| Druhá věž na levelu 2 a 3 | 5 | 11 000 (4 000 + 7 000) |
 
-**Všechno na maximum stojí 222 800 kr**, tedy 55 300 kr za nutné nákupy a 167 500 kr za volitelné.
+**Všechno na maximum stojí 222 800 kr**, tedy 71 800 kr za nutné nákupy a 151 000 kr za volitelné.

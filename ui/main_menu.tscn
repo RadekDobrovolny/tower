@@ -76,12 +76,12 @@ horizontal_alignment = 1
 [node name="MissionButtons" type="VBoxContainer" parent="UI/Center/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 8
 
-[node name="SoundCenterButton" type="Button" parent="UI/Center/VBox"]
+[node name="NotebookButton" type="Button" parent="UI/Center/VBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(340, 36)
 layout_mode = 2
 focus_mode = 0
 theme_type_variation = &"FlatButton"
-text = "Centrum zvuků"
+text = "Pumpíkův zápisník"

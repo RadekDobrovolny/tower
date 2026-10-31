@@ -730,6 +730,11 @@ func _place_control_center() -> ControlCenter:
 	return control_center
 
 
+## Postaví druhou věž hned (startovní stav mise).
+func place_second_tower(level: int) -> void:
+	(_place_building("tower", first_empty_plot(Plot.Kind.TOWER)) as DefenseTower).set_level(level)
+
+
 ## Postaví skladiště hned (startovní stav mise).
 func place_warehouse_ready() -> void:
 	_place_warehouse().finish_instantly()

@@ -15,6 +15,7 @@ enum State { QUEUED, TO_SLOT, LANDED, DEPARTING }
 enum Kind { REGULAR, FREIGHTER, TOURIST }
 
 ## Běžné rakety: vzhled a povaha. Každá loď dostane náhodně jednu z těch, které mise už odemkla.
+## - `name`, `about`: název a popis do Pumpíkova zápisníku
 ## - `from`: od které mise létá (výchozí 1)
 ## - `lines`: vlastní hlášky při přistání (bez nich mluví jako každá loď)
 ## - `patience`: násobek trpělivosti
@@ -23,46 +24,62 @@ enum Kind { REGULAR, FREIGHTER, TOURIST }
 ## - `full_tank`: nikdy neobjednává za částku, vždy plnou
 ## - `brightness`: zjasnění (černá závodní raketa by jinak v temném vesmíru zanikla), `scale`: měřítko
 const HULLS := [
-	{"texture": preload("res://assets/sprites/ships/rocket.png")},
-	{"texture": preload("res://assets/sprites/ships/rocket_cargo.png")},
-	{"texture": preload("res://assets/sprites/ships/rocket_racer.png"), "brightness": 1.7},
-	{"texture": preload("res://assets/sprites/ships/rocket_workhorse.png"), "brightness": 1.1},
+	{"name": "Obyčejná raketa", "about": "Každodenní chleba stanice. Přiletí, natankuje a zaplatí.",
+			"texture": preload("res://assets/sprites/ships/rocket.png")},
+	{"name": "Kufrová raketa", "about": "Malý tahoun s nákladem na zádech. Nikdy si nestěžuje.",
+			"texture": preload("res://assets/sprites/ships/rocket_cargo.png")},
+	{"name": "Závodní raketa", "about": "Černá a rychlá, v temnotě ji skoro nevidíš.",
+			"texture": preload("res://assets/sprites/ships/rocket_racer.png"), "brightness": 1.7},
+	{"name": "Stará dříčka", "about": "Pamatuje lepší časy a drží jen ze zvyku.",
+			"texture": preload("res://assets/sprites/ships/rocket_workhorse.png"), "brightness": 1.1},
 	# Spěchá a má malou nádrž, zato dává dýško častěji.
-	{"texture": preload("res://assets/sprites/ships/rocket_taxi.png"), "lines": Lines.SHIP_TAXI,
+	{"name": "Žluté taxi", "about": "Taxametr běží, tak spěchá. Pasažér je ale štědrý.",
+			"texture": preload("res://assets/sprites/ships/rocket_taxi.png"), "lines": Lines.SHIP_TAXI,
 			"patience": 0.7, "tank": 0.7, "tip": 1.5},
 	# Zamilovaným nevadí čekat a před partnerkou nešetří.
-	{"texture": preload("res://assets/sprites/ships/rocket_date.png"), "lines": Lines.SHIP_DATE, "from": 2,
+	{"name": "Romantická raketa", "about": "Dva zamilovaní a okno ve tvaru srdce. Čekání jim nevadí.",
+			"texture": preload("res://assets/sprites/ships/rocket_date.png"), "lines": Lines.SHIP_DATE, "from": 2,
 			"patience": 1.6, "tank": 0.8, "tip": 2.0},
 	# Velká nádrž, ale s dětmi na palubě dlouho nevydrží.
-	{"texture": preload("res://assets/sprites/ships/rocket_family.png"), "lines": Lines.SHIP_FAMILY, "from": 2,
+	{"name": "Rodinná raketa", "about": "Velká nádrž a děti na palubě, takže dlouho nevydrží.",
+			"texture": preload("res://assets/sprites/ships/rocket_family.png"), "lines": Lines.SHIP_FAMILY, "from": 2,
 			"patience": 0.75, "tank": 1.3, "scale": 0.42},
 	# Malá nádrž a velký spěch, dýško skoro nedává.
-	{"texture": preload("res://assets/sprites/ships/rocket_courier.png"), "lines": Lines.SHIP_COURIER, "from": 3,
+	{"name": "Kurýrní služba", "about": "Balík měl být doručený včera. Bere jen málo galaxínu.",
+			"texture": preload("res://assets/sprites/ships/rocket_courier.png"), "lines": Lines.SHIP_COURIER, "from": 3,
 			"patience": 0.55, "tank": 0.6, "tip": 0.5},
 	# Pracovní dodávka: velká nádrž, běžná trpělivost.
-	{"texture": preload("res://assets/sprites/ships/rocket_van.png"), "lines": Lines.SHIP_VAN, "from": 3,
+	{"name": "Dodávka", "about": "Pracovní loď na střední náklady s velkou nádrží.",
+			"texture": preload("res://assets/sprites/ships/rocket_van.png"), "lines": Lines.SHIP_VAN, "from": 3,
 			"tank": 1.5, "scale": 0.42},
 	# Nikam nespěchá, dýško ale nedá nikdy.
-	{"texture": preload("res://assets/sprites/ships/rocket_nomad.png"), "lines": Lines.SHIP_NOMAD, "from": 4,
+	{"name": "Nomádská raketa", "about": "Vozí celý domov s sebou a nikam nespěchá. Dýško nečekej.",
+			"texture": preload("res://assets/sprites/ships/rocket_nomad.png"), "lines": Lines.SHIP_NOMAD, "from": 4,
 			"patience": 2.0, "tank": 1.2, "tip": 0.0, "scale": 0.42},
 	# Veselý obchodník, dobře se s ním vychází.
-	{"texture": preload("res://assets/sprites/ships/rocket_icecream.png"), "lines": Lines.SHIP_ICECREAM, "from": 4,
+	{"name": "Zmrzlinářská raketa", "about": "Veselý obchodník, dobře se s ním vychází.",
+			"texture": preload("res://assets/sprites/ships/rocket_icecream.png"), "lines": Lines.SHIP_ICECREAM, "from": 4,
 			"patience": 1.2, "tank": 0.8, "tip": 1.5},
 	# Odtahovka pomáhá ostatním, takže spěchá a nádrž má větší.
-	{"texture": preload("res://assets/sprites/ships/rocket_tow.png"), "lines": Lines.SHIP_TOW, "from": 3,
+	{"name": "Odtahovka", "about": "Pomáhá lodím bez galaxínu, takže sama nemá čas.",
+			"texture": preload("res://assets/sprites/ships/rocket_tow.png"), "lines": Lines.SHIP_TOW, "from": 3,
 			"patience": 0.8, "tank": 1.3, "scale": 0.42},
 	# Pohřební raketa má času dost, jen dýško nedá skoro nikdy.
-	{"texture": preload("res://assets/sprites/ships/rocket_hearse.png"), "lines": Lines.SHIP_HEARSE, "from": 4,
+	{"name": "Pohřební raketa", "about": "Pasažér počká. Řidič je tichý a dýška moc nedává.",
+			"texture": preload("res://assets/sprites/ships/rocket_hearse.png"), "lines": Lines.SHIP_HEARSE, "from": 4,
 			"patience": 2.0, "tip": 0.3, "scale": 0.42},
 	# Císařská hlídka je tu pánem: čekat nebude a dýško nedává.
-	{"texture": preload("res://assets/sprites/ships/rocket_imperial_patrol.png"), "lines": Lines.SHIP_PATROL, "from": 5,
+	{"name": "Císařská hlídka", "about": "Tváří se, že jí patří celá galaxie. Na čekání není zvyklá.",
+			"texture": preload("res://assets/sprites/ships/rocket_imperial_patrol.png"), "lines": Lines.SHIP_PATROL, "from": 5,
 			"patience": 0.6, "tip": 0.0, "full_tank": true, "scale": 0.42},
 	# Velká dýška, ale čekat nebude. Vždy plnou nádrž.
-	{"texture": preload("res://assets/sprites/ships/rocket_limo.png"), "lines": Lines.SHIP_LIMO, "from": 5,
+	{"name": "Luxusní limuzína", "about": "Velká dýška, ale čekat nebude. Bere jen plnou nádrž.",
+			"texture": preload("res://assets/sprites/ships/rocket_limo.png"), "lines": Lines.SHIP_LIMO, "from": 5,
 			"patience": 0.45, "tank": 1.2, "tip": 4.0, "tip_size": 2.5, "full_tank": true,
 			"brightness": 1.3, "scale": 0.5},
 	# Má čas i velkou nádrž, šetří každý kredit.
-	{"texture": preload("res://assets/sprites/ships/rocket_redneck.png"), "lines": Lines.SHIP_REDNECK, "from": 5,
+	{"name": "Redneck", "about": "Sudy, rez a paroží. Šetří každý kredit.",
+			"texture": preload("res://assets/sprites/ships/rocket_redneck.png"), "lines": Lines.SHIP_REDNECK, "from": 5,
 			"patience": 1.3, "tank": 1.3, "tip": 0.3, "scale": 0.42},
 ]
 ## Tah motoru, když loď jen visí ve vzduchu (ve frontě). S rychlostí roste až na 1.

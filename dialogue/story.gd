@@ -60,8 +60,14 @@ const MISSION_INTROS := [
 	],
 	[
 		{"speaker": PUMPIK, "mood": "happy", "text": "Piráty jsme zahnali, šéfiku! O stanici se začíná mluvit po celé galaxii."},
-		{"speaker": PUMPIK, "mood": "neutral", "text": "Chce to dotáhnout rozdělanou práci: autokino na level 3, lepší kanón a něco naspořit."},
+		{"speaker": PUMPIK, "mood": "neutral", "text": "Chce to dotáhnout rozdělanou práci: autokino na level 3 a něco naspořit."},
 		{"speaker": PUMPIK, "mood": "worried", "text": "A dávej pozor, kdo k nám přilétá. Prý se tu objevují divné lodě."},
+		{"speaker": PUMPIK, "mood": "neutral", "text": "Ještě bychom potřebovali druhou věž na druhém kraji paluby, ať piráti nemají kde se schovat."},
+	],
+	[
+		{"speaker": PUMPIK, "mood": "worried", "text": "Šéfiku, Bzučák nestíhá. Na stavby, opravy a kořist je sám a pořád lítá sem a tam."},
+		{"speaker": PUMPIK, "mood": "neutral", "text": "Pořiď mu rychlejší let. A dodavatel pořád mešká, chtělo by to spolehlivější dodávky."},
+		{"speaker": PUMPIK, "mood": "neutral", "text": "A jednu věž bych vylepšil na level 2. Piráti nám nedají pokoj."},
 	],
 ]
 

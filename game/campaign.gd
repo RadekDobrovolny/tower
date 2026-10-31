@@ -140,6 +140,17 @@ func get_goals() -> Array[Dictionary]:
 		var tower_label := "Postavit obrannou věž" if mission.goal_tower_level == 1 \
 				else "Obranná věž na levelu %d" % mission.goal_tower_level
 		goals.append(_goal(tower_label, station.best_tower_level(), mission.goal_tower_level))
+	if mission.goal_towers > 0:
+		goals.append(_goal("Obranné věže: %d" % mission.goal_towers, station.get_towers().size(), mission.goal_towers))
+	if mission.goal_reliability > 0:
+		var level: int = station.control_center.levels.reliability if station.control_center else 0
+		goals.append(_goal("Spolehlivé dodávky na levelu %d" % mission.goal_reliability, level, mission.goal_reliability))
+	if mission.goal_drone_speed > 0:
+		goals.append(_goal("%s: rychlost letu na levelu %d" % [station.drone.display_name, mission.goal_drone_speed],
+				station.drone.speed_level, mission.goal_drone_speed))
+	if mission.goal_drone_work > 0:
+		goals.append(_goal("%s: rychlost práce na levelu %d" % [station.drone.display_name, mission.goal_drone_work],
+				station.drone.work_level, mission.goal_drone_work))
 	return goals
 
 
@@ -166,6 +177,8 @@ func _apply_start_state(start: Mission) -> void:
 			start.start_shop_products, start.start_control_center, start.start_tower_level)
 	if start.start_warehouse:
 		station.place_warehouse_ready()
+	if start.start_towers > 1:
+		station.place_second_tower(start.start_tower_level)
 	station.tank.set_level(start.start_tank_level)
 
 

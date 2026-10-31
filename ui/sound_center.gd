@@ -4,6 +4,7 @@ extends Node2D
 ## které sedí. Hrají stejně hlasitě jako ve hře. Seznam se bere z `Sfx.SOUNDS` a `Sfx.LOOPS`,
 ## takže se tu nový zvuk objeví sám.
 
+const NOTEBOOK_SCENE := "res://ui/notebook.tscn"
 ## Které skupiny zvuků jsou ve kterém sloupci.
 const COLUMNS := [["Boj"], ["Provoz"], ["Rozhraní", "Smyčky"]]
 const COLUMN_WIDTH := 280.0
@@ -29,7 +30,7 @@ func _ready() -> void:
 	%PreviousButton.pressed.connect(func() -> void: _play(maxi(_current, 0) - 1))
 	%ReplayButton.pressed.connect(func() -> void: _play(maxi(_current, 0)))
 	%NextButton.pressed.connect(func() -> void: _play(_current + 1))
-	%BackButton.pressed.connect(get_tree().change_scene_to_file.bind(Missions.MENU_SCENE))
+	%BackButton.pressed.connect(get_tree().change_scene_to_file.bind(NOTEBOOK_SCENE))
 	_refresh()
 
 

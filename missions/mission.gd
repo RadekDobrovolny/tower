@@ -56,6 +56,14 @@ extends Resource
 ## Jestli musí stát hotové skladiště.
 @export var goal_warehouse := false
 @export var goal_tower_level := 0
+## Kolik hotových obranných věží musí stanice mít.
+@export var goal_towers := 0
+## Na jaký level musí být vylepšené spolehlivé dodávky v řídícím centru.
+@export var goal_reliability := 0
+## Na jaký level musí být vylepšená rychlost letu Bzučáka.
+@export var goal_drone_speed := 0
+## Na jaký level musí být vylepšená rychlost práce Bzučáka.
+@export var goal_drone_work := 0
 ## Kolik pirátů musí stanice sestřelit (věží i androidem).
 @export var goal_pirates_shot := 0
 
@@ -75,6 +83,8 @@ extends Resource
 @export var start_control_center := 0
 ## 0 = bez obranné věže.
 @export var start_tower_level := 0
+## Kolik obranných věží na tom levelu stojí.
+@export var start_towers := 1
 ## Jestli stojí skladiště (hotový obchod je potřeba).
 @export var start_warehouse := false
 ## Všechno postavené a vylepšené na maximum. Levely výše se pak nepoužijí.

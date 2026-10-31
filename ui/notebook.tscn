@@ -1,0 +1,129 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/notebook.gd" id="1_notebook"]
+[ext_resource type="Script" path="res://space/starfield.gd" id="2_stars"]
+[ext_resource type="Script" path="res://ui/hud_panel.gd" id="3_panel"]
+[ext_resource type="Script" path="res://ui/sound_button.gd" id="4_sound"]
+
+[node name="Notebook" type="Node2D"]
+script = ExtResource("1_notebook")
+
+[node name="Starfield" type="Node2D" parent="."]
+script = ExtResource("2_stars")
+
+[node name="Camera" type="Camera2D" parent="."]
+position = Vector2(640, 360)
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="SoundButton" type="Button" parent="UI"]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -50.0
+offset_top = 14.0
+offset_right = -18.0
+offset_bottom = 44.0
+grow_horizontal = 0
+focus_mode = 0
+theme_override_constants/icon_max_width = 16
+icon_alignment = 1
+script = ExtResource("4_sound")
+
+[node name="Center" type="CenterContainer" parent="UI"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="UI/Center"]
+custom_minimum_size = Vector2(1100, 620)
+layout_mode = 2
+script = ExtResource("3_panel")
+
+[node name="Margin" type="MarginContainer" parent="UI/Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 18
+
+[node name="VBox" type="VBoxContainer" parent="UI/Center/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="UI/Center/Panel/Margin/VBox"]
+layout_mode = 2
+theme_type_variation = &"HudTitle"
+theme_override_font_sizes/font_size = 26
+text = "Pumpíkův zápisník"
+uppercase = true
+
+[node name="Row" type="HBoxContainer" parent="UI/Center/Panel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="Side" type="VBoxContainer" parent="UI/Center/Panel/Margin/VBox/Row"]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Chapters" type="VBoxContainer" parent="UI/Center/Panel/Margin/VBox/Row/Side"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SoundCenterButton" type="Button" parent="UI/Center/Panel/Margin/VBox/Row/Side"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+focus_mode = 0
+alignment = 0
+text = "Centrum zvuků"
+
+[node name="Spacer" type="Control" parent="UI/Center/Panel/Margin/VBox/Row/Side"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="BackButton" type="Button" parent="UI/Center/Panel/Margin/VBox/Row/Side"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+focus_mode = 0
+text = "Zpět do menu"
+
+[node name="List" type="ScrollContainer" parent="UI/Center/Panel/Margin/VBox/Row"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="EntryList" type="VBoxContainer" parent="UI/Center/Panel/Margin/VBox/Row/List"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="Detail" type="VBoxContainer" parent="UI/Center/Panel/Margin/VBox/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="EntryImage" type="TextureRect" parent="UI/Center/Panel/Margin/VBox/Row/Detail"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 190)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="EntryTitle" type="Label" parent="UI/Center/Panel/Margin/VBox/Row/Detail"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+autowrap_mode = 3
+
+[node name="EntryText" type="RichTextLabel" parent="UI/Center/Panel/Margin/VBox/Row/Detail"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 15
+bbcode_enabled = true

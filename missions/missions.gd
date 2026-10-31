@@ -18,4 +18,5 @@ const ALL := [
 	preload("res://missions/mission_4.tres"),
 	preload("res://missions/mission_5.tres"),
 	preload("res://missions/mission_6.tres"),
+	preload("res://missions/mission_7.tres"),
 ]

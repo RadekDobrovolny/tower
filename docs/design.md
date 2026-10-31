@@ -17,7 +17,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 | Struktura | Hra je **kontinuální**: stanice běží pořád dál a **mise** (úkoly) jdou jedna za druhou. Kredity, vylepšení, sloty i zásobník se přenášejí do další mise. Každá mise začíná rozhovorem, ve kterém Pumpík řekne zadání, po splnění se hra pozastaví, ukáže shrnutí a další mise začne svým rozhovorem. Po poslední misi pokračuje volná hra bez cílů. Mise 1 je krátký úvod na pár minut, další mise by měly trvat **aspoň 20 minut**. |
 | Ovládání | Hráč kliká na objekty (Pumpík, budovy, zásobník, stavební dron Bzučák, prázdné parcely). Vpravo se otevře info panel s popisem, stavem a tlačítky na vylepšení nebo stavbu. Zobrazují se jen věci, které jde právě koupit. Na co hráč nemá dost kreditů, je vidět, ale šedé. Klik do prázdna panel zavře. |
 | Stavění | Nepostavené budovy nejsou vidět, jen velmi jemný obrys prázdné parcely. Po kliknutí na parcelu si hráč vybere, co postavit. Stavba se **platí po částech**: hráč zaplatí část, stavební dron **Bzučák** ji postaví a pak hráč zaplatí další. Budova začne fungovat až po poslední části. Vylepšení budov se platí najednou a Bzučák je pak chvíli staví. |
-| Menu | Hra začíná menu, kde jde vybrat, od které mise začít (hodí se hlavně pro testování); pak se použije startovní stav té mise. Poslední volba je **Mise Z**: volná hra bez cílů, kde je všechno postavené a vylepšené na maximum. Pod misemi je **Centrum zvuků**. Během hry jde hru pozastavit tlačítkem „Menu“ nebo klávesou Esc (pokračovat, začít znovu, hlavní menu). |
+| Menu | Hra začíná menu, kde jde vybrat, od které mise začít (hodí se hlavně pro testování); pak se použije startovní stav té mise. Poslední volba je **Mise Z**: volná hra bez cílů, kde je všechno postavené a vylepšené na maximum. Pod misemi je **Pumpíkův zápisník**: encyklopedie psaná Pumpíkovým hlasem s kapitolami Lodě, Postavy, Budovy a Svět a s Centrem zvuků. Je přístupná hned od začátku, proto nesmí prozradit tajemství příběhu. Během hry jde hru pozastavit tlačítkem „Menu“ nebo klávesou Esc (pokračovat, začít znovu, hlavní menu). |
 
 ## Herní smyčka
 
@@ -313,7 +313,7 @@ Hudba zatím není, přijde později. Zvukové efekty jsou syntéza kódem (`too
 - **Smyčky:** tankování (jen glo glo), svařování Bzučáka (jen elektrická zapraskání), přečerpávání z cisterny (výrazné hluboké glo glo a tiché tepání čerpadla). Při pauze ztichnou. Stanice žádný trvalý podkres nemá.
 - **Stejné zvuky se nekupí** (nejmenší rozestup mezi přehráními) a mají mírně náhodnou výšku tónu.
 - **Ovládání:** ikonka reproduktoru v HUD a v menu ztlumí zvuky, posuvník v pauze mění hlasitost. Hra si nastavení pamatuje.
-- **Centrum zvuků** v hlavním menu ukáže všechny zvuky po skupinách. Každý jde pustit kliknutím nebo je projít tlačítky Předchozí a Další, hrají stejně hlasitě jako ve hře, ale bez náhodné výšky. Smyčku zastaví druhé kliknutí.
+- **Centrum zvuků** v Pumpíkově zápisníku ukáže všechny zvuky po skupinách. Každý jde pustit kliknutím nebo je projít tlačítky Předchozí a Další, hrají stejně hlasitě jako ve hře, ale bez náhodné výšky. Smyčku zastaví druhé kliknutí.
 
 ## Mise
 
@@ -423,7 +423,7 @@ První příběhová mise, přichází Zora Zender.
 **Cíle:**
 - Mít na účtu **6 000 kr**.
 - Zábavní systém na **levelu 3**.
-- Obranná věž na **levelu 2**.
+- **2 hotové obranné věže**.
 - Mise skončí až po scéně se Zorou (v cílech se neukazuje).
 
 **Scéna se Zorou** (`game/zora_scene.gd`):
@@ -433,6 +433,17 @@ První příběhová mise, přichází Zora Zender.
 4. Pumpík si toho všimne a vystřelí po ní.
 5. Raketa se jen otřese a velmi rychle zmizí, ale vypadne z ní truhla.
 6. Bzučák truhlu sebere a Pumpík v dialogu popíše **Medailon s císařským orlem**: orel s korunou, slunce a půlměsíc. Uloží se do skladiště a nejde prodat.
+
+## Mise 7: Plné ruce práce
+
+Bzučák nestíhá a dodavatel mešká. Standardní mise, příběhová linka se teprve doplní.
+
+**Startovní stav** (jen při startu od mise 7): jako v Misi 6, ale zábavní systém na levelu 3 a 2 věže na levelu 1. Medailon při tomhle startu chybí.
+
+**Cíle:**
+- Jedna obranná věž na **levelu 2**.
+- Spolehlivé dodávky na **levelu 2** (maximum).
+- Rychlost letu i práce Bzučáka na **levelu 2**.
 
 ## Mise Z: Volná hra
 
