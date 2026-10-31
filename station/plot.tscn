@@ -1,6 +1,10 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://station/plot.gd" id="1_plot"]
+[ext_resource type="Shader" path="res://fx/plot_highlight.gdshader" id="2_highlight"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_highlight"]
+shader = ExtResource("2_highlight")
 
 [node name="Plot" type="Node2D"]
 script = ExtResource("1_plot")
@@ -10,3 +14,8 @@ points = PackedVector2Array(-85, -60, 85, -60, 85, 60, -85, 60)
 closed = true
 width = 2.0
 default_color = Color(0.75, 0.85, 1, 0.15)
+
+[node name="Highlight" type="ColorRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_highlight")
+mouse_filter = 2

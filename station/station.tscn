@@ -114,9 +114,3 @@ position = Vector2(-75, 30)
 [node name="Drone" parent="." instance=ExtResource("4_drone")]
 position = Vector2(40, 138)
 
-[node name="SelectionMarker" type="Line2D" parent="."]
-visible = false
-z_index = 4
-closed = true
-width = 2.0
-default_color = Color(1, 0.9, 0.5, 0.9)

@@ -18,11 +18,14 @@ var building: Building
 var station: Station
 
 @onready var _outline: Line2D = $Outline
+@onready var _highlight: ColorRect = $Highlight
 
 
 func _ready() -> void:
 	var half := size / 2.0
 	_outline.points = PackedVector2Array([-half, Vector2(half.x, -half.y), half, Vector2(-half.x, half.y)])
+	_highlight.position = -half
+	_highlight.size = size
 
 
 func is_empty() -> bool:
@@ -41,6 +44,11 @@ func place(new_building: Building) -> void:
 
 func set_outline_visible(value: bool) -> void:
 	_outline.visible = value
+
+
+## Rozsvítí parcelu jako vybranou.
+func set_highlighted(value: bool) -> void:
+	_highlight.visible = value
 
 
 func info_title() -> String:

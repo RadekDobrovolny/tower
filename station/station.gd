@@ -54,6 +54,7 @@ const ARTIFACTS := [
 const CONTROL_CENTER_TANK_LEVEL := 3
 ## Na které parcely (indexy) se ve startovním stavu mise staví čerpací sloty, zábavní systém,
 ## obchod a obranná věž.
+const SELECTION_GLOW := preload("res://fx/selection_glow.tres")
 const START_SLOT_PLOTS := [0, 1, 2]
 const START_SHOP_PLOT := 3
 const START_ENTERTAINMENT_PLOT := 4
@@ -138,6 +139,8 @@ var _queue: Array[Ship] = []
 var _queue_spots := {}
 ## Zakotvené lodě, které čekají, až se jich ujme android.
 var _awaiting_service: Array[Ship] = []
+## Sprity, které teď svítí jako vybraný objekt.
+var _glowing: Array[Sprite2D] = []
 
 @onready var tank: GalaxinTank = $Tank
 @onready var supply: Supply = $Supply
@@ -147,7 +150,6 @@ var _awaiting_service: Array[Ship] = []
 @onready var _queue_points: Node2D = $QueuePoints
 @onready var _staff: Node2D = $Staff
 @onready var _control_center_spot: Marker2D = $ControlCenterSpot
-@onready var _selection_marker: Line2D = $SelectionMarker
 
 
 func _ready() -> void:
@@ -165,7 +167,8 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	_update_plots()
-	_update_selection_marker()
+	if not is_instance_valid(selected):
+		selected = null
 	_defend_with_androids()
 
 
@@ -178,6 +181,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func select(object: Node) -> void:
+	_move_selection_glow(object)
 	selected = object
 	selection_changed.emit(object)
 
@@ -706,28 +710,31 @@ func _update_plots() -> void:
 		select(null)
 
 
-func _update_selection_marker() -> void:
-	if not is_instance_valid(selected):
-		selected = null
-	_selection_marker.visible = selected != null
-	if selected == null:
-		return
-	var rect: Rect2
-	if selected is Android:
-		rect = Rect2(selected.position - Vector2(30, 34), Vector2(60, 68))
-	elif selected == drone:
-		rect = Rect2(selected.position - Vector2(24, 24), Vector2(48, 48))
-	elif selected == tank:
-		rect = Rect2(tank.position - Vector2(54, 54), Vector2(108, 108))
-	elif selected is Plot:
-		rect = selected.rect()
-	elif selected == control_center:
-		rect = control_center.rect()
-	elif selected is Building:
-		rect = selected.plot.rect()
-	_selection_marker.points = PackedVector2Array([
-		rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y),
-	])
+## Přesune zvýraznění výběru: spritům vybraného objektu dá shader s obrysem. Sprity s vlastním
+## materiálem (přičítané záře) se přeskočí. Prázdná parcela sprite nemá, svítí sama.
+func _move_selection_glow(object: Node) -> void:
+	for sprite in _glowing:
+		if is_instance_valid(sprite):
+			sprite.material = null
+	_glowing.clear()
+	if is_instance_valid(selected) and selected is Plot:
+		selected.set_highlighted(false)
+	if object is Plot:
+		object.set_highlighted(true)
+	elif object:
+		for sprite: Sprite2D in object.find_children("*", "Sprite2D", true, false):
+			if sprite.material == null:
+				sprite.material = _selection_glow_for(sprite)
+				_glowing.append(sprite)
+
+
+## Pás animace potřebuje vlastní kopii materiálu, která zná počet snímků.
+func _selection_glow_for(sprite: Sprite2D) -> ShaderMaterial:
+	if sprite.hframes == 1:
+		return SELECTION_GLOW
+	var glow: ShaderMaterial = SELECTION_GLOW.duplicate()
+	glow.set_shader_parameter("hframes", float(sprite.hframes))
+	return glow
 
 
 func _free_slot() -> FuelSlot:
