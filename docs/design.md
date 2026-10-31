@@ -144,7 +144,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 
 ### Personál
 - **Androidi** (tankovači) obsluhují lodě.
-- Android tankuje jednu loď. S vylepšením **Druhá hadice** (3 000 kr) zvládne **2 lodě najednou**: postaví se mezi dva sloty a ke každé lodi natáhne hadici, každou tankuje plnou rychlostí. Vylepšení se otevře v Misi 2, jakmile stojí druhý čerpací slot, a Pumpík o něm řekne v rozhovoru. Při startu od Mise 3 ho už má.
+- Android tankuje jednu loď. S vylepšením **Druhá hadice** (3 000 kr) zvládne **2 lodě najednou**: postaví se mezi dva sloty a ke každé lodi natáhne hadici, každou tankuje plnou rychlostí. Vylepšení se otevře, jakmile stojí druhý čerpací slot (jde postavit od Mise 2, cílem je v Misi 3), a Pumpík o něm řekne v rozhovoru. Při startu od Mise 3 ho už má.
 - Pumpíkovi se zvlášť vylepšuje **tankování** a **jízda**. Do jakého levelu jde vylepšovat, určuje mise. Barva těla odpovídá levelu tankování.
 
 | Level | Tankování | Cena | Barva |
@@ -169,13 +169,13 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 ### Zábavní systém
 - Autokino pro rakety na stanici. Na plátně běží film a ve spodní části titulky s reklamami a pořady (texty jsou v `dialogue/lines.gd`).
 - Lodím ve frontě pomaleji ubývá trpělivost a pobavení zákazníci častěji nechávají dýško. Lodě ve frontě občas komentují, co běží na plátně.
-- Části stavby (celkem 2 000 kr a 15 s): základní deska (300 kr, 3 s), rampa na obrazovku (400 kr, 4 s), instalace obrazovky (900 kr, 5 s), napojení elektřiny (400 kr, 3 s). Bonusy platí až po zapojení elektřiny.
+- Části stavby (celkem 4 000 kr a 15 s): základní deska (600 kr, 3 s), konstrukce plátna (800 kr, 4 s), instalace plátna (1 800 kr, 5 s), napojení elektřiny (800 kr, 3 s). Bonusy platí až po zapojení elektřiny.
 - Level 4 přidá vedle plátna **holoprojekci** (tančící hologram), level 5 **neonovou show** (světla nad plátnem).
 - **Výherní automaty** (6 000 kr, instalace 10 s) jdou dokoupit zvlášť: každé 4 s si každá loď ve frontě s šancí 25 % zahraje a stanice vydělá 15–60 kr („+… kr automaty“).
 
 | Level | Cena | Doba vylepšení | Úbytek trpělivosti | Šance na dýško |
 |---|---|---|---|---|
-| 1 | 2 000 kr (stavba po částech) | 15 s (stavba) | −25 % | 12 % |
+| 1 | 4 000 kr (stavba po částech) | 15 s (stavba) | −25 % | 12 % |
 | 2 | 3 000 kr | 8 s | −40 % | 14 % |
 | 3 | 5 000 kr | 12 s | −55 % | 16 % |
 | 4 (holoprojekce) | 8 000 kr | 14 s | −65 % | 18 % |
@@ -214,7 +214,7 @@ V misích 1 a 2 je galaxínu neomezeně a stojí pevně 6 kr/j. S misí 3 se zap
 | Zboží | Cena | Instalace | Šance na nákup | Útrata | Trpělivost ve frontě |
 |---|---|---|---|---|---|
 | Nápoje (základ) | – | – | 40 % | 10–25 kr | −5 % |
-| Pouliční jídlo | 2 000 kr | 6 s | 45 % | 20–45 kr | −6 % |
+| Párky v rohlíku | 2 000 kr | 6 s | 45 % | 20–45 kr | −6 % |
 | Holonoviny | 2 500 kr | 6 s | 50 % | 10–25 kr | −8 % |
 | Suvenýry | 3 000 kr | 8 s | 30 % | 40–90 kr | −4 % |
 | Doplňky | 4 000 kr | 8 s | 25 % | 60–140 kr | −4 % |
@@ -319,7 +319,7 @@ Mise jsou zdroje `missions/mission_*.tres` (dají se upravovat v inspektoru Godo
 **Startovní stav:** 1 čerpací slot (horní prostřední parcela), Pumpík s tankováním i jízdou na levelu 1, 0 kr.
 
 **Cíle** (musí platit oba zároveň):
-- Mít na účtu **2 000 kr**. Počítá se zůstatek, peníze utracené za vylepšení se tedy do cíle nezapočítávají.
+- Mít na účtu **1 000 kr**. Počítá se zůstatek, peníze utracené za vylepšení se tedy do cíle nezapočítávají.
 - Vylepšit Pumpíkovi **tankování na level 3**.
 
 **Piráti:** zatím nejsou, přijdou až s krokem 5 plánu.
@@ -356,7 +356,9 @@ Mise jsou zdroje `missions/mission_*.tres` (dají se upravovat v inspektoru Godo
 
 **Startovní stav** (jen při startu od mise 2): 1 čerpací slot, Pumpík s tankováním i jízdou na levelu 3, 2 000 kr. Při plynulé hře pokračuje hráč s tím, co měl na konci mise 1.
 
-**Cíl:** postavit **zábavní systém** a vylepšit ho na **level 3**.
+**Cíle** (musí platit oba zároveň):
+- Mít na účtu **2 000 kr**.
+- Postavit **zábavní systém**. Vylepšovat ho není nutné.
 
 **Co jde dělat:** postavit zábavní systém a druhý **čerpací slot za 8 000 kr** (na libovolné prázdné parcele), vylepšovat Pumpíka až do levelu 6. Slot není nutný ke splnění cíle. Jakmile stojí, Pumpík se ozve v rozhovoru a otevře se mu vylepšení **Druhá hadice** (3 000 kr), se kterým tankuje dvě lodě najednou.
 
@@ -371,9 +373,10 @@ Představuje ekonomiku galaxínu. Cíle jsou zatím provizorní, uprav je podle 
 
 **Startovní stav** (jen při startu od mise 3): 2 čerpací sloty (třetí nejde postavit), Pumpík s tankováním na levelu 6 a jízdou na levelu 5, zábavní systém na levelu 3, 3 000 kr, zásobník na levelu 1. Vždy: 300 j galaxínu zdarma, prodejní cena 6 kr/j, vybraný dodavatel Galaxis.
 
-**Cíle** (musí platit oba zároveň):
-- Mít na účtu **6 000 kr**.
-- Vylepšit zásobník na **level 3**.
+**Cíle** (musí platit všechny zároveň):
+- Mít na účtu **4 000 kr**.
+- Vylepšit zásobník na **level 2**.
+- Mít **2 hotové čerpací sloty**.
 
 **Co jde dělat:** rozšiřovat zásobník a všechno, co zbylo z mise 2 (Pumpík, zábavní systém, druhý slot).
 
@@ -389,7 +392,8 @@ Klidná mise bez pirátů, představuje obchod a řídící centrum.
 **Startovní stav** (jen při startu od mise 4): 2 čerpací sloty (třetí jde postavit), Pumpík s tankováním na levelu 6 a jízdou na levelu 5, zábavní systém na levelu 3, zásobník na levelu 3, 6 000 kr.
 
 **Cíle:**
-- Obchod a v něm **2 nové druhy zboží**.
+- Postavit **obchod**.
+- Prodávat v něm **1 druh zboží** navíc.
 - Řídící centrum s **automatickým dispečinkem**.
 
 ## Mise 5: Piráti
@@ -399,8 +403,9 @@ Na stanici začnou útočit piráti, jde stavět obranné věže.
 **Startovní stav** (jen při startu od mise 5): 3 čerpací sloty, Pumpík s tankováním na levelu 6 a jízdou na levelu 5, zábavní systém na levelu 3, zásobník na levelu 3, obchod se 2 druhy zboží navíc, řídící centrum s dispečinkem, 8 000 kr.
 
 **Cíle:**
-- Obranná věž na **levelu 2**.
-- Sestřelit **8 pirátů** (počítá se věž i Pumpík).
+- Postavit **skladiště** u obchodu.
+- Sestřelit **10 pirátů** (počítá se věž i Pumpík).
+- Postavit **obrannou věž**.
 
 ## Mise Z: Volná hra
 

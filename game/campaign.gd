@@ -114,22 +114,30 @@ func get_goals() -> Array[Dictionary]:
 		goals.append(_goal("%s: tankování na levelu %d" % [_android_name(), mission.goal_fuel_level],
 				_best_fuel_level(), mission.goal_fuel_level))
 	if mission.goal_entertainment_level > 0:
-		goals.append(_goal("Zábavní systém na levelu %d" % mission.goal_entertainment_level,
+		var built_only := mission.goal_entertainment_level == 1
+		goals.append(_goal("Postavit zábavní systém" if built_only else "Zábavní systém na levelu %d" % mission.goal_entertainment_level,
 				station.entertainment_level(), mission.goal_entertainment_level))
 	if mission.goal_tank_level > 0:
 		goals.append(_goal("Zásobník na levelu %d" % mission.goal_tank_level,
 				station.tank.level, mission.goal_tank_level))
+	if mission.goal_slots > 0:
+		goals.append(_goal("Čerpací sloty: %d" % mission.goal_slots, station.get_slots().size(), mission.goal_slots))
+	if mission.goal_shop:
+		goals.append(_goal("Postavit obchod", 1 if station.shop_products() >= 0 else 0, 1))
 	if mission.goal_shop_products > 0:
-		goals.append(_goal("Obchod: %d nové druhy zboží" % mission.goal_shop_products,
+		goals.append(_goal("Přidat do obchodu %s" % Shop.kinds_text(mission.goal_shop_products),
 				maxi(station.shop_products(), 0), mission.goal_shop_products))
 	if mission.goal_dispatch:
 		goals.append(_goal("Automatický dispečink", 1 if station.has_dispatch() else 0, 1))
-	if mission.goal_tower_level > 0:
-		goals.append(_goal("Obranná věž na levelu %d" % mission.goal_tower_level,
-				station.best_tower_level(), mission.goal_tower_level))
+	if mission.goal_warehouse:
+		goals.append(_goal("Postavit skladiště u obchodu", 1 if station.has_warehouse() else 0, 1))
 	if mission.goal_pirates_shot > 0:
 		goals.append(_goal("Sestřelit %d pirátů" % mission.goal_pirates_shot,
 				Game.pirates_shot, mission.goal_pirates_shot))
+	if mission.goal_tower_level > 0:
+		var tower_label := "Postavit obrannou věž" if mission.goal_tower_level == 1 \
+				else "Obranná věž na levelu %d" % mission.goal_tower_level
+		goals.append(_goal(tower_label, station.best_tower_level(), mission.goal_tower_level))
 	return goals
 
 

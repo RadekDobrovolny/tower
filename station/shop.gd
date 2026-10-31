@@ -19,7 +19,7 @@ const BASIC := {"name": "Nápoje", "chance": 0.4, "price_min": 10, "price_max": 
 ## a stánek, který se objeví vedle obchodu.
 const PRODUCTS := [
 	{
-		"name": "Pouliční jídlo", "cost": 2000, "time": 6.0,
+		"name": "Párky v rohlíku", "cost": 2000, "time": 6.0,
 		"chance": 0.45, "price_min": 20, "price_max": 45, "patience": 0.06,
 		"prop": preload("res://assets/sprites/shop/food_cart.png"),
 	},
@@ -185,7 +185,7 @@ func _assortment() -> Array:
 	return items
 
 
-func _kinds_text(count: int) -> String:
+static func kinds_text(count: int) -> String:
 	if count == 1:
 		return "1 druh zboží"
 	return "%d %s zboží" % [count, "druhy" if count <= 4 else "druhů"]
@@ -217,4 +217,4 @@ func _update_construction_looks() -> void:
 	for i in _props.size():
 		_props[i].visible = products.has(i)
 	_label.visible = built_phases >= 1
-	_label.text = "Obchod · %s" % _kinds_text(_assortment().size()) if is_operational() else "Obchod"
+	_label.text = "Obchod · %s" % kinds_text(_assortment().size()) if is_operational() else "Obchod"

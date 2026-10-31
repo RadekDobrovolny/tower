@@ -9,5 +9,5 @@ max_android_level = 3
 max_slots = 1
 ship_interval_min = 3.0
 ship_interval_max = 7.0
-goal_credits = 2000
+goal_credits = 1000
 goal_fuel_level = 3

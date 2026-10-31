@@ -2,7 +2,7 @@
 
 2D hra v Godotu 4.7 (GDScript) s pohledem shora: hráč provozuje vesmírnou čerpací stanici, jeho personál tankuje přilétající lodě a stanici brání proti pirátům. Cílová platforma je web (HTML5 export).
 
-Návrh hry, otevřené otázky a plán vývoje jsou v [docs/design.md](docs/design.md). Když se změní rozhodnutí o hře, aktualizuj i tento dokument.
+Návrh hry, otevřené otázky a plán vývoje jsou v [docs/design.md](docs/design.md). Když se změní rozhodnutí o hře, aktualizuj i tento dokument. Soupis misí s nutnými výdaji je v [docs/missions.md](docs/missions.md), po změně cílů mise nebo cen ho aktualizuj.
 
 ## Technické volby
 - Renderer **Compatibility** (`gl_compatibility`), protože ho vyžaduje web export.

@@ -43,10 +43,16 @@ extends Resource
 @export var goal_fuel_level := 0
 @export var goal_entertainment_level := 0
 @export var goal_tank_level := 0
+## Kolik hotových čerpacích slotů musí stanice mít.
+@export var goal_slots := 0
+## Jestli musí stát hotový obchod.
+@export var goal_shop := false
 ## Kolik druhů zboží navíc musí obchod prodávat.
 @export var goal_shop_products := 0
 ## Jestli musí řídící centrum objednávat samo (automatický dispečink).
 @export var goal_dispatch := false
+## Jestli musí stát hotové skladiště.
+@export var goal_warehouse := false
 @export var goal_tower_level := 0
 ## Kolik pirátů musí stanice sestřelit (věží i androidem).
 @export var goal_pirates_shot := 0

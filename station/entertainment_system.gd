@@ -6,12 +6,12 @@ extends Building
 ## Začne fungovat, až je postavený celý (po zapojení elektřiny). Level 4 přidá holoprojekci,
 ## level 5 neonovou show. Zvlášť jdou dokoupit výherní automaty, na kterých hrají lodě ve frontě.
 
-## Části stavby: název, cena (dohromady 2 000 kr) a doba stavby (s).
+## Části stavby: název, cena (dohromady 4 000 kr) a doba stavby (s).
 const PHASES := [
-	{"name": "Základní deska", "cost": 300, "duration": 3.0},
-	{"name": "Konstrukce plátna", "cost": 400, "duration": 4.0},
-	{"name": "Instalace plátna", "cost": 900, "duration": 5.0},
-	{"name": "Napojení elektřiny", "cost": 400, "duration": 3.0},
+	{"name": "Základní deska", "cost": 600, "duration": 3.0},
+	{"name": "Konstrukce plátna", "cost": 800, "duration": 4.0},
+	{"name": "Instalace plátna", "cost": 1800, "duration": 5.0},
+	{"name": "Napojení elektřiny", "cost": 800, "duration": 3.0},
 ]
 ## Pro každý level: cena vylepšení na tenhle level, jak rychle lodím ve frontě ubývá
 ## trpělivost (1 = bez autokina), o kolik se zvýší šance na dýško a jak dlouho (s)

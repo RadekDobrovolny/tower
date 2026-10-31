@@ -34,6 +34,7 @@ const MISSION_INTROS := [
 		{"speaker": PUMPIK, "mood": "angry", "text": "Šéfiku, dosavadní dodavatel s námi končí! Od teď si galaxín objednáváš sám."},
 		{"speaker": PUMPIK, "mood": "neutral", "text": "Zato si sám určuješ cenu. A první várku 300 j máme v zásobníku zdarma."},
 		{"speaker": PUMPIK, "mood": "worried", "text": "Jen pozor na levné dodavatele. Za nekvalitní galaxín hrozí pokuty."},
+		{"speaker": PUMPIK, "mood": "neutral", "text": "A jeden čerpací slot už nestačí, šéfiku. Postav druhý, ať lodě nečekají."},
 	],
 	[
 		{"speaker": PUMPIK, "mood": "happy", "text": "Stanice se rozrůstá, šéfiku! Posádky by si rády něco koupily, než je natankuju."},
