@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://xmraekia1klr"
-path="res://.godot/imported/pumpik_walk.png-d9eda6174d2220db7c382be8804cba54.ctex"
+uid="uid://bworfm38wown3"
+path="res://.godot/imported/pumpik_drive_up.png-93ab1d4d487a0d8d4a73bda232827deb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/staff/pumpik_walk.png"
-dest_files=["res://.godot/imported/pumpik_walk.png-d9eda6174d2220db7c382be8804cba54.ctex"]
+source_file="res://assets/sprites/staff/pumpik_drive_up.png"
+dest_files=["res://.godot/imported/pumpik_drive_up.png-93ab1d4d487a0d8d4a73bda232827deb.ctex"]
 
 [params]
 

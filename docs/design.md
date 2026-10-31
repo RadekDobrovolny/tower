@@ -96,13 +96,13 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
   - Staveniště pro rozestavěné budovy `construction/foundation.png`, planeta s prstencem do pozadí `space/planet.png`.
 - **Ve hře** jsou zapojené všechny:
   - Lodě dostávají náhodně jednu ze čtyř raket. Cisterna má sprite, do kterého se jemně promítá barva dodavatele.
-  - Pumpík se s levelem tankování zbarvuje. Má tři animace po 8 snímcích (`staff/pumpik_idle.png`, `pumpik_walk.png`, `pumpik_pump.png`): v klidu dýchá a pulzuje mu hledí, při chůzi střídá nohy (čím rychlejší chůze, tím rychleji kmitá) a u lodi pumpuje pistolí. Bzučák se ve vzduchu kolébá.
+  - Pumpík je kulatý retro robot na kolech (červený a krémový smalt, skleněná kopule s elektronkami, knír, budík na břiše, láhev s hadicemi na zádech). Má osm snímků na animaci: jízda ve čtyřech směrech (`staff/pumpik_drive_down.png`, `_up`, `_left`, `_right`, čím rychlejší jízda, tím rychleji se točí kola) a zepředu klid (`pumpik_idle.png`) a tankování (`pumpik_pump.png`). Když stojí nebo tankuje, otočí se čelem k hráči. S levelem tankování se jen jemně zbarvuje. Bzučák se ve vzduchu kolébá.
   - Paluba má opakovanou texturu a mosazné lemování. Planeta je vpravo dole v pozadí hry i v menu.
   - Rozestavěné budovy: v 1. části staveniště. Čerpací slot pak má přistávací plochu, art deco pumpu vedle ní a nakonec potrubí k patě pumpy. Zábavní systém ve 2. části ukazuje ztmavenou televizi (rozestavěný rám), ve 3. hotovou televizi a po zapojení elektřiny pohyblivý psychedelický obraz s běžící reklamou.
 - **Nové lodě, kořist a zábava** (16 kreditů, dva archy 2×2): nákladní loď `ships/freighter.png`, turistická `ships/tourist.png`, trosky `loot/wreckage.png`, truhla `loot/chest.png`, výherní automaty, hologram a světla scény v `entertainment/` (ventil potrubí z tohoto archu se nakonec nepoužívá).
 - **Potrubí** (40 kreditů, pět archů 2×2): navazující dílek měděné trubky `station/pipe_tile.png`, kolena `pipe_elbow_*.png` a T kusy `pipe_tee_*.png` pro každý potřebný směr ramen (přípona = směry: l, r, u, d), příruba `pipe_flange.png`, podlahová spojka u čerpadla `pipe_floor.png`, průhledítko s galaxínem `pipe_sight.png` a tlakoměr `pipe_gauge.png`. Všechny díly jsou nasvícené zleva shora a nikdy se neotáčejí, aby stíny byly všude na stejné straně: rovné trubky se kreslí zleva doprava a zdola nahoru (lesk nahoře, u svislých vlevo) a každý směr kolena i T kusu má vlastní obrázek. Potrubí je rozvod, který vede jen vodorovně a svisle: ze zásobníku vede trubka nahoru do hlavní větve v uličce mezi horními a dolními parcelami, z ní k čerpadlům v horní řadě odbočují T kusy (na konci větve je koleno). Čerpadla na dolních parcelách mají vlastní trubku do boku zásobníku. U zásobníku jsou příruby, u čerpadel podlahové spojky, na levé větvi průhledítko a na pravé tlakoměr. Trubky leží nad spojkami a zasouvají se do jejich objímek tak, aby zakryly otvory a kolem trubky zůstal vidět mosazný kroužek. Puls galaxínu v trubkách je vypnutý.
 - **Stavby a piráti** (24 kreditů, tři archy 2×2): obchod `shop/shop.png` a stánky `shop/food_cart.png`, `holonews.png`, `souvenirs.png`, `accessories.png`; řídící centrum `station/control_center.png` a anténa dispečinku `station/radar_dish.png`; obranná věž `defense/tower_base.png` a kanóny `defense/turret.png`, `turret_twin.png` (level 3); piráti `pirates/raider.png` a `pirates/gunship.png`.
-- **Animace Pumpíka** (60 kreditů): SpriteCook `frame-engine-v1.1`, 20 kreditů za animaci. Detailní animace chce zdroj aspoň 256×256, proto se Pumpík vyřízl z archu v plném rozlišení a doplnil průhledným okrajem na 300×400. Všechny tři animace jsou oříznuté jedním společným rámečkem, aby na sebe při přepínání seděly.
+- **Pumpík** (16 + 120 kreditů): nový vzhled podle hráčovy předlohy, nejdřív arch se čtyřmi pohledy na stejného robota (s předlohou jako referencí), pak šest animací po 20 kreditech (`frame-engine-v1.1`). Všechny jsou oříznuté jedním společným rámečkem, aby na sebe při přepínání seděly.
 - **Bez kreditů v kódu:** HUD (ikonky, shader panelů), neonový nápis, vesmírné pozadí a mlhoviny, efekty (kouř, jiskry, blikání neonu) a animace pohybem.
 
 ## Systémy
@@ -129,7 +129,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 ### Personál
 - **Androidi** (tankovači) obsluhují lodě.
 - Android zvládne tankovat **2 lodě najednou**: postaví se mezi dva sloty a ke každé lodi natáhne hadici. Každou loď tankuje plnou rychlostí.
-- Pumpíkovi se zvlášť vylepšuje **tankování** a **chůze**. Do jakého levelu jde vylepšovat, určuje mise. Barva těla odpovídá levelu tankování.
+- Pumpíkovi se zvlášť vylepšuje **tankování** a **jízda**. Do jakého levelu jde vylepšovat, určuje mise. Barva těla odpovídá levelu tankování.
 
 | Level | Tankování | Cena | Barva |
 |---|---|---|---|
@@ -140,7 +140,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 | 5 | 30 j/s | 5 500 kr | růžová |
 | 6 | 36 j/s | 8 000 kr | bílomodrá |
 
-| Level | Chůze | Cena |
+| Level | Jízda | Cena |
 |---|---|---|
 | 1 | 80 px/s | výchozí |
 | 2 | 110 px/s | 500 kr |
@@ -268,7 +268,7 @@ Mise jsou zdroje `missions/mission_*.tres` (dají se upravovat v inspektoru Godo
 
 Úvodní mise, ve které se hráč naučí obsluhu lodí a vylepšování personálu.
 
-**Startovní stav:** 1 čerpací slot (horní prostřední parcela), Pumpík s tankováním i chůzí na levelu 1, 0 kr.
+**Startovní stav:** 1 čerpací slot (horní prostřední parcela), Pumpík s tankováním i jízdou na levelu 1, 0 kr.
 
 **Cíle** (musí platit oba zároveň):
 - Mít na účtu **2 000 kr**. Počítá se zůstatek, peníze utracené za vylepšení se tedy do cíle nezapočítávají.
@@ -276,7 +276,7 @@ Mise jsou zdroje `missions/mission_*.tres` (dají se upravovat v inspektoru Godo
 
 **Piráti:** zatím nejsou, přijdou až s krokem 5 plánu.
 
-**Pumpík** jde v téhle misi vylepšit nejvýš na level 3 (tankování i chůzi). Nic dalšího se zatím stavět nedá.
+**Pumpík** jde v téhle misi vylepšit nejvýš na level 3 (tankování i jízdu). Nic dalšího se zatím stavět nedá.
 
 ### Lodě
 - Přilétají každé 3–7 s, v průměru tedy každých 5 s.
@@ -306,7 +306,7 @@ Mise jsou zdroje `missions/mission_*.tres` (dají se upravovat v inspektoru Godo
 
 ## Mise 2: Zábava pro zákazníky
 
-**Startovní stav** (jen při startu od mise 2): 1 čerpací slot, Pumpík s tankováním i chůzí na levelu 3, 2 000 kr. Při plynulé hře pokračuje hráč s tím, co měl na konci mise 1.
+**Startovní stav** (jen při startu od mise 2): 1 čerpací slot, Pumpík s tankováním i jízdou na levelu 3, 2 000 kr. Při plynulé hře pokračuje hráč s tím, co měl na konci mise 1.
 
 **Cíl:** postavit **zábavní systém** a vylepšit ho na **level 3**.
 
@@ -321,7 +321,7 @@ Mise jsou zdroje `missions/mission_*.tres` (dají se upravovat v inspektoru Godo
 
 Představuje ekonomiku galaxínu. Cíle jsou zatím provizorní, uprav je podle sebe.
 
-**Startovní stav** (jen při startu od mise 3): 2 čerpací sloty (třetí nejde postavit), Pumpík s tankováním na levelu 6 a chůzí na levelu 5, zábavní systém na levelu 3, 3 000 kr, zásobník na levelu 1. Vždy: 300 j galaxínu zdarma, prodejní cena 6 kr/j, vybraný dodavatel Galaxis.
+**Startovní stav** (jen při startu od mise 3): 2 čerpací sloty (třetí nejde postavit), Pumpík s tankováním na levelu 6 a jízdou na levelu 5, zábavní systém na levelu 3, 3 000 kr, zásobník na levelu 1. Vždy: 300 j galaxínu zdarma, prodejní cena 6 kr/j, vybraný dodavatel Galaxis.
 
 **Cíle** (musí platit oba zároveň):
 - Mít na účtu **6 000 kr**.
@@ -338,7 +338,7 @@ Představuje ekonomiku galaxínu. Cíle jsou zatím provizorní, uprav je podle 
 
 Klidná mise bez pirátů, představuje obchod a řídící centrum.
 
-**Startovní stav** (jen při startu od mise 4): 2 čerpací sloty (třetí jde postavit), Pumpík s tankováním na levelu 6 a chůzí na levelu 5, zábavní systém na levelu 3, zásobník na levelu 3, 6 000 kr.
+**Startovní stav** (jen při startu od mise 4): 2 čerpací sloty (třetí jde postavit), Pumpík s tankováním na levelu 6 a jízdou na levelu 5, zábavní systém na levelu 3, zásobník na levelu 3, 6 000 kr.
 
 **Cíle:**
 - Obchod a v něm **2 nové druhy zboží**.
@@ -348,7 +348,7 @@ Klidná mise bez pirátů, představuje obchod a řídící centrum.
 
 Na stanici začnou útočit piráti, jde stavět obranné věže.
 
-**Startovní stav** (jen při startu od mise 5): 3 čerpací sloty, Pumpík s tankováním na levelu 6 a chůzí na levelu 5, zábavní systém na levelu 3, zásobník na levelu 3, obchod se 2 druhy zboží navíc, řídící centrum s dispečinkem, 8 000 kr.
+**Startovní stav** (jen při startu od mise 5): 3 čerpací sloty, Pumpík s tankováním na levelu 6 a jízdou na levelu 5, zábavní systém na levelu 3, zásobník na levelu 3, obchod se 2 druhy zboží navíc, řídící centrum s dispečinkem, 8 000 kr.
 
 **Cíle:**
 - Obranná věž na **levelu 2**.

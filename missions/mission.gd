@@ -10,7 +10,7 @@ extends Resource
 @export_multiline var description := ""
 
 @export_group("Pravidla")
-## Nejvyšší level, na který jde vylepšit androida (tankování i chůzi).
+## Nejvyšší level, na který jde vylepšit androida (tankování i jízdu).
 @export var max_android_level := 6
 ## Jestli jde koupit a vylepšovat zábavní systém.
 @export var entertainment_available := false

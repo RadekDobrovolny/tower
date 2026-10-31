@@ -122,7 +122,8 @@
       "files": [
         {
           "file": "assets/sprites/staff/pumpik_walk.png",
-          "sha12": "83540c0ab3e1"
+          "sha12": "83540c0ab3e1",
+          "note": "starý vzhled Pumpíka, nahrazeno robotem (soubor smazán nebo přepsán)"
         }
       ]
     },
@@ -132,7 +133,8 @@
       "files": [
         {
           "file": "assets/sprites/staff/pumpik_idle.png",
-          "sha12": "33009eeccd43"
+          "sha12": "33009eeccd43",
+          "note": "starý vzhled Pumpíka, nahrazeno robotem (soubor smazán nebo přepsán)"
         }
       ]
     },
@@ -142,7 +144,8 @@
       "files": [
         {
           "file": "assets/sprites/staff/pumpik_pump.png",
-          "sha12": "5cc500a8993d"
+          "sha12": "5cc500a8993d",
+          "note": "starý vzhled Pumpíka, nahrazeno robotem (soubor smazán nebo přepsán)"
         }
       ],
       "note": "Všechny tři animace jsou oříznuté jedním společným rámečkem (sedí na sebe) a zmenšené tak, aby byl Pumpík vysoký 128 px; pásy po 8 snímcích 83×133."
@@ -379,6 +382,76 @@
           "sha12": "0a70fbd3e887",
           "cell": "vpravo dole",
           "note": "měď mezi objímkami, konce prolnuté, aby dílek navazoval"
+        }
+      ]
+    },
+    {
+      "asset_id": "cbcb0ac9-7d58-4aae-aa82-1502c39a1660",
+      "label": "Tower – Pumpík, předloha nového vzhledu (obrázek od hráče)",
+      "files": []
+    },
+    {
+      "asset_id": "aeb3becf-9a20-40cf-856f-55079b145a0b",
+      "label": "Tower – Pumpík robot, čtyři pohledy (16 kreditů, s referencí)",
+      "files": []
+    },
+    {
+      "asset_id": "06dffccf-700c-4ea1-9fb3-18ccb954dba6",
+      "label": "Pumpík robot – drive_down (frame-engine-v1.1, 8 snímků, 20 kreditů)",
+      "files": [
+        {
+          "file": "assets/sprites/staff/pumpik_drive_down.png",
+          "sha12": "6373bdc1fa93"
+        }
+      ]
+    },
+    {
+      "asset_id": "6f2f2fb2-f417-4272-9029-a4e0ca58e7e0",
+      "label": "Pumpík robot – drive_up (frame-engine-v1.1, 8 snímků, 20 kreditů)",
+      "files": [
+        {
+          "file": "assets/sprites/staff/pumpik_drive_up.png",
+          "sha12": "4b63387749b9"
+        }
+      ]
+    },
+    {
+      "asset_id": "2a2f8901-659d-41d5-9b67-3fc38a739392",
+      "label": "Pumpík robot – drive_left (frame-engine-v1.1, 8 snímků, 20 kreditů)",
+      "files": [
+        {
+          "file": "assets/sprites/staff/pumpik_drive_left.png",
+          "sha12": "c20baf79049c"
+        }
+      ]
+    },
+    {
+      "asset_id": "e1d40834-802f-4821-aafb-e544f0658597",
+      "label": "Pumpík robot – drive_right (frame-engine-v1.1, 8 snímků, 20 kreditů)",
+      "files": [
+        {
+          "file": "assets/sprites/staff/pumpik_drive_right.png",
+          "sha12": "bee169d8e821"
+        }
+      ]
+    },
+    {
+      "asset_id": "fbab6b74-bc8e-45bb-89c1-6c963bac4108",
+      "label": "Pumpík robot – idle (frame-engine-v1.1, 8 snímků, 20 kreditů)",
+      "files": [
+        {
+          "file": "assets/sprites/staff/pumpik_idle.png",
+          "sha12": "3966fc88fd24"
+        }
+      ]
+    },
+    {
+      "asset_id": "a9d4ea73-6a73-4b07-b9e1-f472f1313f09",
+      "label": "Pumpík robot – pump (frame-engine-v1.1, 8 snímků, 20 kreditů)",
+      "files": [
+        {
+          "file": "assets/sprites/staff/pumpik_pump.png",
+          "sha12": "0424de5830c2"
         }
       ]
     }

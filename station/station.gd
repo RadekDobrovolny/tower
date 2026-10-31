@@ -104,7 +104,7 @@ const TRUNK_LANE := -68.0
 ## Jak daleko od odboček musí být průhledítko nebo tlakoměr na hlavní větvi.
 const DECOR_CLEARANCE := 30.0
 ## Jak blízko (px) k androidovi nebo zásobníku musí hráč kliknout, aby je vybral.
-const ANDROID_PICK_RADIUS := 28.0
+const ANDROID_PICK_RADIUS := 32.0
 const TANK_PICK_RADIUS := 50.0
 const DRONE_PICK_RADIUS := 18.0
 
@@ -675,7 +675,7 @@ func _update_selection_marker() -> void:
 		return
 	var rect: Rect2
 	if selected is Android:
-		rect = Rect2(selected.position - Vector2(22, 32), Vector2(44, 64))
+		rect = Rect2(selected.position - Vector2(30, 34), Vector2(60, 68))
 	elif selected == drone:
 		rect = Rect2(selected.position - Vector2(24, 24), Vector2(48, 48))
 	elif selected == tank:

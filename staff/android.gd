@@ -1,9 +1,9 @@
 class_name Android
 extends Node2D
 
-## Android, který chodí k zakotveným lodím a tankuje je. Zvládne obsluhovat víc lodí
+## Android na kolech, který jezdí k zakotveným lodím a tankuje je. Zvládne obsluhovat víc lodí
 ## najednou: postaví se mezi ně a ke každé natáhne hadici.
-## Zvlášť se vylepšuje rychlost tankování a rychlost chůze (okamžitě, bez stavby).
+## Zvlášť se vylepšuje rychlost tankování a rychlost jízdy (okamžitě, bez stavby).
 ## Piráti střílejí přednostně po něm. Každý zásah ubere bod odolnosti, a když odolnost
 ## klesne na nulu, je rozbitý: netankuje, nebrání se a čeká, až ho opraví stavební dron.
 ## Částečně poškozený pracuje dál a zastaví se, až když k němu dron doletí opravovat.
@@ -24,7 +24,7 @@ const FUEL_LEVELS := [
 	{"rate": 30.0, "cost": 5500, "color": Color(1.0, 0.5, 0.6)},
 	{"rate": 36.0, "cost": 8000, "color": Color(0.85, 1.0, 1.0)},
 ]
-## Levely chůze: rychlost (px/s) a cena vylepšení na tento level.
+## Levely jízdy: rychlost (px/s) a cena vylepšení na tento level.
 const WALK_LEVELS := [
 	{"speed": 80.0, "cost": 0},
 	{"speed": 110.0, "cost": 500},
@@ -36,17 +36,20 @@ const WALK_LEVELS := [
 ## Jak často android odpoví, když dostane novou loď.
 const REPLY_CHANCE := 0.5
 ## Jak moc se barva levelu promítne do chromu.
-const LEVEL_TINT := 0.35
-## Animace (pásy po 8 snímcích ze SpriteCooku): klid, chůze a tankování.
+const LEVEL_TINT := 0.12
+## Animace (pásy po 8 snímcích ze SpriteCooku): klid a tankování (zepředu) a jízda do čtyř stran.
 const ANIMATIONS := {
 	"idle": preload("res://assets/sprites/staff/pumpik_idle.png"),
-	"walk": preload("res://assets/sprites/staff/pumpik_walk.png"),
 	"pump": preload("res://assets/sprites/staff/pumpik_pump.png"),
+	"drive_down": preload("res://assets/sprites/staff/pumpik_drive_down.png"),
+	"drive_up": preload("res://assets/sprites/staff/pumpik_drive_up.png"),
+	"drive_left": preload("res://assets/sprites/staff/pumpik_drive_left.png"),
+	"drive_right": preload("res://assets/sprites/staff/pumpik_drive_right.png"),
 }
 const ANIMATION_FRAMES := 8
 const IDLE_FPS := 6.0
 const PUMP_FPS := 8.0
-## Kolik pixelů ujde za jeden cyklus chůze (dva kroky). Rychlejší Pumpík proto rychleji kmitá nohama.
+## Kolik pixelů ujede za jeden cyklus animace jízdy. Rychlejší Pumpík proto rychleji točí koly.
 const WALK_STRIDE := 64.0
 ## Boj s piráty: prodleva mezi výstřely (s), poškození jednoho výstřelu a jak dlouho trvá
 ## oprava stavebním dronem.
@@ -72,7 +75,7 @@ const SAFE_AFTER := 4.0
 const HIT_FLASH_TIME := 0.15
 const BLAST_TIME := 0.12
 ## Ústí tankovací pistole vůči středu androida (odtud letí laser).
-const NOZZLE := Vector2(-9, 22)
+const NOZZLE := Vector2(-25, -13)
 ## Jak moc poškozený android ztmavne.
 const DAMAGED_TINT := Color(0.55, 0.5, 0.5)
 
@@ -103,8 +106,9 @@ var _home: Vector2
 var _reported_empty := false
 var _animation := ""
 var _animation_time := 0.0
-## Jestli se android v tomto snímku pohnul (pro animaci chůze).
+## Jestli se android v tomto snímku pohnul a kterým směrem (pro animaci jízdy).
 var _moved := false
+var _move_direction := Vector2.ZERO
 ## Pirát, se kterým android bojuje, nebo null.
 var _enemy: Pirate
 var _shot_cooldown := 0.0
@@ -316,7 +320,7 @@ func info_lines() -> PackedStringArray:
 	var lines := PackedStringArray([
 		"Android, který tankuje lodě. Zvládne obsluhovat dvě lodě najednou.",
 		"Tankování: level %d (%d j/s)" % [fuel_level, roundi(fuel_rate())],
-		"Chůze: level %d (%d px/s)" % [walk_level, roundi(walk_speed())],
+		"Jízda: level %d (%d px/s)" % [walk_level, roundi(walk_speed())],
 		"Právě obsluhuje lodí: %d / %d" % [_ships.size(), max_parallel_ships],
 	])
 	if station.tower_available or shield_level > 0:
@@ -355,7 +359,7 @@ func _fuel_upgrade_label() -> String:
 
 
 func _walk_upgrade_label() -> String:
-	return "Vylepšit chůzi na level %d" % (walk_level + 1)
+	return "Vylepšit jízdu na level %d" % (walk_level + 1)
 
 
 func _on_upgraded() -> void:
@@ -384,25 +388,34 @@ func _update_hoses(connected: bool) -> void:
 		var hose := _hoses[i]
 		hose.visible = connected and i < _ships.size()
 		if hose.visible:
-			hose.points = PackedVector2Array([Vector2.ZERO, to_local(_ships[i].global_position)])
+			hose.points = PackedVector2Array([NOZZLE, to_local(_ships[i].global_position)])
 
 
 func _walk_to(target: Vector2, delta: float) -> bool:
 	var before := global_position
 	global_position = global_position.move_toward(target, walk_speed() * delta)
 	_moved = global_position != before
+	if _moved:
+		_move_direction = global_position - before
 	return global_position.is_equal_approx(target)
 
 
-## Chůze, když se hýbe; tankování (i střelba z pistole), když má napojenou hadici nebo
-## bojuje; jinak klid (poškozený jen pomalu).
+## Jízda ve směru pohybu, když se hýbe; tankování (i střelba z pistole), když má napojenou
+## hadici nebo bojuje; jinak klid (poškozený jen pomalu). Stojí vždy čelem k hráči.
 func _animate(delta: float) -> void:
 	if _moved:
-		_play("walk", walk_speed() / WALK_STRIDE * ANIMATION_FRAMES, delta)
+		_play(_drive_animation(), walk_speed() / WALK_STRIDE * ANIMATION_FRAMES, delta)
 	elif _hoses[0].visible or _enemy:
 		_play("pump", PUMP_FPS, delta)
 	else:
 		_play("idle", IDLE_FPS * (0.4 if damaged else 1.0), delta)
+
+
+## Animace jízdy podle toho, kterým směrem se pohybuje víc.
+func _drive_animation() -> String:
+	if absf(_move_direction.x) > absf(_move_direction.y):
+		return "drive_right" if _move_direction.x > 0.0 else "drive_left"
+	return "drive_down" if _move_direction.y > 0.0 else "drive_up"
 
 
 func _fight(delta: float) -> void:
