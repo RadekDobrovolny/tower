@@ -12,22 +12,47 @@ enum State { QUEUED, TO_SLOT, LANDED, DEPARTING }
 ## v obchodě utratí 20× víc, přilétá jen ke stanici s hotovým obchodem).
 enum Kind { REGULAR, FREIGHTER, TOURIST }
 
-## Vzhledy běžných raket. Každá loď dostane náhodně jeden z nich. `brightness` je zjasnění (černá
-## závodní raketa by jinak v temném vesmíru zanikla), `scale` měřítko a `lines` vlastní hlášky
-## při přistání (bez nich mluví jako každá loď).
+## Běžné rakety: vzhled a povaha. Každá loď dostane náhodně jednu z těch, které mise už odemkla.
+## - `from`: od které mise létá (výchozí 1)
+## - `lines`: vlastní hlášky při přistání (bez nich mluví jako každá loď)
+## - `patience`: násobek trpělivosti
+## - `tank`: násobek velikosti nádrže
+## - `tip`: násobek šance na dýško, `tip_size`: násobek jeho výše
+## - `full_tank`: nikdy neobjednává za částku, vždy plnou
+## - `brightness`: zjasnění (černá závodní raketa by jinak v temném vesmíru zanikla), `scale`: měřítko
 const HULLS := [
 	{"texture": preload("res://assets/sprites/ships/rocket.png")},
 	{"texture": preload("res://assets/sprites/ships/rocket_cargo.png")},
 	{"texture": preload("res://assets/sprites/ships/rocket_racer.png"), "brightness": 1.7},
 	{"texture": preload("res://assets/sprites/ships/rocket_workhorse.png"), "brightness": 1.1},
-	{"texture": preload("res://assets/sprites/ships/rocket_courier.png"), "lines": Lines.SHIP_COURIER},
-	{"texture": preload("res://assets/sprites/ships/rocket_date.png"), "lines": Lines.SHIP_DATE},
-	{"texture": preload("res://assets/sprites/ships/rocket_van.png"), "lines": Lines.SHIP_VAN, "scale": 0.42},
-	{"texture": preload("res://assets/sprites/ships/rocket_taxi.png"), "lines": Lines.SHIP_TAXI},
-	{"texture": preload("res://assets/sprites/ships/rocket_nomad.png"), "lines": Lines.SHIP_NOMAD, "scale": 0.42},
-	{"texture": preload("res://assets/sprites/ships/rocket_family.png"), "lines": Lines.SHIP_FAMILY, "scale": 0.42},
-	{"texture": preload("res://assets/sprites/ships/rocket_limo.png"), "lines": Lines.SHIP_LIMO, "brightness": 1.3, "scale": 0.5},
-	{"texture": preload("res://assets/sprites/ships/rocket_redneck.png"), "lines": Lines.SHIP_REDNECK, "scale": 0.42},
+	# Spěchá a má malou nádrž, zato dává dýško častěji.
+	{"texture": preload("res://assets/sprites/ships/rocket_taxi.png"), "lines": Lines.SHIP_TAXI,
+			"patience": 0.7, "tank": 0.7, "tip": 1.5},
+	# Zamilovaným nevadí čekat a před partnerkou nešetří.
+	{"texture": preload("res://assets/sprites/ships/rocket_date.png"), "lines": Lines.SHIP_DATE, "from": 2,
+			"patience": 1.6, "tank": 0.8, "tip": 2.0},
+	# Velká nádrž, ale s dětmi na palubě dlouho nevydrží.
+	{"texture": preload("res://assets/sprites/ships/rocket_family.png"), "lines": Lines.SHIP_FAMILY, "from": 2,
+			"patience": 0.75, "tank": 1.3, "scale": 0.42},
+	# Malá nádrž a velký spěch, dýško skoro nedává.
+	{"texture": preload("res://assets/sprites/ships/rocket_courier.png"), "lines": Lines.SHIP_COURIER, "from": 3,
+			"patience": 0.55, "tank": 0.6, "tip": 0.5},
+	# Pracovní dodávka: velká nádrž, běžná trpělivost.
+	{"texture": preload("res://assets/sprites/ships/rocket_van.png"), "lines": Lines.SHIP_VAN, "from": 3,
+			"tank": 1.5, "scale": 0.42},
+	# Nikam nespěchá, dýško ale nedá nikdy.
+	{"texture": preload("res://assets/sprites/ships/rocket_nomad.png"), "lines": Lines.SHIP_NOMAD, "from": 4,
+			"patience": 2.0, "tank": 1.2, "tip": 0.0, "scale": 0.42},
+	# Veselý obchodník, dobře se s ním vychází.
+	{"texture": preload("res://assets/sprites/ships/rocket_icecream.png"), "lines": Lines.SHIP_ICECREAM, "from": 4,
+			"patience": 1.2, "tank": 0.8, "tip": 1.5},
+	# Velká dýška, ale čekat nebude. Vždy plnou nádrž.
+	{"texture": preload("res://assets/sprites/ships/rocket_limo.png"), "lines": Lines.SHIP_LIMO, "from": 5,
+			"patience": 0.45, "tank": 1.2, "tip": 4.0, "tip_size": 2.5, "full_tank": true,
+			"brightness": 1.3, "scale": 0.5},
+	# Má čas i velkou nádrž, šetří každý kredit.
+	{"texture": preload("res://assets/sprites/ships/rocket_redneck.png"), "lines": Lines.SHIP_REDNECK, "from": 5,
+			"patience": 1.3, "tank": 1.3, "tip": 0.3, "scale": 0.42},
 ]
 ## Tah motoru, když loď jen visí ve vzduchu (ve frontě). S rychlostí roste až na 1.
 const HOVER_THROTTLE := 0.3
@@ -99,7 +124,8 @@ var order_amount := 0
 var _target: Vector2
 var _patience_left := PATIENCE
 var _complained := false
-var _hull_lines: Array = []
+## Druh běžné rakety z HULLS. Nákladní a turistická loď ho nemají.
+var _hull := {}
 var _fuel_on_arrival: float
 var _target_fuel: float
 ## Kolik z natankovaného galaxínu bylo nekvalitního.
@@ -127,9 +153,11 @@ func _ready() -> void:
 		kind = Kind.FREIGHTER
 	elif roll < FREIGHTER_CHANCE + TOURIST_CHANCE and station.shop_products() >= 0:
 		kind = Kind.TOURIST
+	if kind == Kind.REGULAR:
+		_hull = _random_hull()
 	tank_capacity = randf_range(40.0, 100.0) * _tank_factor()
 	fuel = tank_capacity * randf_range(0.05, 0.3)
-	if kind == Kind.REGULAR:
+	if kind == Kind.REGULAR and not _hull.get("full_tank", false):
 		_choose_order()
 	_setup_hull()
 	_fuel_bar.max_value = tank_capacity
@@ -201,8 +229,8 @@ func leave_paid() -> int:
 	var price := order_amount if order_amount > 0 else roundi(bought * station.sell_price)
 	var fined := bought > 0.0 and randf() < _low_quality_fuel / bought * MAX_FINE_CHANCE
 	var tip := 0
-	if not fined and randf() < TIP_CHANCE + station.tip_bonus():
-		tip = maxi(1, roundi(price * randf_range(TIP_SHARE_MIN, TIP_SHARE_MAX)))
+	if not fined and randf() < (TIP_CHANCE + station.tip_bonus()) * _hull.get("tip", 1.0):
+		tip = maxi(1, roundi(price * randf_range(TIP_SHARE_MIN, TIP_SHARE_MAX) * _hull.get("tip_size", 1.0)))
 	Game.record_ship_served()
 	Game.add_credits(price + tip - (FINE if fined else 0))
 	Sfx.play("coin", TIP_COIN_PITCH if tip > 0 else 1.0)
@@ -228,7 +256,11 @@ func _tank_factor() -> float:
 			return FREIGHTER_TANK
 		Kind.TOURIST:
 			return TOURIST_TANK
-	return 1.0
+	return _hull.get("tank", 1.0)
+
+
+func _random_hull() -> Dictionary:
+	return HULLS.filter(func(hull: Dictionary) -> bool: return hull.get("from", 1) <= station.ship_tier).pick_random()
 
 
 func _choose_order() -> void:
@@ -242,7 +274,7 @@ func _choose_order() -> void:
 
 ## Trpělivost ubývá rychleji, když je galaxín drahý, a pomaleji, když běží autokino.
 func _patience_drain(delta: float) -> float:
-	return delta * station.patience_drain() * station.price_patience_factor()
+	return delta * station.patience_drain() * station.price_patience_factor() / _hull.get("patience", 1.0)
 
 
 func _wait_in_queue(delta: float) -> void:
@@ -324,12 +356,10 @@ func _setup_hull() -> void:
 			_sprite.texture = TOURIST_TEXTURE
 			_sprite.scale = Vector2.ONE * TOURIST_SCALE
 		_:
-			var hull: Dictionary = HULLS.pick_random()
-			_sprite.texture = hull.texture
-			_sprite.scale = Vector2.ONE * hull.get("scale", _sprite.scale.x)
-			_hull_lines = hull.get("lines", [])
+			_sprite.texture = _hull.texture
+			_sprite.scale = Vector2.ONE * _hull.get("scale", _sprite.scale.x)
 			# Jemně jiný jas, aby dvě stejné rakety nevypadaly úplně stejně.
-			brightness *= hull.get("brightness", 1.0)
+			brightness *= _hull.get("brightness", 1.0)
 	_sprite.modulate = Color(brightness, brightness, brightness)
 	_engine.position.x = -_sprite.texture.get_width() * _sprite.scale.x / 2.0 + 2.0
 
@@ -352,8 +382,8 @@ func _land() -> void:
 		_say(Lines.FREIGHTER_ORDER)
 	elif order_amount > 0:
 		_say(Lines.ORDER_AMOUNT)
-	elif not _hull_lines.is_empty():
-		_say(_hull_lines)
+	elif _hull.has("lines"):
+		_say(_hull.lines)
 	else:
 		_say(Lines.ORDER_FULL)
 	state = State.LANDED

@@ -592,47 +592,57 @@
     },
     {
       "asset_id": "7b82ed6b-49cb-4147-9d55-6153d1f5d815",
-      "label": "Tower – arch L: osm druhů běžných raket (reference arch 2, 16 kreditů)",
+      "label": "Tower – arch L: osm raket z boku, nepoužito (hra je otáčí, nahrazeno archem M, 16 kreditů)",
+      "files": []
+    },
+    {
+      "asset_id": "72e4fbe4-dfb3-4c80-b787-3ab18fea6c9a",
+      "label": "Tower – arch M: devět raket pohledem shora (reference arch 2, 16 kreditů)",
       "files": [
         {
           "file": "assets/sprites/ships/rocket_courier.png",
-          "sha12": "e864bb08dff8",
+          "sha12": "7a6ff05486d8",
           "cell": "řádek 1, vlevo"
         },
         {
           "file": "assets/sprites/ships/rocket_date.png",
-          "sha12": "84d79e3b93fc",
+          "sha12": "6f5b59b6206c",
           "cell": "řádek 1, uprostřed"
         },
         {
           "file": "assets/sprites/ships/rocket_van.png",
-          "sha12": "ac9a3ccd0e27",
+          "sha12": "e54fd979fc03",
           "cell": "řádek 1, vpravo"
         },
         {
           "file": "assets/sprites/ships/rocket_taxi.png",
-          "sha12": "773a79def694",
+          "sha12": "85273550c27e",
           "cell": "řádek 2, vlevo"
         },
         {
           "file": "assets/sprites/ships/rocket_nomad.png",
-          "sha12": "41f56fbc2bdb",
+          "sha12": "26b710e5c853",
           "cell": "řádek 2, uprostřed"
         },
         {
           "file": "assets/sprites/ships/rocket_family.png",
-          "sha12": "b11f0f1d3a38",
+          "sha12": "a52a1d23f64b",
           "cell": "řádek 2, vpravo"
         },
         {
           "file": "assets/sprites/ships/rocket_limo.png",
-          "sha12": "86f7e79507c0",
+          "sha12": "86bdc871d8b7",
           "cell": "řádek 3, vlevo"
         },
         {
           "file": "assets/sprites/ships/rocket_redneck.png",
-          "sha12": "8844107bcfdf",
+          "sha12": "6d4f5afd7646",
           "cell": "řádek 3, uprostřed"
+        },
+        {
+          "file": "assets/sprites/ships/rocket_icecream.png",
+          "sha12": "bdd82969a9e1",
+          "cell": "řádek 3, vpravo"
         }
       ]
     }

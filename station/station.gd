@@ -146,6 +146,8 @@ var max_slots := 1
 var entertainment_available := false
 var dual_hose_available := false
 var warehouse_available := false
+## Které běžné rakety už létají (číslo mise, `Ship.HULLS`).
+var ship_tier := 1
 var shop_available := false
 var tower_available := false
 var control_center_available := false

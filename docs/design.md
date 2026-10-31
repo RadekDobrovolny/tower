@@ -109,7 +109,20 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 ## Systémy
 
 ### Lodě (zákazníci)
-- **Druhy lodí:** běžné rakety (12 vzhledů: 4 obyčejné a kurýrní služba, romantická na rande, dodávka, žluté taxi, nomádská, rodinná, luxusní limuzína a redneck, ti poslední mají vlastní hlášky při přistání a jinak se chovají stejně), občas **nákladní loď** (10 %, 2× větší nádrž, objedná vždy plnou) a **turistická loď** (8 %, jen když stojí hotový obchod, o 30 % větší nádrž, v obchodě nakupuje ochotněji a utratí 20× víc, nad obchodem se ukáže „+… kr turisté“).
+- **Druhy lodí:** běžné rakety mají 13 vzhledů a odemykají se s misemi, viz tabulka. K nim občas **nákladní loď** (10 %, 2× větší nádrž, objedná vždy plnou) a **turistická loď** (8 %, jen když stojí hotový obchod, o 30 % větší nádrž, v obchodě nakupuje ochotněji a utratí 20× víc, nad obchodem se ukáže „+… kr turisté“). Lodě se otáčejí do všech směrů, proto musí být kreslené přesně shora a souměrné podél osy.
+
+| Raketa | Od mise | Trpělivost | Nádrž | Dýško | Povaha |
+|---|---|---|---|---|---|
+| 4 obyčejné rakety | 1 | 100 % | 100 % | běžné | |
+| Žluté taxi | 1 | 70 % | 70 % | 1,5× častěji | spěchá, ale dá dýško |
+| Romantická na rande | 2 | 160 % | 80 % | 2× častěji | zamilovaným čekání nevadí |
+| Rodinná | 2 | 75 % | 130 % | běžné | s dětmi dlouho nevydrží |
+| Kurýrní služba | 3 | 55 % | 60 % | 2× méně často | velký spěch |
+| Dodávka | 3 | 100 % | 150 % | běžné | pracovní loď |
+| Nomádská | 4 | 200 % | 120 % | nikdy | nikam nespěchá |
+| Zmrzlinářská | 4 | 120 % | 80 % | 1,5× častěji | veselý obchodník |
+| Luxusní limuzína | 5 | 45 % | 120 % | 4× častěji a 2,5× vyšší | čekat nebude, vždy plnou nádrž |
+| Redneck | 5 | 130 % | 130 % | 3× méně často | šetří každý kredit |
 - **Strach z pirátů:** když pirát dorazí ke stanici a začne útočit, všechny lodě ve frontě i u čerpadel utečou („Piráti! Mizím!“). Natankovaný galaxín nezaplatí a počítají se mezi lodě, které odletěly bez placení. Dokud útok trvá, žádná nová loď nepřiletí.
 - **Cisterny při útoku:** objednaná cisterna, která ještě neletí, se zruší a peníze se vrátí. Cisterna, která už je na obrazovce, odletí i uprostřed přečerpávání: co přečerpala, zůstane v zásobníku, za zbytek vrátí peníze. Dokud útok trvá, nejde objednat novou (ani dispečinkem).
 - Loď chce buď plnou nádrž, nebo galaxín jen za určitou částku („Chci galaxínu za 100 kreditů“).

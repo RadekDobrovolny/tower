@@ -195,6 +195,11 @@ const SHIP_REDNECK := [
 	"To paroží? Srazil jsem ho u Saturnu.",
 	"Tahle kára je po dědovi, drží jen na drátech.",
 ]
+const SHIP_ICECREAM := [
+	"Natankuj, než mi to roztaje.",
+	"Kopeček galaxínového, nebo vanilku?",
+	"Ve vakuu se zmrzlina prodává špatně.",
+]
 
 ## Loď odlétá, protože na stanici došel galaxín.
 const SHIP_NO_FUEL := [

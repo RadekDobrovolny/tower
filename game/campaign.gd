@@ -163,6 +163,7 @@ func _begin_mission(index: int) -> void:
 	mission = Missions.ALL[index]
 	mission_elapsed = 0.0
 	_apply_rules(mission)
+	station.ship_tier = number()
 	hud.refresh_mission()
 	mission_started.emit(number())
 
@@ -189,6 +190,7 @@ func _apply_rules(rules: Mission) -> void:
 
 func _begin_free_play() -> void:
 	mission = null
+	station.ship_tier = Missions.ALL.size()
 	mission_elapsed = 0.0
 	hud.refresh_mission()
 
