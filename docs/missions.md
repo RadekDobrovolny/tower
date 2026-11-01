@@ -16,7 +16,8 @@ Ceny vycházejí z konstant v kódu. Když se změní cena nebo cíl mise, je po
 | 6 | Nečekaná zákaznice | naspořit 6 000 kr, zábavní systém na levelu 3, 2 obranné věže, scéna se Zorou | **14 000** | 6 000 | 20 000 + galaxín |
 | 7 | Plné ruce práce | věž na levelu 2, spolehlivé dodávky na levelu 2, Bzučák rychlost letu i práce na levelu 2, scéna s císařskou hlídkou | **14 500** | 0 | 8 500 + galaxín |
 | 8 | Embargo | filtry galaxínu na levelu 3 (schéma od Sizela) | **10 500** | 0 | 10 500 + galaxín |
-| | **Celkem** | | **82 300** | | **82 300 + galaxín** |
+| 9 | Provizorní motel | rozšířit plošinu, postavit motel, postavit parkoviště | **18 000** | 0 | 18 000 + galaxín |
+| | **Celkem** | | **100 300** | | **100 300 + galaxín** |
 
 - **Nutné výdaje:** součet všech povinných nákupů v misi.
 - **Držet na účtu:** kolik kreditů musí hráč mít zároveň, když mise končí. Tyto peníze nejde utratit a zůstávají do další mise.
@@ -192,6 +193,25 @@ Ceny vycházejí z konstant v kódu. Když se změní cena nebo cíl mise, je po
 - Mise nejde splnit bez tří dodávek od Sizela, protože schéma přijde až s tou třetí. Dvě objednávky stojí při plné cisterně 2 400 kr, třetí taky, ještě za 6 kr/j.
 - Při běžné prodejní ceně 6 kr/j galaxín před zlevněním nevydělá nic a lodí je méně. Výdělek musí přijít z vyšší prodejní ceny, dýšek, obchodu a zábavy. Po zlevnění na 4 kr/j vydělá 2 kr/j.
 
+## Mise 9: Provizorní motel
+
+**Cíle:** rozšířit plošinu, postavit motel a postavit parkoviště.
+
+**Odemkne se:**
+- rozšíření plošiny doprava: 2 nové parcely
+- motel na běžné parcele a parkoviště pro 4 lodě pod plošinou
+- hosté motelu, když stojí motel i parkoviště: část lodí po natankování zaparkuje a každých 5 s platí 20 kr, rodinná raketa 40 kr a limuzína 50 kr. Turistická loď do motelu nejezdí
+
+| Nákup | Cena |
+|---|---|
+| Rozšíření plošiny (3 části) | 8 000 |
+| Motel (4 části) | 6 000 |
+| Parkoviště (3 části) | 4 000 |
+| **Celkem** | **18 000** |
+
+- Hráč musí vydělat **18 000 kr** a k tomu na galaxín. Embargo trvá, takže lodí přilétá o 50 % méně a Sizel prodává za 4 kr/j.
+- Ceny staveb a motelu jsou odhad, zatím nevyvážené.
+
 ## Mise Z: Volná hra
 
 Nemá cíle a jde na ni jen z menu. Všechno je postavené a vylepšené na maximum, hráč začíná s 10 000 kr.
@@ -210,6 +230,7 @@ Když hra začne přímo od mise, dostane hráč pevný startovní stav. Od Mise
 | 6 | 8 000 | jako Mise 5, ale zábavní systém 2, věž na levelu 1 a skladiště | 9 000 + galaxín |
 | 7 | 8 000 | jako Mise 6, ale zábavní systém 3 a 2 věže na levelu 1, bez medailonu | 6 500 + galaxín |
 | 8 | 8 000 | jako Mise 7, ale 2 věže na levelu 2 | 2 500 + galaxín |
+| 9 | 8 000 | jako Mise 8, ale filtry na levelu 3 a Sizel je přítel | 10 000 + galaxín |
 
 ## Volitelné nákupy
 
@@ -235,4 +256,4 @@ Nejsou nutné ke splnění žádné mise.
 | První věž na levelu 3 | 5 | 7 000 |
 | Druhá věž na levelu 2 a 3 | 5 | 11 000 (4 000 + 7 000) |
 
-**Všechno na maximum stojí 222 800 kr**, tedy 82 300 kr za nutné nákupy a 140 500 kr za volitelné.
+**Všechno na maximum stojí 240 800 kr**, tedy 100 300 kr za nutné nákupy a 140 500 kr za volitelné.

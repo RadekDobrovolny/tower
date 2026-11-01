@@ -4,9 +4,13 @@ extends Node2D
 ## Parcela na stanici, na které jde postavit budovu. Prázdná je vidět jen jako jemný obrys
 ## a jde na ni kliknout, jen když na ní jde něco postavit (jinak ji stanice skryje).
 ## Po kliknutí nabídne, co tu jde postavit. Běžné parcely jsou pro sloty a budovy,
-## menší místa na krajích paluby jsou jen pro obranné věže.
+## menší místa na krajích paluby jsou jen pro obranné věže. Mimo palubu jsou místa pro její
+## rozšíření a pro parkoviště.
 
-enum Kind { BUILDING, TOWER }
+enum Kind { BUILDING, TOWER, EXTENSION, PARKING }
+
+## Jak výrazný je obrys míst mimo palubu, kde by jinak nebyl na tmavém vesmíru vidět.
+const OUTSIDE_OUTLINE_ALPHA := 0.5
 
 @export var kind := Kind.BUILDING
 @export var size := Vector2(170, 120)
@@ -17,6 +21,8 @@ enum Kind { BUILDING, TOWER }
 
 ## Kde vůči parcele stojí přístavba budovy (skladiště u obchodu).
 @export var annex_offset := Vector2(0, 66)
+## Parcela na rozšířené části paluby: jde na ni stavět, až je plošina rozšířená.
+@export var needs_extension := false
 
 var building: Building
 var station: Station
@@ -30,6 +36,8 @@ func _ready() -> void:
 	_outline.points = PackedVector2Array([-half, Vector2(half.x, -half.y), half, Vector2(-half.x, half.y)])
 	_highlight.position = -half
 	_highlight.size = size
+	if kind == Kind.EXTENSION or kind == Kind.PARKING:
+		_outline.default_color.a = OUTSIDE_OUTLINE_ALPHA
 
 
 func is_empty() -> bool:
@@ -46,6 +54,12 @@ func place(new_building: Building) -> void:
 	add_child(new_building)
 
 
+## Odstraní budovu. Rozšíření plošiny po dostavění splyne s palubou.
+func clear() -> void:
+	building.queue_free()
+	building = null
+
+
 func set_outline_visible(value: bool) -> void:
 	_outline.visible = value
 
@@ -56,7 +70,14 @@ func set_highlighted(value: bool) -> void:
 
 
 func info_title() -> String:
-	return "Místo pro obrannou věž" if kind == Kind.TOWER else "Prázdná parcela"
+	match kind:
+		Kind.TOWER:
+			return "Místo pro obrannou věž"
+		Kind.EXTENSION:
+			return "Místo pro rozšíření plošiny"
+		Kind.PARKING:
+			return "Místo pro parkoviště"
+	return "Prázdná parcela"
 
 
 func info_lines() -> PackedStringArray:

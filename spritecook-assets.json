@@ -799,6 +799,57 @@
           "cell": "vpravo dole"
         }
       ]
+    },
+    {
+      "asset_id": "af642a00-918c-453c-b029-63b9670a71df",
+      "label": "Tower – arch O: motel, parkoviště a rozšíření plošiny (bez reference, 8 kreditů)",
+      "files": [
+        {
+          "file": "assets/sprites/motel/motel.png",
+          "sha12": "e261997f28b5",
+          "cell": "1. řada vlevo"
+        },
+        {
+          "file": "assets/sprites/motel/motel_frame.png",
+          "sha12": "ad4546e691fb",
+          "cell": "1. řada uprostřed"
+        },
+        {
+          "file": "assets/sprites/motel/motel_sign.png",
+          "sha12": "06ce546500a7",
+          "cell": "1. řada vpravo"
+        },
+        {
+          "file": "assets/sprites/motel/parking_bay.png",
+          "sha12": "5635f5fcb1d5",
+          "cell": "2. řada vlevo"
+        },
+        {
+          "file": "assets/sprites/motel/lamp.png",
+          "sha12": "a822a5cf1172",
+          "cell": "2. řada uprostřed"
+        },
+        {
+          "file": "assets/sprites/motel/girders.png",
+          "sha12": "b2dc9157cd9d",
+          "cell": "2. řada vpravo"
+        },
+        {
+          "file": "assets/sprites/motel/vending.png",
+          "sha12": "d10bd05f0d48",
+          "cell": "3. řada vlevo"
+        },
+        {
+          "file": "assets/sprites/motel/luggage.png",
+          "sha12": "ec7d1e1466fc",
+          "cell": "3. řada uprostřed"
+        },
+        {
+          "file": "assets/sprites/motel/gate.png",
+          "sha12": "452e9c7b98cf",
+          "cell": "3. řada vpravo"
+        }
+      ]
     }
   ]
 }

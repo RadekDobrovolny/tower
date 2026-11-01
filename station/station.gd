@@ -22,14 +22,19 @@ const BUILDING_SCENES := {
 	"entertainment": preload("res://station/entertainment_system.tscn"),
 	"shop": preload("res://station/shop.tscn"),
 	"tower": preload("res://defense/defense_tower.tscn"),
+	"motel": preload("res://station/motel.tscn"),
+	"parking": preload("res://station/parking.tscn"),
+	"extension": preload("res://station/platform_extension.tscn"),
 }
 ## Názvy budov a text tlačítka, kterým se stavba začíná.
 const BUILDING_NAMES := {
 	"fuel_slot": "Čerpací slot", "entertainment": "Zábavní systém", "shop": "Obchod", "tower": "Obranná věž",
+	"motel": "Motel", "parking": "Parkoviště", "extension": "Rozšíření plošiny",
 }
 const BUILD_LABELS := {
 	"fuel_slot": "Začít stavět čerpací slot", "entertainment": "Začít stavět zábavní systém",
 	"shop": "Začít stavět obchod", "tower": "Začít stavět obrannou věž",
+	"motel": "Začít stavět motel", "parking": "Začít stavět parkoviště", "extension": "Začít rozšiřovat plošinu",
 }
 const CONTROL_CENTER_SCENE := preload("res://economy/control_center.tscn")
 const WAREHOUSE_SCENE := preload("res://station/warehouse.tscn")
@@ -121,6 +126,16 @@ const PIPE_FITTINGS := {
 	"DLU": [preload("res://assets/sprites/station/pipe_tee_udl.png"), Vector2(18.4, -0.1)],
 }
 const FITTING_SCALE := PIPE_WIDTH / 32.0
+## Obrys paluby po částech (ve směru hodinových ručiček). Rozšíření nahradí pravý kraj a hotové
+## parkoviště se napojí na spodní hranu, takže jsou s palubou jeden kus. Reflektor pak musí
+## dosvítit až na nové kraje.
+const DECK_LEFT: Array[Vector2] = [Vector2(-328, 160), Vector2(-360, 128), Vector2(-360, -128), Vector2(-328, -160)]
+const DECK_RIGHT: Array[Vector2] = [Vector2(328, -160), Vector2(360, -128), Vector2(360, 128), Vector2(328, 160)]
+const DECK_RIGHT_EXTENDED: Array[Vector2] = [Vector2(520, -160), Vector2(552, -128), Vector2(552, 128), Vector2(520, 160)]
+const DECK_PARKING: Array[Vector2] = [
+	Vector2(448, 160), Vector2(448, 284), Vector2(432, 300), Vector2(-52, 300), Vector2(-68, 284), Vector2(-68, 160),
+]
+const LARGE_DECK_FLOODLIGHT_SCALE := 10.0
 ## Délka ramen spojek od středu spojky po konec objímky (px textury). Trubka se do objímky
 ## zasune o FITTING_SOCKET, takže zakryje otvor a kolem ní zůstane vidět jen mosazný kroužek.
 const FITTING_ARMS := {
@@ -155,6 +170,8 @@ var max_slots := 1
 var entertainment_available := false
 var dual_hose_available := false
 var warehouse_available := false
+## Jestli jde rozšířit plošinu a postavit motel s parkovištěm.
+var motel_available := false
 ## Které běžné rakety už létají (číslo mise, `Ship.HULLS`).
 var ship_tier := 1
 var shop_available := false
@@ -163,6 +180,8 @@ var control_center_available := false
 ## Na jaký level jdou koupit filtry. Mise 8 ho zvýší, až dostaneme schéma.
 var max_filter_level := 1
 var galaxin_economy := false
+## Jestli je paluba rozšířená doprava a má další parcely.
+var platform_extended := false
 ## Řídící centrum u zásobníku (i rozestavěné), nebo null.
 var control_center: ControlCenter
 ## Skladiště u obchodu, nebo null.
@@ -199,6 +218,9 @@ var _glowing: Array[Sprite2D] = []
 @onready var _queue_points: Node2D = $QueuePoints
 @onready var _staff: Node2D = $Staff
 @onready var _control_center_spot: Marker2D = $ControlCenterSpot
+@onready var _platform: Polygon2D = $Platform
+@onready var _platform_edge: Line2D = $PlatformEdge
+@onready var _floodlight: PointLight2D = $Floodlight
 
 
 func _ready() -> void:
@@ -283,6 +305,40 @@ func shop() -> Shop:
 		if plot.building is Shop:
 			return plot.building
 	return null
+
+
+## Motel (i rozestavěný), nebo null.
+func motel() -> Motel:
+	for plot in get_plots():
+		if plot.building is Motel:
+			return plot.building
+	return null
+
+
+func has_motel() -> bool:
+	return motel() != null and motel().is_operational()
+
+
+## Parkoviště (i rozestavěné), nebo null.
+func parking() -> Parking:
+	for plot in get_plots():
+		if plot.building is Parking:
+			return plot.building
+	return null
+
+
+func has_parking() -> bool:
+	return parking() != null and parking().is_operational()
+
+
+## Posádka si občas po natankování vezme pokoj v motelu (zájezdy ne). Když je kde zaparkovat,
+## loď přeletí na parkoviště a vrátí se true.
+func try_motel_stay(ship: Ship) -> bool:
+	if ship.kind == Ship.Kind.TOURIST or not has_motel() or not has_parking() \
+			or not parking().has_free_bay() or randf() >= Motel.GUEST_CHANCE:
+		return false
+	ship.park_at(parking().take_bay(ship), randi_range(Motel.PAYMENTS_MIN, Motel.PAYMENTS_MAX))
+	return true
 
 
 ## Kolik druhů zboží navíc obchod prodává (-1 = obchod není hotový).
@@ -620,6 +676,10 @@ func setup_maxed() -> void:
 		tower_plot = first_empty_plot(Plot.Kind.TOWER)
 	_place_control_center().set_maxed()
 	_place_warehouse().finish_instantly()
+	_open_extension()
+	_place_building("motel", first_empty_plot()).finish_instantly()
+	_place_building("parking", first_empty_plot(Plot.Kind.PARKING)).finish_instantly()
+	_update_deck()
 	tank.set_level(GalaxinTank.LEVELS.size())
 	drone.set_maxed()
 	for android in get_androids():
@@ -790,11 +850,45 @@ func on_building_finished(building: Building) -> void:
 	elif building is FuelSlot:
 		# Nový slot hned nabídne lodi, která čeká ve frontě.
 		_on_slot_freed(building)
+	elif building is PlatformExtension:
+		if selected == building:
+			select(null)
+		building.plot.clear()
+		_open_extension()
+	elif building is Parking:
+		_update_deck()
+
+
+## Paluba se rozšíří a na novém kusu se otevřou parcely.
+func _open_extension() -> void:
+	platform_extended = true
+	_update_deck()
+
+
+## Poskládá obrys paluby podle toho, co už je postavené.
+func _update_deck() -> void:
+	var outline := PackedVector2Array(DECK_RIGHT_EXTENDED if platform_extended else DECK_RIGHT)
+	if has_parking():
+		outline.append_array(PackedVector2Array(DECK_PARKING))
+	outline.append_array(PackedVector2Array(DECK_LEFT))
+	_platform.polygon = outline
+	_platform_edge.points = outline
+	if platform_extended or has_parking():
+		_floodlight.texture_scale = LARGE_DECK_FLOODLIGHT_SCALE
 
 
 ## Co jde na parcele daného druhu stavět.
 func _building_types(plot: Plot) -> Array:
-	return ["tower"] if plot.kind == Plot.Kind.TOWER else ["fuel_slot", "entertainment", "shop"]
+	if plot.needs_extension and not platform_extended:
+		return []
+	match plot.kind:
+		Plot.Kind.TOWER:
+			return ["tower"]
+		Plot.Kind.EXTENSION:
+			return ["extension"]
+		Plot.Kind.PARKING:
+			return ["parking"]
+	return ["fuel_slot", "entertainment", "shop", "motel"]
 
 
 func _build_phases(type: String) -> Array:
@@ -805,6 +899,12 @@ func _build_phases(type: String) -> Array:
 			return EntertainmentSystem.PHASES
 		"shop":
 			return Shop.PHASES
+		"motel":
+			return Motel.PHASES
+		"parking":
+			return Parking.PHASES
+		"extension":
+			return PlatformExtension.PHASES
 	return DefenseTower.PHASES
 
 
@@ -821,6 +921,12 @@ func _build_cost(type: String) -> int:
 			allowed = shop_available and shop() == null
 		"tower":
 			allowed = tower_available
+		"motel":
+			allowed = motel_available and motel() == null
+		"parking":
+			allowed = motel_available and parking() == null
+		"extension":
+			allowed = motel_available and not platform_extended
 	return _build_phases(type)[0].cost if allowed else -1
 
 
@@ -847,7 +953,8 @@ func _pick(point: Vector2) -> Node:
 		if plot.rect().has_point(point):
 			if plot.building:
 				return plot.building
-			return plot if can_build_on(plot) else null
+			if can_build_on(plot):
+				return plot
 	return null
 
 

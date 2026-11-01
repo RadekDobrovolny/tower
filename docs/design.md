@@ -468,6 +468,23 @@ Císař uvalí embargo na celou oblast a snaží se zastavit pohyb osob. Oficiá
 
 Embargo je pravidlo mise (`Mission.embargo`). Platí i ve volné hře po misi a vypne ho až další mise bez tohoto pravidla. Další mise musí mít `max_filter_level = 3`, jinak by hráč schéma ztratil. Volba z Mise 7 (prozradit, nebo zatajit Zoru) zatím průběh Mise 8 nemění.
 
+## Mise 9: Provizorní motel
+
+Embargo trvá a Sizel přijde s nápadem: lidé uvízli a někde spát musejí, tak ať stanice postaví provizorní motel. Plány dodá za provizi, to je ale jen řeč v rozhovoru, ceny staveb to nemění. Pumpík si stěžuje, kolik práce to bude.
+
+**Startovní stav** (jen při startu od mise 9): jako v Misi 8, ale filtry na levelu 3 a Sizel je přítel (galaxín za 4 kr/j).
+
+**Cíle:**
+- **Rozšířit plošinu** (3 části, 8 000 kr). Paluba se rozšíří doprava a přibudou na ní 2 nové parcely.
+- **Postavit motel** (4 části, 6 000 kr) na běžné parcele.
+- **Postavit parkoviště** (3 části, 4 000 kr) pod plošinou pro 4 lodě.
+
+**Rozložení:** kamera se nemění, všechno se vejde do základního výhledu. Rozšíření je vpravo, aby ho nezakrýval panel galaxínu. Parkoviště přiléhá k palubě zespodu, vpravo od kotviště cisterny.
+
+**Hosté motelu:** když stojí motel i parkoviště a je volné stání, loď po zaplacení s šancí 35 % přeletí na parkoviště. Zůstane 25 až 45 s a každých 5 s pošle platbu: běžně 20 kr, rodinná raketa 40 kr a luxusní limuzína 50 kr. Turistická loď do motelu nejezdí. Před piráty hosté neutíkají. Šance a délka pobytu jsou odhad, zatím nevyvážené.
+
+Hotové parkoviště je s palubou jeden kus (`Station._update_deck`), stejně jako její rozšíření.
+
 ## Mise Z: Volná hra
 
 Jde na ni jen z menu, na misi 5 nenavazuje. Pravidla jsou jako v misi 5 (včetně pirátů), ale nejsou tu žádné cíle a na začátku je všechno hotové: 3 čerpací sloty, obchod s veškerým zbožím, zábavní systém na levelu 5 s výherními automaty, obě věže na levelu 3, řídící centrum se všemi vylepšeními, zásobník na levelu 4 (plný), Pumpík i Bzučák na maximu. Start s 10 000 kr. Artefakty se sbírají až během hry.

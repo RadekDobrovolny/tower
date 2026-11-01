@@ -99,6 +99,14 @@ const MISSION_INTROS := [
 		{"speaker": PUMPIK, "mood": "angry", "text": "Zbyl jen černý trh. Sizel Varn nám galaxín doveze, ale chce 6 kr za jednotku a vozí pořád tu samou břečku."},
 		{"speaker": PUMPIK, "mood": "neutral", "text": "Pořiď v řídícím centru filtry, ať s tím nemáme pokuty. Na level 3 ale nemáme schéma. A rozmysli si prodejní cenu, za 6 kr na galaxínu nic nevyděláme."},
 	],
+	[
+		{"speaker": SIZEL, "mood": "happy", "text": "Šéfe, mám obchod. Embargo jen tak neskončí a kdo sem doletí, nemá kam dál. Někde spát musejí."},
+		{"speaker": PUMPIK, "mood": "worried", "text": "Na stanici? Vždyť tu ani není místo, šéfiku."},
+		{"speaker": SIZEL, "mood": "happy", "text": "Provizorní motel, plechovko. Pár obytných kapslí, neon a parkoviště pro čtyři lodě. Kredity potečou i bez galaxínu."},
+		{"speaker": PUMPIK, "mood": "worried", "text": "Rozšířit plošinu, postavit motel a pod to parkoviště? Šéfiku, to bude práce na celé věky."},
+		{"speaker": SIZEL, "mood": "happy", "text": "Plány dodám já, šéfe. Za malou provizi, samozřejmě."},
+		{"speaker": PUMPIK, "mood": "angry", "text": "Samozřejmě. Já tankuju, střílím po pirátech a teď mám ještě převlékat postele?"},
+	],
 ]
 
 ## Stojí druhý slot, takže se otevřela druhá hadice.

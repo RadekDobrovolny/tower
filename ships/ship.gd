@@ -9,7 +9,7 @@ signal gave_up(ship: Ship)
 ## Loď z příběhu dotankovala a místo placení čeká, co s ní udělá scéna.
 signal skipped_payment(ship: Ship)
 
-enum State { QUEUED, TO_SLOT, LANDED, DEPARTING }
+enum State { QUEUED, TO_SLOT, LANDED, DEPARTING, TO_PARKING, PARKED }
 ## Běžná loď, velká nákladní loď (2× větší nádrž) a turistická loď (o 30 % větší nádrž,
 ## v obchodě utratí 20× víc, přilétá jen ke stanici s hotovým obchodem).
 enum Kind { REGULAR, FREIGHTER, TOURIST }
@@ -22,6 +22,7 @@ enum Kind { REGULAR, FREIGHTER, TOURIST }
 ## - `tank`: násobek velikosti nádrže
 ## - `tip`: násobek šance na dýško, `tip_size`: násobek jeho výše
 ## - `full_tank`: nikdy neobjednává za částku, vždy plnou
+## - `motel_pay`: kolik platí v motelu místo běžné ceny
 ## - `brightness`: zjasnění (černá závodní raketa by jinak v temném vesmíru zanikla), `scale`: měřítko
 const HULLS := [
 	{"name": "Obyčejná raketa", "about": "Každodenní chleba stanice. Přiletí, natankuje a zaplatí.",
@@ -43,7 +44,7 @@ const HULLS := [
 	# Velká nádrž, ale s dětmi na palubě dlouho nevydrží.
 	{"name": "Rodinná raketa", "about": "Velká nádrž a děti na palubě, takže dlouho nevydrží.",
 			"texture": preload("res://assets/sprites/ships/rocket_family.png"), "lines": Lines.SHIP_FAMILY, "from": 2,
-			"patience": 0.75, "tank": 1.3, "scale": 0.42},
+			"patience": 0.75, "tank": 1.3, "motel_pay": 40, "scale": 0.42},
 	# Malá nádrž a velký spěch, dýško skoro nedává.
 	{"name": "Kurýrní služba", "about": "Balík měl být doručený včera. Bere jen málo galaxínu.",
 			"texture": preload("res://assets/sprites/ships/rocket_courier.png"), "lines": Lines.SHIP_COURIER, "from": 3,
@@ -75,7 +76,7 @@ const HULLS := [
 	# Velká dýška, ale čekat nebude. Vždy plnou nádrž.
 	{"name": "Luxusní limuzína", "about": "Velká dýška, ale čekat nebude. Bere jen plnou nádrž.",
 			"texture": preload("res://assets/sprites/ships/rocket_limo.png"), "lines": Lines.SHIP_LIMO, "from": 5,
-			"patience": 0.45, "tank": 1.2, "tip": 4.0, "tip_size": 2.5, "full_tank": true,
+			"patience": 0.45, "tank": 1.2, "tip": 4.0, "tip_size": 2.5, "full_tank": true, "motel_pay": 50,
 			"brightness": 1.3, "scale": 0.5},
 	# Má čas i velkou nádrž, šetří každý kredit.
 	{"name": "Redneck", "about": "Sudy, rez a paroží. Šetří každý kredit.",
@@ -178,6 +179,9 @@ var _takeoff_point: Vector2
 var _takeoff_scale := 1.0
 ## Rychlost v posledním snímku, podle ní táhne motor.
 var _current_speed := 0.0
+## Kolik plateb za motel posádka ještě pošle a za jak dlouho (s) přijde další.
+var _motel_payments := 0
+var _motel_pay_left := 0.0
 
 @onready var _body: Node2D = $Body
 @onready var _sprite: Sprite2D = $Body/Sprite
@@ -220,6 +224,10 @@ func _process(delta: float) -> void:
 			_wait_at_slot(delta)
 		State.DEPARTING:
 			_fly_away(delta)
+		State.TO_PARKING:
+			_fly_to_parking(delta)
+		State.PARKED:
+			_stay_in_motel(delta)
 	_shake(delta)
 	var waiting_for_fuel := state == State.LANDED and _patience_left < PATIENCE
 	_patience_bar.visible = state == State.QUEUED or waiting_for_fuel
@@ -292,7 +300,8 @@ func leave_paid() -> int:
 		_say(Lines.TIP)
 	elif randf() < THANKS_CHANCE:
 		_say(Lines.HAPPY_LEAVE)
-	_depart(PAID_DEPARTURE_DELAY)
+	if not station.try_motel_stay(self):
+		_depart(PAID_DEPARTURE_DELAY)
 	return tip
 
 
@@ -309,6 +318,17 @@ func is_story() -> bool:
 func sneak_away() -> void:
 	_speed_limit = SNEAK_SPEED
 	_depart(PAID_DEPARTURE_DELAY)
+
+
+## Posádka si vzala pokoj v motelu: loď přeletí na stání `bay` a pošle `payments` plateb.
+func park_at(bay: Vector2, payments: int) -> void:
+	_release_slot()
+	_target = bay
+	_motel_payments = payments
+	_motel_pay_left = Motel.PAY_INTERVAL
+	_takeoff_point = global_position
+	_departure_delay = PAID_DEPARTURE_DELAY
+	state = State.TO_PARKING
 
 
 ## Loď z příběhu odletí bez tankování.
@@ -491,10 +511,7 @@ func _land() -> void:
 
 
 func _depart(delay: float) -> void:
-	if slot:
-		var old_slot := slot
-		slot = null
-		old_slot.release()
+	_release_slot()
 	_takeoff_point = global_position
 	_takeoff_scale = _body.scale.x
 	_speed = 0.0
@@ -502,9 +519,51 @@ func _depart(delay: float) -> void:
 	state = State.DEPARTING
 
 
+func _release_slot() -> void:
+	if slot:
+		var old_slot := slot
+		slot = null
+		old_slot.release()
+
+
+## Přelet na parkoviště: loď se nejdřív zvedne a nad stáním zase klesá.
+func _fly_to_parking(delta: float) -> void:
+	if _departure_delay > 0.0:
+		_departure_delay -= delta
+		if _departure_delay <= 0.0:
+			Sfx.play("ship_takeoff")
+		return
+	var arrived := _fly_to(_target, delta, true)
+	var lift := clampf(global_position.distance_to(_takeoff_point) / APPROACH_RADIUS, 0.0, 1.0)
+	_body.scale = Vector2.ONE * minf(_body.scale.x, lerpf(1.0, FLIGHT_SCALE, lift))
+	if arrived:
+		global_position = _target
+		_body.scale = Vector2.ONE
+		_current_speed = 0.0
+		Sfx.play("ship_land")
+		state = State.PARKED
+
+
+## Za pobyt se platí průběžně. Po poslední platbě loď uvolní stání a odletí.
+func _stay_in_motel(delta: float) -> void:
+	_motel_pay_left -= delta
+	if _motel_pay_left > 0.0:
+		return
+	_motel_pay_left += Motel.PAY_INTERVAL
+	var price: int = _hull.get("motel_pay", Motel.PAY_AMOUNT)
+	station.motel().add_payment(price)
+	Game.add_credits(price)
+	Sfx.play("coin", Shop.SALE_COIN_PITCH, Shop.SALE_COIN_GAIN_DB)
+	FloatingText.spawn(get_parent(), global_position + Vector2(0, -56), "+%d kr motel" % price)
+	_motel_payments -= 1
+	if _motel_payments <= 0:
+		station.parking().release_bay(self)
+		_depart(PAID_DEPARTURE_DELAY)
+
+
 ## Na plošině (a před odletem) je motor vypnutý, ve vzduchu táhne podle rychlosti.
 func _engine_throttle() -> float:
-	if state == State.LANDED or (state == State.DEPARTING and _departure_delay > 0.0):
+	if state == State.LANDED or state == State.PARKED or _departure_delay > 0.0:
 		return 0.0
 	return HOVER_THROTTLE + (1.0 - HOVER_THROTTLE) * clampf(_current_speed / MAX_SPEED, 0.0, 1.0)
 

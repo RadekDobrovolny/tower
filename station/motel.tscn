@@ -1,0 +1,70 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://station/motel.gd" id="1_motel"]
+[ext_resource type="Texture2D" path="res://assets/sprites/construction/foundation.png" id="2_foundation"]
+[ext_resource type="Texture2D" path="res://assets/sprites/motel/motel.png" id="3_body"]
+[ext_resource type="Texture2D" path="res://assets/sprites/motel/motel_frame.png" id="4_frame"]
+[ext_resource type="Texture2D" path="res://assets/sprites/motel/motel_sign.png" id="5_sign"]
+[ext_resource type="Texture2D" path="res://assets/sprites/motel/vending.png" id="6_vending"]
+[ext_resource type="Texture2D" path="res://assets/sprites/motel/luggage.png" id="7_luggage"]
+[ext_resource type="Texture2D" path="res://fx/soft_light.tres" id="8_soft"]
+[ext_resource type="Material" path="res://fx/additive.tres" id="9_additive"]
+
+[node name="Motel" type="Node2D"]
+script = ExtResource("1_motel")
+
+[node name="Base" type="Sprite2D" parent="."]
+visible = false
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_foundation")
+
+[node name="Frame" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(0, -6)
+scale = Vector2(0.46, 0.46)
+texture = ExtResource("4_frame")
+
+[node name="SignGlow" type="Sprite2D" parent="."]
+visible = false
+modulate = Color(1, 0.3, 0.8, 0.5)
+material = ExtResource("9_additive")
+position = Vector2(-62, -48)
+scale = Vector2(0.9, 0.7)
+texture = ExtResource("8_soft")
+
+[node name="Sign" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(-62, -30)
+scale = Vector2(0.42, 0.42)
+texture = ExtResource("5_sign")
+
+[node name="Body" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(4, -4)
+scale = Vector2(0.46, 0.46)
+texture = ExtResource("3_body")
+
+[node name="Vending" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(66, 22)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("6_vending")
+
+[node name="Luggage" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(-66, 34)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("7_luggage")
+
+[node name="Label" type="Label" parent="."]
+visible = false
+offset_left = -80.0
+offset_top = 46.0
+offset_right = 80.0
+offset_bottom = 64.0
+mouse_filter = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+text = "Motel"
+horizontal_alignment = 1

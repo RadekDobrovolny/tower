@@ -68,6 +68,24 @@ position = Vector2(322, -72)
 kind = 1
 size = Vector2(64, 100)
 
+[node name="WingPlot1" parent="Plots" instance=ExtResource("2_plot")]
+position = Vector2(456, -80)
+needs_extension = true
+
+[node name="WingPlot2" parent="Plots" instance=ExtResource("2_plot")]
+position = Vector2(456, 85)
+needs_extension = true
+
+[node name="ExtensionPlot" parent="Plots" instance=ExtResource("2_plot")]
+position = Vector2(456, 0)
+kind = 2
+size = Vector2(190, 320)
+
+[node name="ParkingPlot" parent="Plots" instance=ExtResource("2_plot")]
+position = Vector2(190, 238)
+kind = 3
+size = Vector2(516, 140)
+
 [node name="ControlCenterSpot" type="Marker2D" parent="."]
 position = Vector2(108, 92)
 

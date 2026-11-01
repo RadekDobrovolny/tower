@@ -157,6 +157,12 @@ func get_goals() -> Array[Dictionary]:
 	if mission.goal_purification > 0:
 		var filters: int = station.control_center.levels.purification if station.control_center else 0
 		goals.append(_goal("Filtry galaxínu na levelu %d" % mission.goal_purification, filters, mission.goal_purification))
+	if mission.goal_platform:
+		goals.append(_goal("Rozšířit plošinu", 1 if station.platform_extended else 0, 1))
+	if mission.goal_motel:
+		goals.append(_goal("Postavit motel", 1 if station.has_motel() else 0, 1))
+	if mission.goal_parking:
+		goals.append(_goal("Postavit parkoviště", 1 if station.has_parking() else 0, 1))
 	if mission.goal_drone_speed > 0:
 		goals.append(_goal("%s: rychlost letu na levelu %d" % [station.drone.display_name, mission.goal_drone_speed],
 				station.drone.speed_level, mission.goal_drone_speed))
@@ -192,6 +198,9 @@ func _apply_start_state(start: Mission) -> void:
 	if start.start_towers > 1:
 		station.place_second_tower(start.start_tower_level)
 	station.tank.set_level(start.start_tank_level)
+	if start.start_filter_level > 0:
+		station.control_center.levels.purification = start.start_filter_level
+	station.supply.sizel_friend = start.start_sizel_friend
 
 
 ## Zapne pravidla mise. Stav stanice (kredity, vylepšení, sloty) zůstává.
@@ -219,6 +228,7 @@ func _apply_rules(rules: Mission) -> void:
 	station.control_center_available = rules.control_center_available
 	station.tower_available = rules.tower_available
 	station.warehouse_available = rules.warehouse_available
+	station.motel_available = rules.motel_available
 	station.drone.upgrades_available = rules.drone_upgrades
 	station.max_filter_level = rules.max_filter_level
 	station.supply.set_embargo(rules.embargo)

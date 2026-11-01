@@ -36,6 +36,8 @@ extends Resource
 ## Císařské embargo na celou oblast: galaxín jde objednat jen od Sizela, a to dráž, a lodí
 ## přilétá méně.
 @export var embargo := false
+## Jestli jde rozšířit plošinu a postavit motel s parkovištěm.
+@export var motel_available := false
 ## Jestli v misi proběhne scéna se Zorou. Mise skončí až po ní.
 @export var zora_scene := false
 ## Jestli v misi proběhne scéna s císařskou hlídkou. Mise skončí až po ní.
@@ -75,6 +77,10 @@ extends Resource
 @export var goal_drone_work := 0
 ## Na jaký level musí být vylepšené filtry galaxínu.
 @export var goal_purification := 0
+## Jestli musí být rozšířená plošina a hotový motel a parkoviště.
+@export var goal_platform := false
+@export var goal_motel := false
+@export var goal_parking := false
 ## Kolik pirátů musí stanice sestřelit (věží i androidem).
 @export var goal_pirates_shot := 0
 
@@ -98,5 +104,9 @@ extends Resource
 @export var start_towers := 1
 ## Jestli stojí skladiště (hotový obchod je potřeba).
 @export var start_warehouse := false
+## Level filtrů galaxínu (řídící centrum je potřeba).
+@export var start_filter_level := 0
+## Jestli je Sizel už náš přítel (příběh Mise 8).
+@export var start_sizel_friend := false
 ## Všechno postavené a vylepšené na maximum. Levely výše se pak nepoužijí.
 @export var start_maxed := false

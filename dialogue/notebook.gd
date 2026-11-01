@@ -63,6 +63,8 @@ static func _hull_facts(hull: Dictionary) -> String:
 		facts.append("Dýško dává často.")
 	if hull.get("full_tank", false):
 		facts.append("Vždy chce plnou nádrž.")
+	if hull.has("motel_pay"):
+		facts.append("V motelu platí %d kr." % hull.motel_pay)
 	return " ".join(facts)
 
 
@@ -143,6 +145,18 @@ static func _buildings() -> Array[Dictionary]:
 		{
 			"title": "Skladiště", "image": preload("res://assets/sprites/warehouse/warehouse.png"),
 			"text": "Přístavba obchodu za %s. Artefakty fungují, jen když jsou v něm, a dají se tu prodat. Má %d míst." % [_phases_cost(Warehouse.PHASES), Warehouse.SLOTS],
+		},
+		{
+			"title": "Rozšíření plošiny", "image": preload("res://assets/sprites/motel/girders.png"),
+			"text": "Nová část paluby vpravo se 2 parcelami. Stojí %s." % _phases_cost(PlatformExtension.PHASES),
+		},
+		{
+			"title": "Motel", "image": preload("res://assets/sprites/motel/motel.png"),
+			"text": "Obytné kapsle pro posádky, které si potřebují odpočinout. Host nechá loď na parkovišti a každých %d s zaplatí %d kr. Zájezdy tu nebydlí. Stavba stojí %s." % [roundi(Motel.PAY_INTERVAL), Motel.PAY_AMOUNT, _phases_cost(Motel.PHASES)],
+		},
+		{
+			"title": "Parkoviště", "image": preload("res://assets/sprites/motel/parking_bay.png"),
+			"text": "%d stání pod plošinou pro lodě hostů motelu. Stojí %s." % [Parking.BAYS.size(), _phases_cost(Parking.PHASES)],
 		},
 	]
 
