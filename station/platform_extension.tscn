@@ -9,10 +9,11 @@ script = ExtResource("1_extension")
 
 [node name="Deck" type="Polygon2D" parent="."]
 visible = false
+z_index = -1
 texture_repeat = 2
 texture = ExtResource("2_deck")
 texture_offset = Vector2(-4, 0)
-polygon = PackedVector2Array(328, -160, 520, -160, 552, -128, 552, 128, 520, 160, 328, 160, 360, 128, 360, -128)
+polygon = PackedVector2Array(320, -160, 520, -160, 552, -128, 552, 128, 520, 160, 320, 160)
 
 [node name="Girders" type="Node2D" parent="."]
 visible = false

@@ -38,6 +38,8 @@ func _ready() -> void:
 	_highlight.size = size
 	if kind == Kind.EXTENSION or kind == Kind.PARKING:
 		_outline.default_color.a = OUTSIDE_OUTLINE_ALPHA
+	# Obrys zapne až stanice, když tu jde stavět. Úvodní rozhovor by ho jinak ukázal všude.
+	_outline.hide()
 
 
 func is_empty() -> bool:

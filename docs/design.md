@@ -488,6 +488,8 @@ Embargo trvá a Sizel přijde s nápadem: lidé uvízli a někde spát musejí, 
 
 Hotové parkoviště je s palubou jeden kus (`Station._update_deck`), stejně jako její rozšíření.
 
+Hrana paluby není přesně rovná: je o pár pixelů zubatá, místy vylomená a podél ní je rez.
+
 ## Mise Z: Volná hra
 
 Jde na ni jen z menu, na misi 5 nenavazuje. Pravidla jsou jako v misi 5 (včetně pirátů), ale nejsou tu žádné cíle a na začátku je všechno hotové: 3 čerpací sloty, obchod s veškerým zbožím, zábavní systém na levelu 5 s výherními automaty, obě věže na levelu 3, řídící centrum se všemi vylepšeními, zásobník na levelu 4 (plný), Pumpík i Bzučák na maximu. Start s 10 000 kr. Artefakty se sbírají až během hry.

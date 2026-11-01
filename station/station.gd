@@ -137,6 +137,12 @@ const DECK_PARKING: Array[Vector2] = [
 	Vector2(448, 160), Vector2(448, 284), Vector2(432, 300), Vector2(-52, 300), Vector2(-68, 284), Vector2(-68, 160),
 ]
 const LARGE_DECK_FLOODLIGHT_SCALE := 10.0
+## Hrana paluby není přesně rovná: po krocích (px) se o kousek vlní a občas je z ní vylomený zub.
+const EDGE_STEP_MIN := 6.0
+const EDGE_STEP_MAX := 14.0
+const EDGE_WOBBLE := 1.5
+const EDGE_CHIP_CHANCE := 0.14
+const EDGE_CHIP_DEPTH := 4.0
 ## Délka ramen spojek od středu spojky po konec objímky (px textury). Trubka se do objímky
 ## zasune o FITTING_SOCKET, takže zakryje otvor a kolem ní zůstane vidět jen mosazný kroužek.
 const FITTING_ARMS := {
@@ -220,6 +226,7 @@ var _glowing: Array[Sprite2D] = []
 @onready var _staff: Node2D = $Staff
 @onready var _control_center_spot: Marker2D = $ControlCenterSpot
 @onready var _platform: Polygon2D = $Platform
+@onready var _deck_rust: Line2D = $Platform/DeckRust
 @onready var _floodlight: PointLight2D = $Floodlight
 
 
@@ -234,6 +241,7 @@ func _ready() -> void:
 	supply.tank = tank
 	supply.station = self
 	_apply_galaxin_economy()
+	_update_deck()
 
 
 func _process(_delta: float) -> void:
@@ -875,9 +883,33 @@ func _update_deck() -> void:
 	if has_parking():
 		outline.append_array(PackedVector2Array(DECK_PARKING))
 	outline.append_array(PackedVector2Array(DECK_LEFT))
+	outline = _roughen_edge(outline)
 	_platform.polygon = outline
+	_deck_rust.points = outline
 	if platform_extended or has_parking():
 		_floodlight.texture_scale = LARGE_DECK_FLOODLIGHT_SCALE
+
+
+## Rozdělí rovné hrany obrysu na krátké kousky a trochu je rozhodí. Obrys vede ve směru hodinových
+## ručiček. Každá hrana má vlastní seed, takže kusy paluby, které se nemění, drží stejný tvar.
+func _roughen_edge(outline: PackedVector2Array) -> PackedVector2Array:
+	var rough := PackedVector2Array()
+	var rng := RandomNumberGenerator.new()
+	for i in outline.size():
+		var from := outline[i]
+		var to := outline[(i + 1) % outline.size()]
+		var direction := from.direction_to(to)
+		var inward := direction.rotated(PI / 2.0)
+		rng.seed = hash([from, to])
+		rough.append(from)
+		var along := rng.randf_range(EDGE_STEP_MIN, EDGE_STEP_MAX)
+		while along < from.distance_to(to) - EDGE_STEP_MIN:
+			var shift := rng.randf_range(-EDGE_WOBBLE, EDGE_WOBBLE)
+			if rng.randf() < EDGE_CHIP_CHANCE:
+				shift = rng.randf_range(EDGE_CHIP_DEPTH * 0.5, EDGE_CHIP_DEPTH)
+			rough.append(from + direction * along + inward * shift)
+			along += rng.randf_range(EDGE_STEP_MIN, EDGE_STEP_MAX)
+	return rough
 
 
 ## Co jde na parcele daného druhu stavět.

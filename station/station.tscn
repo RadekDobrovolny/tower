@@ -8,15 +8,27 @@
 [ext_resource type="Script" path="res://economy/supply.gd" id="6_supply"]
 [ext_resource type="Texture2D" path="res://assets/sprites/station/deck.png" id="7_deck"]
 [ext_resource type="Texture2D" path="res://fx/soft_light.tres" id="8_light"]
+[ext_resource type="Shader" path="res://fx/deck_rust.gdshader" id="9_rust"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rust"]
+shader = ExtResource("9_rust")
 
 [node name="Station" type="Node2D"]
 script = ExtResource("1_station")
 
 [node name="Platform" type="Polygon2D" parent="."]
+clip_children = 2
 texture_repeat = 2
 texture = ExtResource("7_deck")
 texture_offset = Vector2(-4, 0)
 polygon = PackedVector2Array(-328, -160, 328, -160, 360, -128, 360, 128, 328, 160, -328, 160, -360, 128, -360, -128)
+
+[node name="DeckRust" type="Line2D" parent="Platform"]
+material = SubResource("ShaderMaterial_rust")
+closed = true
+width = 42.0
+texture_mode = 1
+joint_mode = 2
 
 [node name="Floodlight" type="PointLight2D" parent="."]
 scale = Vector2(1, 0.55)

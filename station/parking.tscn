@@ -35,10 +35,11 @@ texture = ExtResource("3_girders")
 visible = false
 
 [node name="Deck" type="Polygon2D" parent="Plate"]
+z_index = -1
 texture_repeat = 2
 texture = ExtResource("2_deck")
 texture_offset = Vector2(-4, 0)
-polygon = PackedVector2Array(-68, 160, 448, 160, 448, 284, 432, 300, -52, 300, -68, 284)
+polygon = PackedVector2Array(-68, 150, 448, 150, 448, 284, 432, 300, -52, 300, -68, 284)
 
 [node name="Corner" type="Polygon2D" parent="Plate/Deck"]
 texture_repeat = 2
