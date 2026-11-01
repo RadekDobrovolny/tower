@@ -198,6 +198,8 @@ func _apply_start_state(start: Mission) -> void:
 	if start.start_towers > 1:
 		station.place_second_tower(start.start_tower_level)
 	station.tank.set_level(start.start_tank_level)
+	if start.start_medallion:
+		station.store_artifact(Station.MEDALLION)
 	if start.start_filter_level > 0:
 		station.control_center.levels.purification = start.start_filter_level
 	station.supply.sizel_friend = start.start_sizel_friend

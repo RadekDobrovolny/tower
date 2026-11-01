@@ -131,6 +131,7 @@ const FITTING_SCALE := PIPE_WIDTH / 32.0
 ## dosvítit až na nové kraje.
 const DECK_LEFT: Array[Vector2] = [Vector2(-328, 160), Vector2(-360, 128), Vector2(-360, -128), Vector2(-328, -160)]
 const DECK_RIGHT: Array[Vector2] = [Vector2(328, -160), Vector2(360, -128), Vector2(360, 128), Vector2(328, 160)]
+const DECK_RIGHT_ABOVE_PARKING: Array[Vector2] = [Vector2(328, -160), Vector2(360, -128), Vector2(360, 160)]
 const DECK_RIGHT_EXTENDED: Array[Vector2] = [Vector2(520, -160), Vector2(552, -128), Vector2(552, 128), Vector2(520, 160)]
 const DECK_PARKING: Array[Vector2] = [
 	Vector2(448, 160), Vector2(448, 284), Vector2(432, 300), Vector2(-52, 300), Vector2(-68, 284), Vector2(-68, 160),
@@ -219,7 +220,6 @@ var _glowing: Array[Sprite2D] = []
 @onready var _staff: Node2D = $Staff
 @onready var _control_center_spot: Marker2D = $ControlCenterSpot
 @onready var _platform: Polygon2D = $Platform
-@onready var _platform_edge: Line2D = $PlatformEdge
 @onready var _floodlight: PointLight2D = $Floodlight
 
 
@@ -867,12 +867,15 @@ func _open_extension() -> void:
 
 ## Poskládá obrys paluby podle toho, co už je postavené.
 func _update_deck() -> void:
-	var outline := PackedVector2Array(DECK_RIGHT_EXTENDED if platform_extended else DECK_RIGHT)
+	var outline := PackedVector2Array(DECK_RIGHT)
+	if platform_extended:
+		outline = PackedVector2Array(DECK_RIGHT_EXTENDED)
+	elif has_parking():
+		outline = PackedVector2Array(DECK_RIGHT_ABOVE_PARKING)
 	if has_parking():
 		outline.append_array(PackedVector2Array(DECK_PARKING))
 	outline.append_array(PackedVector2Array(DECK_LEFT))
 	_platform.polygon = outline
-	_platform_edge.points = outline
 	if platform_extended or has_parking():
 		_floodlight.texture_scale = LARGE_DECK_FLOODLIGHT_SCALE
 
@@ -1122,13 +1125,18 @@ func add_artifact(artifact: Dictionary) -> bool:
 	var keep: bool = artifact.has("story") \
 			or (has_warehouse() and not stored_artifacts.has(artifact) and stored_artifacts.size() < Warehouse.SLOTS)
 	if keep:
-		stored_artifacts.append(artifact)
-		_apply_artifacts()
+		store_artifact(artifact)
 		artifact_stored.emit(artifact)
 	else:
 		Game.add_credits(artifact.credits)
 	state_changed.emit()
 	return keep
+
+
+## Uloží artefakt do skladiště a zapne jeho účinek. Přímo se volá pro startovní stav mise.
+func store_artifact(artifact: Dictionary) -> void:
+	stored_artifacts.append(artifact)
+	_apply_artifacts()
 
 
 ## Prodá artefakt ze skladiště. Jeho účinek skončí a znovu může vypadnout z pirátů.

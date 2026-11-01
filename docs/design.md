@@ -442,7 +442,7 @@ První příběhová mise, přichází Zora Zender.
 
 Bzučák nestíhá a dodavatel mešká. Asi 45 s po začátku mise přistane císařská hlídka a Kobaltový strážce se ptá na Zoru. O medailonu nemluví a Pumpík o něm taky nic neřekne. Hráč si vybere, jestli ji prozradí, nebo zatají. Výběr zatím mění jen repliky a pamatuje si ho `Game.zora_reported` pro další příběh. Mise skončí až po téhle scéně.
 
-**Startovní stav** (jen při startu od mise 7): jako v Misi 6, ale zábavní systém na levelu 3 a 2 věže na levelu 1. Medailon při tomhle startu chybí.
+**Startovní stav** (jen při startu od mise 7): jako v Misi 6, ale zábavní systém na levelu 3 a 2 věže na levelu 1. Ve skladišti je medailon od Zory a zůstává tam i v dalších misích, dokud ho nepoužije pozdější příběh.
 
 **Cíle:**
 - Jedna obranná věž na **levelu 2**.

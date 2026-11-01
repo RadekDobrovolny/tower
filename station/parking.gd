@@ -22,6 +22,7 @@ var _bay_sprites: Array[Sprite2D] = []
 @onready var _frame: Node2D = $Frame
 @onready var _plate: Node2D = $Plate
 @onready var _deck: Polygon2D = $Plate/Deck
+@onready var _corner: Polygon2D = $Plate/Deck/Corner
 @onready var _lights: Node2D = $Lights
 @onready var _label: Label = $Label
 
@@ -42,6 +43,8 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	super(delta)
+	# Roh paluby nad parkovištěm doplní rozestavěný plech, dokud ho nezakryje rozšíření.
+	_corner.visible = not station.platform_extended
 	_label.text = "Parkoviště · %d / %d" % [guests(), BAYS.size()] if is_operational() else "Parkoviště"
 
 

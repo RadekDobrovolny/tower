@@ -39,5 +39,6 @@ start_control_center = 2
 start_tower_level = 2
 start_towers = 2
 start_warehouse = true
+start_medallion = true
 start_filter_level = 3
 start_sizel_friend = true

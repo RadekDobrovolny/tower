@@ -104,6 +104,8 @@ extends Resource
 @export var start_towers := 1
 ## Jestli stojí skladiště (hotový obchod je potřeba).
 @export var start_warehouse := false
+## Jestli je ve skladišti medailon ze scény se Zorou (skladiště je potřeba).
+@export var start_medallion := false
 ## Level filtrů galaxínu (řídící centrum je potřeba).
 @export var start_filter_level := 0
 ## Jestli je Sizel už náš přítel (příběh Mise 8).

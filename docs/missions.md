@@ -228,7 +228,7 @@ Když hra začne přímo od mise, dostane hráč pevný startovní stav. Od Mise
 | 4 | 6 000 | jako Mise 3 a zásobník 3 | 9 000 + galaxín |
 | 5 | 8 000 | 3 sloty, Druhá hadice, tankování 6, jízda 5, zábavní systém 3, zásobník 3, obchod se 2 druhy zboží, řídící centrum s dispečinkem | 1 000 + galaxín |
 | 6 | 8 000 | jako Mise 5, ale zábavní systém 2, věž na levelu 1 a skladiště | 9 000 + galaxín |
-| 7 | 8 000 | jako Mise 6, ale zábavní systém 3 a 2 věže na levelu 1, bez medailonu | 6 500 + galaxín |
+| 7 | 8 000 | jako Mise 6, ale zábavní systém 3, 2 věže na levelu 1 a medailon ve skladišti | 6 500 + galaxín |
 | 8 | 8 000 | jako Mise 7, ale 2 věže na levelu 2 | 2 500 + galaxín |
 | 9 | 8 000 | jako Mise 8, ale filtry na levelu 3 a Sizel je přítel | 10 000 + galaxín |
 

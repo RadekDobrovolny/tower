@@ -11,33 +11,24 @@ script = ExtResource("1_parking")
 
 [node name="Frame" type="Node2D" parent="."]
 visible = false
-
-[node name="TieLeft" type="Sprite2D" parent="Frame"]
-position = Vector2(-129, 30)
-scale = Vector2(0.87, 0.42)
-texture = ExtResource("3_girders")
-
-[node name="TieRight" type="Sprite2D" parent="Frame"]
-position = Vector2(129, 30)
-scale = Vector2(0.87, 0.42)
-texture = ExtResource("3_girders")
+z_index = -1
 
 [node name="BeamLeft" type="Sprite2D" parent="Frame"]
-position = Vector2(-220, -12)
+position = Vector2(-170, -22)
 rotation = 1.5708
-scale = Vector2(0.46, 0.5)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("3_girders")
 
 [node name="BeamMiddle" type="Sprite2D" parent="Frame"]
-position = Vector2(-70, -12)
+position = Vector2(-30, -22)
 rotation = 1.5708
-scale = Vector2(0.46, 0.5)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("3_girders")
 
 [node name="BeamRight" type="Sprite2D" parent="Frame"]
-position = Vector2(80, -12)
+position = Vector2(110, -22)
 rotation = 1.5708
-scale = Vector2(0.46, 0.5)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("3_girders")
 
 [node name="Plate" type="Node2D" parent="."]
@@ -46,7 +37,14 @@ visible = false
 [node name="Deck" type="Polygon2D" parent="Plate"]
 texture_repeat = 2
 texture = ExtResource("2_deck")
+texture_offset = Vector2(-4, 0)
 polygon = PackedVector2Array(-68, 160, 448, 160, 448, 284, 432, 300, -52, 300, -68, 284)
+
+[node name="Corner" type="Polygon2D" parent="Plate/Deck"]
+texture_repeat = 2
+texture = ExtResource("2_deck")
+texture_offset = Vector2(-4, 0)
+polygon = PackedVector2Array(328, 160, 360, 128, 360, 160)
 
 [node name="Lights" type="Node2D" parent="."]
 visible = false
