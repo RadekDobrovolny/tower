@@ -553,7 +553,6 @@ func _stay_in_motel(delta: float) -> void:
 	var price: int = _hull.get("motel_pay", Motel.PAY_AMOUNT)
 	station.motel().add_payment(price)
 	Game.add_credits(price)
-	Sfx.play("coin", Shop.SALE_COIN_PITCH, Shop.SALE_COIN_GAIN_DB)
 	FloatingText.spawn(get_parent(), global_position + Vector2(0, -56), "+%d kr motel" % price)
 	_motel_payments -= 1
 	if _motel_payments <= 0:
