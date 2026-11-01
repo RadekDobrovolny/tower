@@ -138,9 +138,9 @@ const ZORA_MEDALLION := [
 const PATROL_ARRIVES := [
 	{"speaker": GUARD, "mood": "scornful", "text": "Kobaltová stráž Jeho Veličenstva. Odložte hadice a poslouchejte."},
 	{"speaker": PUMPIK, "mood": "worried", "text": "Šéfiku, to je císařská stráž. Tihle netankují, tihle se ptají."},
-	{"speaker": GUARD, "mood": "neutral", "text": "Hledáme ženu jménem Zora Zender. Cirkusová artistka, rychlá červená raketa. Viděli jste ji?"},
 	{
-		"speaker": PUMPIK, "mood": "worried", "text": "Šéfiku, co mu mám říct?",
+		"speaker": GUARD, "mood": "neutral",
+		"text": "Hledáme ženu jménem Zora Zender. Cirkusová artistka, rychlá červená raketa. Viděli jste ji?",
 		"choices": [
 			{
 				"id": REPORT_ZORA, "text": "Byla tu a ujela bez placení",
