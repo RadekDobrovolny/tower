@@ -616,7 +616,8 @@
         {
           "file": "assets/sprites/ships/rocket_date.png",
           "sha12": "6f5b59b6206c",
-          "cell": "řádek 1, uprostřed"
+          "cell": "řádek 1, uprostřed",
+          "note": "nahrazena verzí z Codexu, viz níže"
         },
         {
           "file": "assets/sprites/ships/rocket_van.png",
@@ -914,6 +915,17 @@
           "file": "assets/sprites/portraits/pumpik_angry.png",
           "sha12": "e572560005e7",
           "cell": "vpravo dole"
+        }
+      ]
+    },
+    {
+      "source": "Codex CLI s tarifem ChatGPT, nemá SpriteCook ID",
+      "label": "Tower – romantická raketa, překreslené srdce-okno shora (reference předchozí sprite)",
+      "files": [
+        {
+          "file": "assets/sprites/ships/rocket_date.png",
+          "sha12": "d27b3b342f2b",
+          "cell": "celý obrázek"
         }
       ]
     }
