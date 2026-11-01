@@ -524,22 +524,26 @@
         {
           "file": "assets/sprites/portraits/pumpik_neutral.png",
           "sha12": "8c716ed4a7dc",
-          "cell": "vlevo nahoře"
+          "cell": "vlevo nahoře",
+          "note": "nahrazen verzí z Codexu, viz níže"
         },
         {
           "file": "assets/sprites/portraits/pumpik_happy.png",
           "sha12": "17090ee20227",
-          "cell": "vpravo nahoře"
+          "cell": "vpravo nahoře",
+          "note": "nahrazen verzí z Codexu, viz níže"
         },
         {
           "file": "assets/sprites/portraits/pumpik_worried.png",
           "sha12": "850c2c5950d3",
-          "cell": "vlevo dole"
+          "cell": "vlevo dole",
+          "note": "nahrazen verzí z Codexu, viz níže"
         },
         {
           "file": "assets/sprites/portraits/pumpik_angry.png",
           "sha12": "f30a2f612025",
-          "cell": "vpravo dole"
+          "cell": "vpravo dole",
+          "note": "nahrazen verzí z Codexu, viz níže"
         }
       ]
     },
@@ -886,6 +890,32 @@
       "source": "Codex CLI s tarifem ChatGPT, nemá SpriteCook ID",
       "label": "Tower – Pumpík, pohledy se dvěma koly, překreslený arch aeb3becf. Přední a zadní kola jsou přenesená do animací stání, tankování a jízdy, trup a pohyb zůstaly původní",
       "files": []
+    },
+    {
+      "source": "Codex CLI s tarifem ChatGPT, nemá SpriteCook ID",
+      "label": "Tower – Pumpík, obličeje pro dialogy, 4 emoce, s celými pažemi a pistolí s hadicí (reference předchozí portréty a koncept). U ustarané emoce je ručně odstraněná olejová slza",
+      "files": [
+        {
+          "file": "assets/sprites/portraits/pumpik_neutral.png",
+          "sha12": "3cf950245b02",
+          "cell": "vlevo nahoře"
+        },
+        {
+          "file": "assets/sprites/portraits/pumpik_happy.png",
+          "sha12": "2d96020fb134",
+          "cell": "vpravo nahoře"
+        },
+        {
+          "file": "assets/sprites/portraits/pumpik_worried.png",
+          "sha12": "f1740eaca485",
+          "cell": "vlevo dole"
+        },
+        {
+          "file": "assets/sprites/portraits/pumpik_angry.png",
+          "sha12": "e572560005e7",
+          "cell": "vpravo dole"
+        }
+      ]
     }
   ]
 }
