@@ -402,7 +402,8 @@
       "files": [
         {
           "file": "assets/sprites/staff/pumpik_drive_down.png",
-          "sha12": "6373bdc1fa93"
+          "sha12": "308c991553df",
+          "note": "kola nahrazena dvěma z Codexu, viz níže"
         }
       ]
     },
@@ -412,7 +413,8 @@
       "files": [
         {
           "file": "assets/sprites/staff/pumpik_drive_up.png",
-          "sha12": "4b63387749b9"
+          "sha12": "808313d473c9",
+          "note": "kola nahrazena dvěma z Codexu, viz níže"
         }
       ]
     },
@@ -442,7 +444,8 @@
       "files": [
         {
           "file": "assets/sprites/staff/pumpik_idle.png",
-          "sha12": "3966fc88fd24"
+          "sha12": "f4410d2436b4",
+          "note": "kola nahrazena dvěma z Codexu, viz níže"
         }
       ]
     },
@@ -452,7 +455,8 @@
       "files": [
         {
           "file": "assets/sprites/staff/pumpik_pump.png",
-          "sha12": "0424de5830c2"
+          "sha12": "6e5bdebcf0c4",
+          "note": "kola nahrazena dvěma z Codexu, viz níže"
         }
       ]
     },
@@ -462,7 +466,8 @@
       "files": [
         {
           "file": "assets/sprites/staff/pumpik_pump_up.png",
-          "sha12": "4880ad95a85c"
+          "sha12": "b3695fea0ad3",
+          "note": "kola nahrazena dvěma z Codexu, viz níže"
         }
       ]
     },
@@ -850,6 +855,37 @@
           "cell": "3. řada vpravo"
         }
       ]
+    },
+    {
+      "source": "Codex CLI s tarifem ChatGPT, nemá SpriteCook ID",
+      "label": "Tower – vesmírný vetešník, starý krtek, obličeje pro dialogy, 4 emoce (reference arch Sizela)",
+      "files": [
+        {
+          "file": "assets/sprites/portraits/dealer_neutral.png",
+          "sha12": "475684984123",
+          "cell": "vlevo nahoře"
+        },
+        {
+          "file": "assets/sprites/portraits/dealer_happy.png",
+          "sha12": "8f332feca1b4",
+          "cell": "vpravo nahoře"
+        },
+        {
+          "file": "assets/sprites/portraits/dealer_worried.png",
+          "sha12": "cba52d055a17",
+          "cell": "vlevo dole"
+        },
+        {
+          "file": "assets/sprites/portraits/dealer_angry.png",
+          "sha12": "25ae7e09f833",
+          "cell": "vpravo dole"
+        }
+      ]
+    },
+    {
+      "source": "Codex CLI s tarifem ChatGPT, nemá SpriteCook ID",
+      "label": "Tower – Pumpík, pohledy se dvěma koly, překreslený arch aeb3becf. Přední a zadní kola jsou přenesená do animací stání, tankování a jízdy, trup a pohyb zůstaly původní",
+      "files": []
     }
   ]
 }

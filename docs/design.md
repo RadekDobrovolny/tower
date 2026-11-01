@@ -286,6 +286,8 @@ V misích 1 a 2 je galaxínu neomezeně a stojí pevně 6 kr/j. S misí 3 se zap
 - Účinek artefaktu platí, jen dokud je ve skladišti. Po prodeji skončí a artefakt může z pirátů vypadnout znovu.
 
 ### Vesmírný vetešník
+
+Starý šedý krtek s růžovým čumákem, vousky, kšiltovkou s lupou a kabátem plným klíčů a harampádí. Cynik s dobrým srdcem, prázdný zásobník prý cítí až z Jupiteru. Má čtyři emoce (`neutral`, `happy`, `worried`, `angry`). V okně nabídky se usmívá, u almužny je ustaraný.
 - Přiletí, když je zásobník prázdný, žádná cisterna není objednaná ani na cestě a hráč nemá ani na 50 j od nejlevnějšího dodavatele (100 kr). Menší dávku vypije jedna loď a stanice se z ní nevzpamatuje. Musí to trvat 4 s, protože kredity ještě může přinést kořist, obchod nebo automaty, a počká i na lodě u čerpadel, které ještě zaplatí za natankovaný galaxín. Během útoku pirátů nepřiletí.
 - Hra se zastaví a vetešník nabídne **3 náhodná vylepšení, která hráč má, za 50 % nákupní ceny**. Prodané vylepšení hráč ztratí (o jeden level zpět) a může si ho později znovu koupit. Prodat jde levely Pumpíka, štíty, nanoboty, Bzučáka, zásobníku, zábavního systému, věží, zboží obchodu, výherní automaty a vylepšení řídícího centra. Budovy samotné ani to, na čem Bzučák právě pracuje, prodat nejde.
 - Hráč může odmítnout („Zatím ne“), vetešník se pak vrátí za 30 s.
@@ -303,6 +305,7 @@ Postavy mluví v dialogovém okně ve spodní části obrazovky: vlevo detailní
 
 - Zadání každé mise říká **Pumpík** v rozhovoru místo modálního okna. Cíle jsou vidět vpravo nahoře. Okno se shrnutím po splnění mise zůstává.
 - Pumpík má čtyři emoce: klidný, nadšený, ustaraný a naštvaný (`neutral`, `happy`, `worried`, `angry`).
+- Pumpík má dvě kola, jedno na každé straně trupu. Nové obrázky nebo animace musí držet tenhle počet.
 - Kobaltový strážce má čtyři emoce: přísný, pohrdavý, vyděšený a naštvaný (`neutral`, `scornful`, `scared`, `angry`).
 - Sizel Varn má čtyři emoce: klidný, potěšený, vyděšený a naštvaný (`neutral`, `happy`, `worried`, `angry`).
 - Rozhovory jsou v `dialogue/story.gd`.

@@ -8,6 +8,7 @@ const PUMPIK := "pumpik"
 const ZORA := "zora"
 const GUARD := "guard"
 const SIZEL := "sizel"
+const DEALER := "dealer"
 
 ## Mise 7: hráč Zoru prozradil hlídce.
 const REPORT_ZORA := "report"
@@ -48,6 +49,15 @@ const SPEAKERS := {
 			"happy": preload("res://assets/sprites/portraits/sizel_happy.png"),
 			"worried": preload("res://assets/sprites/portraits/sizel_worried.png"),
 			"angry": preload("res://assets/sprites/portraits/sizel_angry.png"),
+		},
+	},
+	DEALER: {
+		"name": "Vesmírný vetešník",
+		"portraits": {
+			"neutral": preload("res://assets/sprites/portraits/dealer_neutral.png"),
+			"happy": preload("res://assets/sprites/portraits/dealer_happy.png"),
+			"worried": preload("res://assets/sprites/portraits/dealer_worried.png"),
+			"angry": preload("res://assets/sprites/portraits/dealer_angry.png"),
 		},
 	},
 }

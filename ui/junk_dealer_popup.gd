@@ -22,6 +22,8 @@ func open(dealer: JunkDealer, offers: Array[ShopItem]) -> void:
 	var handout := dealer.station.sale_items().is_empty()
 	var lines: Array = Lines.JUNK_DEALER_HANDOUT if handout else Lines.JUNK_DEALER_OFFER
 	%DealerBody.text = Lines.pick(lines)
+	var portraits: Dictionary = Story.SPEAKERS[Story.DEALER].portraits
+	%DealerPortrait.texture = portraits.worried if handout else portraits.happy
 	get_tree().paused = true
 	show()
 

@@ -678,9 +678,20 @@ layout_mode = 2
 texture = SubResource("GradientTexture1D_line")
 expand_mode = 1
 
-[node name="DealerBody" type="Label" parent="JunkDealerPopup/Center/Panel/Margin/VBox"]
+[node name="Speech" type="HBoxContainer" parent="JunkDealerPopup/Center/Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="DealerPortrait" type="TextureRect" parent="JunkDealerPopup/Center/Panel/Margin/VBox/Speech"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(440, 0)
+custom_minimum_size = Vector2(130, 130)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DealerBody" type="Label" parent="JunkDealerPopup/Center/Panel/Margin/VBox/Speech"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(296, 0)
 layout_mode = 2
 autowrap_mode = 3
 
