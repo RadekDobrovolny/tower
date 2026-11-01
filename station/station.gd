@@ -3,8 +3,7 @@ extends Node2D
 
 ## Čerpací stanice. Spravuje parcely a budovy na nich (stavby a vylepšení dělá stavební
 ## dron), přiděluje lodím sloty a místa ve frontě, posílá k nim androidy, řídí výběr
-## objektů kliknutím a prodejní cenu galaxínu. Když útočí piráti a stanice nemá hotovou
-## obrannou věž, pošle proti nim androida.
+## objektů kliknutím a prodejní cenu galaxínu. Když útočí piráti, pošle proti nim androida.
 
 ## Hráč kliknutím vybral objekt (android, zásobník, budova, prázdná parcela) nebo nic (null).
 signal selection_changed(object: Node)
@@ -16,6 +15,8 @@ signal state_changed
 const BASE_PRICE := 6
 const MIN_PRICE := 3
 const MAX_PRICE := 12
+## Kolik lodí přilétá při embargu: posádky se bojí létat a čerpat.
+const EMBARGO_DEMAND := 0.5
 const BUILDING_SCENES := {
 	"fuel_slot": preload("res://station/fuel_slot.tscn"),
 	"entertainment": preload("res://station/entertainment_system.tscn"),
@@ -39,8 +40,8 @@ const LOOT_SCENE := preload("res://loot/loot.tscn")
 const LOOT_CHANCE := [0.6, 1.0]
 const CHEST_CHANCE := [0.2, 0.45]
 const WRECKAGE_CREDITS := [Vector2i(150, 400), Vector2i(400, 900)]
-## Artefakty z pirátských truhel. Ty s cenou se prodají, ostatní mají trvalý účinek
-## a najdou se jen jednou (`unique`).
+## Artefakty z pirátských truhel: cena při prodeji, obrázek, popis a účinek. Účinek platí,
+## jen dokud je artefakt ve skladišti.
 const ARTIFACTS := [
 	{
 		"id": "compass", "name": "Rezavý pirátský kompas", "credits": 1200,
@@ -80,7 +81,7 @@ const ARTIFACTS := [
 	},
 ]
 ## O kolik víc pojme zásobník, když je krystal ve skladišti, a jak působí vysílačka a mapa.
-const CRYSTAL_CAPACITY := 400
+const CRYSTAL_CAPACITY := 400.0
 const RADIO_INTERVAL_FACTOR := 1.25
 const MAP_LOOT_BONUS := 1.5
 ## Medailon, který vypadne ze Zory. Uloží se vždy a nejde prodat.
@@ -92,9 +93,9 @@ const MEDALLION := {
 }
 ## Od jakého levelu zásobníku jde k němu přistavět řídící centrum.
 const CONTROL_CENTER_TANK_LEVEL := 3
+const SELECTION_GLOW := preload("res://fx/selection_glow.tres")
 ## Na které parcely (indexy) se ve startovním stavu mise staví čerpací sloty, zábavní systém,
 ## obchod a obranná věž.
-const SELECTION_GLOW := preload("res://fx/selection_glow.tres")
 const START_SLOT_PLOTS := [0, 1, 2]
 const START_SHOP_PLOT := 3
 const START_ENTERTAINMENT_PLOT := 4
@@ -159,12 +160,14 @@ var ship_tier := 1
 var shop_available := false
 var tower_available := false
 var control_center_available := false
+## Na jaký level jdou koupit filtry. Mise 8 ho zvýší, až dostaneme schéma.
+var max_filter_level := 1
 var galaxin_economy := false
 ## Řídící centrum u zásobníku (i rozestavěné), nebo null.
 var control_center: ControlCenter
 ## Skladiště u obchodu, nebo null.
 var warehouse: Warehouse
-## Názvy nalezených artefaktů (v pořadí nálezu).
+## Artefakty ve skladišti (v pořadí nálezu).
 var stored_artifacts: Array[Dictionary] = []
 ## Účinky artefaktů: násobek prodlevy mezi útoky pirátů a násobek ceny trosek.
 var pirate_interval_factor := 1.0
@@ -429,10 +432,9 @@ func build_control_center() -> bool:
 
 
 ## Zadá stavebnímu dronovi zakázku na `target` (budova nebo zásobník; musí mít vlastnost `job`).
-func queue_job(target: Node2D, title: String, phases: Array, on_phase_done: Callable,
-		on_done: Callable, urgent := false) -> ConstructionJob:
-	var job := ConstructionJob.new(target, title, phases)
-	job.on_phase_done = on_phase_done
+func queue_job(target: Node2D, title: String, phase: Dictionary, on_done: Callable,
+		urgent := false) -> ConstructionJob:
+	var job := ConstructionJob.new(target, title, phase)
 	job.on_done = func() -> void:
 		target.set("job", null)
 		if target is Building or target == tank:
@@ -608,7 +610,6 @@ func _add_pipe_part(texture: Texture2D, at: Vector2, angle: float, offset: Vecto
 	return part
 
 
-## Zapne ekonomiku galaxínu (omezený zásobník, dodavatelé, vlastní cena) a naplní zásobník.
 ## Postaví všechno a vylepší to na maximum (start mise Z).
 func setup_maxed() -> void:
 	setup_start_buildings(START_SLOT_PLOTS.size(), 0, Shop.PRODUCTS.size(), 0, DefenseTower.LEVELS.size())
@@ -661,6 +662,7 @@ func sale_items() -> Array[ShopItem]:
 	return items
 
 
+## Zapne ekonomiku galaxínu (omezený zásobník, dodavatelé, vlastní cena) a naplní zásobník.
 func enable_galaxin_economy(initial_amount: float) -> void:
 	galaxin_economy = true
 	_apply_galaxin_economy()
@@ -671,9 +673,11 @@ func set_sell_price(value: int) -> void:
 	sell_price = clampi(value, MIN_PRICE, MAX_PRICE)
 
 
-## Kolikrát víc lodí přilétá než při běžné ceně. Levný galaxín láká, drahý odrazuje.
+## Kolikrát víc lodí přilétá než při běžné ceně. Levný galaxín láká, drahý odrazuje
+## a při embargu se posádky bojí létat.
 func demand_factor() -> float:
-	return pow(float(BASE_PRICE) / sell_price, 1.5)
+	var factor := pow(float(BASE_PRICE) / sell_price, 1.5)
+	return factor * EMBARGO_DEMAND if supply.embargo else factor
 
 
 ## Kolikrát rychleji lodím ubývá trpělivost kvůli ceně (drahý galaxín = netrpělivější lodě).
@@ -693,6 +697,23 @@ func demand_text() -> String:
 	if factor >= 0.6:
 		return "nízký"
 	return "velmi nízký"
+
+
+## Zavře plošinu pro nouzové přistání: vezme volnou, a když žádná není, první, ze které loď uhne.
+func close_slot_for_emergency() -> FuelSlot:
+	var slot := _free_slot()
+	if slot == null:
+		slot = get_slots()[0]
+	slot.closed = true
+	if slot.occupant:
+		slot.occupant.make_way()
+	return slot
+
+
+## Plošina je zase volná a nabídne se lodi, která čeká ve frontě.
+func reopen_slot(slot: FuelSlot) -> void:
+	slot.closed = false
+	_on_slot_freed(slot)
 
 
 ## Jestli se ke stanici vejde další loď, ať už do volného slotu, nebo do fronty.
@@ -932,8 +953,8 @@ func _on_android_free_for_ship(android: Android) -> void:
 		android.serve(_awaiting_service.pop_front())
 
 
-## Bez hotové obranné věže se pirátům, kteří útočí na stanici, postaví android
-## (jeden android na jednoho piráta). Po boji je poškozený a opraví ho stavební dron.
+## Pirátovi, který útočí na stanici, se postaví android, i když stojí věže
+## (jeden android na jednoho piráta).
 func _defend_with_androids() -> void:
 	for pirate in get_tree().get_nodes_in_group("pirates"):
 		if not pirate.is_attacking() or pirate.fought_by != null:
@@ -945,7 +966,7 @@ func _defend_with_androids() -> void:
 				break
 
 
-## Pirát začal útočit: část lodí, které čekají ve frontě, dostane strach a uteče.
+## Pirát začal útočit: lodě ve frontě i u čerpadel utečou a dodávka galaxínu se zruší.
 func on_pirate_attack() -> void:
 	Sfx.play("alarm")
 	# Nejdřív fronta, aby se na sloty uvolněné útěkem nikdo nezařadil.
@@ -1031,10 +1052,6 @@ func _random_artifact() -> Dictionary:
 	return {} if pool.is_empty() else pool.pick_random()
 
 
-
-
-
-
 ## Kolik lodí čeká ve frontě.
 func queue_size() -> int:
 	return _queue.size()
@@ -1057,4 +1074,4 @@ func pirate_targets() -> Array[Vector2]:
 ## Zadá stavebnímu dronovi opravu poškozeného androida. Oprava má přednost před vším ostatním.
 func request_repair(android: Android) -> void:
 	queue_job(android, "Oprava: %s" % android.display_name,
-			[{"name": "Oprava", "duration": Android.REPAIR_TIME}], Callable(), android.finish_repair, true)
+			{"name": "Oprava", "duration": Android.REPAIR_TIME}, android.finish_repair, true)

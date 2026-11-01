@@ -20,6 +20,8 @@ const PUMP_FOOT := Vector2(0, 28)
 ## Z které strany čerpadla stojí android: -1 vlevo, 1 vpravo. Nastaví stanice podle parcely.
 var service_side := -1
 var occupant: Ship = null
+## Plošinu zabrala cisterna, která tu nouzově přistává. Žádná loď sem teď nesmí.
+var closed := false
 
 @onready var _base: Sprite2D = $Base
 @onready var _pad: Sprite2D = $Pad
@@ -48,7 +50,7 @@ func display_name() -> String:
 
 
 func is_free() -> bool:
-	return is_operational() and occupant == null
+	return is_operational() and occupant == null and not closed
 
 
 ## Místo u čerpadla, kde stojí android, když tankuje.
@@ -76,7 +78,9 @@ func info_lines() -> PackedStringArray:
 		lines.append(construction_line())
 		lines.append("Až bude hotový, budou sem přistávat lodě.")
 		return lines
-	if occupant == null:
+	if closed:
+		lines.append("Stav: nouzově tu přistává cisterna")
+	elif occupant == null:
 		lines.append("Stav: volný, čeká na loď")
 	elif occupant.state == Ship.State.LANDED:
 		lines.append("Stav: loď tankuje (%d / %d j)" % [roundi(occupant.fuel), roundi(occupant.tank_capacity)])
@@ -100,6 +104,8 @@ func _update_construction_looks() -> void:
 func _pad_lights_mode() -> PadLights.Mode:
 	if not is_operational():
 		return PadLights.Mode.OFF
+	if closed:
+		return PadLights.Mode.LANDED
 	if occupant == null:
 		return PadLights.Mode.IDLE
 	if occupant.state == Ship.State.LANDED:

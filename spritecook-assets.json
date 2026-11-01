@@ -768,6 +768,37 @@
           "cell": "vpravo dole"
         }
       ]
+    },
+    {
+      "asset_id": "bc88c7ce-8326-412d-b14c-7fce097fd1e1",
+      "label": "Tower – Sizel Varn, předloha (obrázek od hráče)",
+      "files": []
+    },
+    {
+      "asset_id": "e419f0ab-24dd-4ce5-8b8d-67315c0ba4f8",
+      "label": "Tower – Sizel Varn, obličeje pro dialogy, 4 emoce: klidný, potěšený, vyděšený, naštvaný (reference předloha, 16 kreditů)",
+      "files": [
+        {
+          "file": "assets/sprites/portraits/sizel_neutral.png",
+          "sha12": "2fb237edce02",
+          "cell": "vlevo nahoře"
+        },
+        {
+          "file": "assets/sprites/portraits/sizel_happy.png",
+          "sha12": "78b8c2d6abd3",
+          "cell": "vpravo nahoře"
+        },
+        {
+          "file": "assets/sprites/portraits/sizel_worried.png",
+          "sha12": "5d00bf036263",
+          "cell": "vlevo dole"
+        },
+        {
+          "file": "assets/sprites/portraits/sizel_angry.png",
+          "sha12": "69347e2eab75",
+          "cell": "vpravo dole"
+        }
+      ]
     }
   ]
 }

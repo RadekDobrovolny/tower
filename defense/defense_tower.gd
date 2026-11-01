@@ -98,7 +98,7 @@ func start_upgrade() -> bool:
 		return false
 	var target_level := level + 1
 	station.queue_job(self, "Vylepšení na level %d" % target_level,
-			[{"name": "Výměna kanónu", "duration": LEVELS[target_level - 1].time}], Callable(), _finish_upgrade)
+			{"name": "Výměna kanónu", "duration": LEVELS[target_level - 1].time}, _finish_upgrade)
 	return true
 
 
@@ -106,7 +106,7 @@ func info_lines() -> PackedStringArray:
 	var lines := PackedStringArray()
 	if level == 0:
 		lines.append(construction_line())
-		lines.append("Až bude hotová, sama sestřeluje piráty v dosahu. Dokud nějaká věž stojí, Pumpík nemusí bojovat.")
+		lines.append("Až bude hotová, sama sestřeluje piráty v dosahu.")
 		return lines
 	var current := stats()
 	lines.append("Level %d" % level)

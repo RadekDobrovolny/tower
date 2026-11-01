@@ -269,6 +269,13 @@ const TOURISTS := [
 ]
 
 ## Loď utíká z fronty, protože útočí piráti.
+## Na plošinu si musí sednout hořící cisterna.
+const SHIP_MAKE_WAY := [
+	"Hoří to! Uhýbám!",
+	"Tohle nechci vidět zblízka!",
+	"Plošina je vaše, já mizím!",
+]
+
 const SHIP_SCARED := [
 	"Piráti! Mizím!",
 	"Tady natankuju jindy!",

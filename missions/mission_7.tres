@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_mission")
 title = "Plné ruce práce"
+max_filter_level = 2
 max_android_level = 6
 entertainment_available = true
 drone_upgrades = true

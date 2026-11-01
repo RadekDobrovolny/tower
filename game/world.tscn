@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://economy/junk_dealer.gd" id="7_dealer"]
 [ext_resource type="Script" path="res://game/zora_scene.gd" id="8_zora"]
 [ext_resource type="Script" path="res://game/patrol_scene.gd" id="9_patrol"]
+[ext_resource type="Script" path="res://game/sizel_scene.gd" id="10_sizel"]
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_campaign")
@@ -59,4 +60,9 @@ hud = NodePath("../HUD")
 script = ExtResource("9_patrol")
 station = NodePath("../Station")
 spawner = NodePath("../ShipSpawner")
+hud = NodePath("../HUD")
+
+[node name="SizelScene" type="Node" parent="." node_paths=PackedStringArray("station", "hud")]
+script = ExtResource("10_sizel")
+station = NodePath("../Station")
 hud = NodePath("../HUD")

@@ -4,6 +4,16 @@
 [ext_resource type="PackedScene" path="res://ui/speech_bubble.tscn" id="2_bubble"]
 [ext_resource type="Texture2D" path="res://assets/sprites/ships/tanker.png" id="3_tanker"]
 [ext_resource type="PackedScene" path="res://fx/engine_flame.tscn" id="4_engine"]
+[ext_resource type="Material" path="res://fx/additive.tres" id="5_additive"]
+[ext_resource type="Texture2D" path="res://fx/soft_light.tres" id="6_soft_light"]
+
+[sub_resource type="Gradient" id="Gradient_fire"]
+offsets = PackedFloat32Array(0, 0.35, 1)
+colors = PackedColorArray(1, 0.9, 0.55, 1, 1, 0.45, 0.1, 0.9, 0.6, 0.08, 0.02, 0)
+
+[sub_resource type="Gradient" id="Gradient_smoke"]
+offsets = PackedFloat32Array(0, 1)
+colors = PackedColorArray(0.24, 0.22, 0.22, 0.6, 0.1, 0.1, 0.12, 0)
 
 [node name="Tanker" type="Node2D"]
 script = ExtResource("1_tanker")
@@ -22,6 +32,50 @@ scale = Vector2(1.2, 1.2)
 [node name="Sprite" type="Sprite2D" parent="Body"]
 scale = Vector2(0.6, 0.6)
 texture = ExtResource("3_tanker")
+
+[node name="Smoke" type="CPUParticles2D" parent="Body"]
+position = Vector2(-8, -8)
+emitting = false
+amount = 16
+lifetime = 1.5
+texture = ExtResource("6_soft_light")
+emission_shape = 1
+emission_sphere_radius = 6.0
+direction = Vector2(0, -1)
+spread = 25.0
+gravity = Vector2(0, -20)
+initial_velocity_min = 20.0
+initial_velocity_max = 45.0
+scale_amount_min = 0.3
+scale_amount_max = 0.7
+color_ramp = SubResource("Gradient_smoke")
+
+[node name="Fire" type="CPUParticles2D" parent="Body"]
+material = ExtResource("5_additive")
+position = Vector2(-8, -6)
+emitting = false
+amount = 24
+lifetime = 0.6
+texture = ExtResource("6_soft_light")
+emission_shape = 1
+emission_sphere_radius = 8.0
+direction = Vector2(0, -1)
+spread = 20.0
+gravity = Vector2(0, -90)
+initial_velocity_min = 25.0
+initial_velocity_max = 60.0
+scale_amount_min = 0.14
+scale_amount_max = 0.36
+color_ramp = SubResource("Gradient_fire")
+
+[node name="FireLight" type="PointLight2D" parent="Body"]
+visible = false
+position = Vector2(-8, -6)
+color = Color(1, 0.5, 0.15, 1)
+energy = 1.0
+blend_mode = 0
+texture = ExtResource("6_soft_light")
+texture_scale = 2.4
 
 [node name="SpeechBubble" parent="." instance=ExtResource("2_bubble")]
 height = 24.0

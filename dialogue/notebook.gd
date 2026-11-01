@@ -94,6 +94,10 @@ static func _characters() -> Array[Dictionary]:
 			"text": "Důstojník císařské stráže ve skleněné přilbě a kobaltové uniformě. Netankuje, jen se ptá. A když se ptá, je lepší stát rovně.",
 		},
 		{
+			"title": "Sizel Varn", "image": Story.SPEAKERS[Story.SIZEL].portraits.neutral,
+			"text": "Ještěří dohazovač a překupník. Sežene všechno, co je zrovna zakázané, a vždycky si spočítá přirážku. Vozí nejlevnější galaxín v oblasti, a taky nejhorší.",
+		},
+		{
 			"title": "Vesmírný vetešník",
 			"text": "Přiletí, když dojde galaxín i kredity, vždycky ví, kdy je zle. Odkoupí jedno ze tří vylepšení za polovinu ceny. Kdo nemá co prodat, dostane almužnu %s." % _price(JunkDealer.HANDOUT),
 		},

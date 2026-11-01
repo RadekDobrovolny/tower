@@ -7,8 +7,8 @@ extends Node2D
 ## Piráti střílejí přednostně po něm. Každý zásah ubere bod odolnosti, a když odolnost
 ## klesne na nulu, je rozbitý: netankuje, nebrání se a čeká, až ho opraví stavební dron.
 ## Částečně poškozený pracuje dál a zastaví se, až když k němu dron doletí opravovat.
-## Když stanice nemá obrannou věž, střílí po pirátech z tankovací pistole (galaxínovým
-## laserem). Štíty přidávají odolnost, nanoboti opravují částečné poškození (rozbitého ne).
+## Proti útočícím pirátům střílí z tankovací pistole (galaxínovým laserem), i když stojí věže.
+## Štíty přidávají odolnost, nanoboti opravují částečné poškození (rozbitého ne).
 
 ## Android může vzít další loď (dotankoval nebo má volnou hadici).
 signal free_for_ship(android: Android)
@@ -314,7 +314,6 @@ func _lose_shield_level() -> void:
 
 func _lose_nanobot_level() -> void:
 	nanobot_level -= 1
-	_update_looks()
 
 
 ## Přestane obsluhovat loď (např. když to vzdala a odlétá).
@@ -330,7 +329,6 @@ func serve(ship: Ship) -> void:
 		_bubble.say(Lines.pick(Lines.ANDROID_REPLY))
 
 
-## Nastaví levely bez placení (startovní stav mise).
 ## Všechna vylepšení na maximum (start mise Z).
 func set_maxed() -> void:
 	shield_level = SHIELD_LEVELS.size() - 1
@@ -340,6 +338,7 @@ func set_maxed() -> void:
 	set_levels(FUEL_LEVELS.size(), WALK_LEVELS.size())
 
 
+## Nastaví levely bez placení (startovní stav mise).
 func set_levels(fuel: int, walk: int) -> void:
 	fuel_level = clampi(fuel, 1, FUEL_LEVELS.size())
 	walk_level = clampi(walk, 1, WALK_LEVELS.size())
@@ -502,6 +501,8 @@ func _direction_name(direction: Vector2) -> String:
 func _fight(delta: float) -> void:
 	if not is_instance_valid(_enemy) or not _enemy.is_attacking():
 		_enemy = null
+		# Loď, která přistála během boje, se teprve teď dočká.
+		free_for_ship.emit(self)
 		return
 	_facing = _direction_name(_enemy.global_position - global_position)
 	_shot_cooldown -= delta
@@ -518,8 +519,11 @@ func warning_shot(target: Node2D, on_hit: Callable) -> void:
 	LaserBolt.fire(station, to_global(NOZZLES[_facing]), target, LaserBolt.GOLD, on_hit, BOLT_LENGTH)
 
 
-## Odolnost klesla na nulu: android je rozbitý a čeká na opravu (bez nanobotů ho opraví dron).
+## Odolnost klesla na nulu: android je rozbitý a čeká, až ho opraví dron. Pirát, se kterým
+## bojoval, je zase volný, aby se mu po opravě mohl znovu postavit.
 func _break_down() -> void:
+	if is_instance_valid(_enemy):
+		_enemy.fought_by = null
 	_enemy = null
 	damaged = true
 	Sfx.play("break_down")
@@ -573,9 +577,3 @@ func _update_looks() -> void:
 	var tint := Color.WHITE.lerp(FUEL_LEVELS[fuel_level - 1].color, LEVEL_TINT)
 	_sprite.modulate = tint * DAMAGED_TINT if damaged else tint
 	_damage_sparks.emitting = damaged
-	if damaged:
-		_level_label.text = "%s · rozbitý" % display_name
-	elif is_being_repaired():
-		_level_label.text = "%s · v opravě" % display_name
-	else:
-		_level_label.text = display_name

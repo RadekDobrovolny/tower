@@ -256,9 +256,9 @@ func add_fuel(amount: float, low_quality_share := 0.0) -> void:
 		_patience_left = PATIENCE
 
 
-## Jestli stojí u čerpadla a ještě nezaplatila za to, co natankovala.
+## Jestli stojí u čerpadla a ještě zaplatí za to, co natankovala. Loď z příběhu sama neplatí.
 func owes_payment() -> bool:
-	return state == State.LANDED and fuel > _fuel_on_arrival
+	return not is_story() and state == State.LANDED and fuel > _fuel_on_arrival
 
 
 ## Jestli už má loď natankováno, kolik chtěla.
@@ -430,6 +430,14 @@ func flee() -> void:
 	Game.record_ship_lost()
 	Sfx.play("ship_angry")
 	_bubble.say_now(Lines.pick(Lines.SHIP_SCARED), true)
+	gave_up.emit(self)
+	_depart(0.3)
+
+
+## Uvolní plošinu pro nouzové přistání: zaplatí, co natankovala, a uhne.
+func make_way() -> void:
+	_pay_for_partial_fill()
+	_bubble.say_now(Lines.pick(Lines.SHIP_MAKE_WAY), true)
 	gave_up.emit(self)
 	_depart(0.3)
 

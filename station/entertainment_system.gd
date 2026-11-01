@@ -122,8 +122,8 @@ func start_upgrade() -> bool:
 		return false
 	var target_level := level + 1
 	station.queue_job(self, "Vylepšení na level %d" % target_level,
-			[{"name": "Vylepšování", "duration": LEVELS[target_level - 1].upgrade_time}],
-			Callable(), _finish_upgrade)
+			{"name": "Vylepšování", "duration": LEVELS[target_level - 1].upgrade_time},
+			_finish_upgrade)
 	return true
 
 
@@ -138,8 +138,8 @@ func start_slot_machines() -> bool:
 	var cost := slot_machines_cost()
 	if cost < 0 or not Game.spend_credits(cost):
 		return false
-	station.queue_job(self, "Výherní automaty", [{"name": "Instalace automatů", "duration": SLOTS_TIME}],
-			Callable(), _finish_slot_machines)
+	station.queue_job(self, "Výherní automaty", {"name": "Instalace automatů", "duration": SLOTS_TIME},
+			_finish_slot_machines)
 	return true
 
 

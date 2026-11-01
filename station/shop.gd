@@ -138,7 +138,7 @@ func add_product(index: int) -> bool:
 		return false
 	var product: Dictionary = PRODUCTS[index]
 	station.queue_job(self, "Nové zboží: %s" % product.name,
-			[{"name": "Stavba stánku", "duration": product.time}], Callable(), _finish_product.bind(index))
+			{"name": "Stavba stánku", "duration": product.time}, _finish_product.bind(index))
 	return true
 
 

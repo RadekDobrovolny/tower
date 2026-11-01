@@ -7,6 +7,7 @@ extends RefCounted
 const PUMPIK := "pumpik"
 const ZORA := "zora"
 const GUARD := "guard"
+const SIZEL := "sizel"
 
 ## Mise 7: hráč Zoru prozradil hlídce.
 const REPORT_ZORA := "report"
@@ -38,6 +39,15 @@ const SPEAKERS := {
 			"scornful": preload("res://assets/sprites/portraits/guard_scornful.png"),
 			"scared": preload("res://assets/sprites/portraits/guard_scared.png"),
 			"angry": preload("res://assets/sprites/portraits/guard_angry.png"),
+		},
+	},
+	SIZEL: {
+		"name": "Sizel Varn",
+		"portraits": {
+			"neutral": preload("res://assets/sprites/portraits/sizel_neutral.png"),
+			"happy": preload("res://assets/sprites/portraits/sizel_happy.png"),
+			"worried": preload("res://assets/sprites/portraits/sizel_worried.png"),
+			"angry": preload("res://assets/sprites/portraits/sizel_angry.png"),
 		},
 	},
 }
@@ -84,9 +94,10 @@ const MISSION_INTROS := [
 		{"speaker": PUMPIK, "mood": "neutral", "text": "A jednu věž bych vylepšil na level 2. Piráti nám nedají pokoj."},
 	],
 	[
-		{"speaker": PUMPIK, "mood": "worried", "text": "Šéfiku, přišel císařský výnos. Stanice má zákaz dodávek, Galaxis ani Orion nám už nesmějí nic prodat."},
-		{"speaker": PUMPIK, "mood": "angry", "text": "Zbyl jen Lojza. Na výnosy kašle, ale ví, že nemáme na výběr. Chce 6 kr za jednotku a vozí pořád tu samou břečku."},
-		{"speaker": PUMPIK, "mood": "neutral", "text": "Pořiď filtry v řídícím centru, ať s tím nemáme pokuty. A rozmysli si prodejní cenu, za 6 kr na galaxínu nic nevyděláme."},
+		{"speaker": PUMPIK, "mood": "worried", "text": "Šéfiku, císař uvalil embargo na celou oblast. Galaxis ani Orion sem nesmějí a hlídky zastavují každou loď."},
+		{"speaker": PUMPIK, "mood": "worried", "text": "Posádky se bojí létat i tankovat, takže zákazníků bude o polovinu méně."},
+		{"speaker": PUMPIK, "mood": "angry", "text": "Zbyl jen černý trh. Sizel Varn nám galaxín doveze, ale chce 6 kr za jednotku a vozí pořád tu samou břečku."},
+		{"speaker": PUMPIK, "mood": "neutral", "text": "Pořiď v řídícím centru filtry, ať s tím nemáme pokuty. Na level 3 ale nemáme schéma. A rozmysli si prodejní cenu, za 6 kr na galaxínu nic nevyděláme."},
 	],
 ]
 
@@ -149,6 +160,34 @@ const PATROL_ARRIVES := [
 			},
 		],
 	},
+]
+
+## Mise 8: první dodávka od Sizela.
+const SIZEL_FIRST_DELIVERY := [
+	{"speaker": SIZEL, "mood": "happy", "text": "Sizel Varn, dohazovač všeho, co je zrovna zakázané. Šest za jednotku, šéfe, a nesmlouvám."},
+	{"speaker": PUMPIK, "mood": "angry", "text": "Vždyť to bývalo za dva kredity! A je to pořád ta samá břečka!"},
+	{"speaker": SIZEL, "mood": "angry", "text": "Bývalo. Teď je embargo a hlídky střílejí bez ptaní. Riziko se platí."},
+]
+
+## Mise 8: druhá dodávka, hlídky už jsou Sizelovi v patách.
+const SIZEL_SECOND_DELIVERY := [
+	{"speaker": SIZEL, "mood": "worried", "text": "Hlídky jsou čím dál blíž, šéfe. Dneska mi prosvištěla střela kolem nádrže."},
+	{"speaker": PUMPIK, "mood": "worried", "text": "Tak na sebe dávej pozor. Bez tebe tu nemáme ani kapku."},
+]
+
+## Mise 8: třetí cisterna přilétá poškozená a hoří.
+const SIZEL_MAYDAY := [
+	{"speaker": SIZEL, "mood": "worried", "text": "Tady Sizel! Hlídka mě trefila do trupu, hořím! Nevím, jak dlouho to vydrží!"},
+	{"speaker": PUMPIK, "mood": "worried", "text": "Sizeli, hned na plošinu! Bzučák tě opraví! Uvolněte mu místo!"},
+]
+
+## Mise 8: Bzučák cisternu opravil, Sizel je náš přítel.
+const SIZEL_THANKS := [
+	{"speaker": SIZEL, "mood": "worried", "text": "Ještě že jste tady byli. Kdokoli jiný by mě nechal shořet i s cisternou."},
+	{"speaker": PUMPIK, "mood": "neutral", "text": "U nás nikdo neshoří. Ani když si účtuje šest za jednotku."},
+	{"speaker": SIZEL, "mood": "happy", "text": "Tohle ti nezapomenu, plechovko. Od teď vám to vozím za 4 kr za jednotku."},
+	{"speaker": SIZEL, "mood": "happy", "text": "A tady je schéma na filtr level 3. Vyčistí i to, co vozím já."},
+	{"speaker": PUMPIK, "mood": "happy", "text": "Šéfiku, máme ho! Filtr level 3 teď jde nainstalovat v řídícím centru."},
 ]
 
 const FREE_PLAY_INTRO := [

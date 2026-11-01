@@ -2,7 +2,7 @@ class_name Hud
 extends CanvasLayer
 
 ## Herní HUD: kredity, cíle mise, info panel vybraného objektu (s vylepšeními a stavbami),
-## panel galaxínu, pauza a okno mise (úvod mise a shrnutí po jejím splnění).
+## panel galaxínu, pauza a okno mise (shrnutí po jejím splnění).
 ## Ceny se ukazují s ikonkou mince místo „kr“ (UiIcons.money_bbcode).
 
 const DONE_COLOR := Color(0.5, 0.94, 0.55)
@@ -16,7 +16,6 @@ const CREDITS_ROLL_SPEED := 10.0
 const INFO_KEY_MAX_LENGTH := 24
 const INFO_KEY_COLOR := "#9e99a8"
 
-var _supplier_prices: Array[RichTextLabel] = []
 var _campaign: Campaign
 ## Objekt, jehož info panel je otevřený, a tlačítka jeho akcí.
 var _selected: Node
@@ -25,6 +24,8 @@ var _action_buttons: Array[ActionButton] = []
 var _action_labels := PackedStringArray()
 var _refresh_pending := false
 var _galaxin_panel_ready := false
+## Ceny na přepínačích dodavatelů (v pořadí Supply.SUPPLIERS).
+var _supplier_prices: Array[RichTextLabel] = []
 var _shown_credits := 0.0
 var _last_credits := 0
 ## Řádky cílů: {"icon": TextureRect, "label": RichTextLabel, "value": Label, "bar": ProgressBar, "done": bool}.
@@ -150,7 +151,6 @@ func _dismiss_hint() -> void:
 	_hint.hide()
 
 
-## Varování nahoře bliká, dokud nějaký pirát útočí.
 ## Blikající výstraha pod tlačítkem Menu: útok pirátů, nebo prázdný zásobník (lodě nepřilétají).
 func _update_alert() -> void:
 	var station := _campaign.station
@@ -295,12 +295,12 @@ func _rebuild_action_buttons() -> void:
 		_action_buttons.append(button)
 
 
-## Info panel ukazuje živé hodnoty (průběh stavby, stav slotu), proto se obnovuje každý snímek.
 func _buy(item: ShopItem) -> void:
 	if item.buy.call():
 		Sfx.play("ui_buy")
 
 
+## Info panel ukazuje živé hodnoty (průběh stavby, stav slotu), proto se obnovuje každý snímek.
 func _refresh_info_panel() -> void:
 	if not is_instance_valid(_selected):
 		_on_selection_changed(null)

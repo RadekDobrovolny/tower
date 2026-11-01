@@ -202,7 +202,7 @@ V misích 1 a 2 je galaxínu neomezeně a stojí pevně 6 kr/j. S misí 3 se zap
 
 | Dodavatel | Cena | Cisterna | Dodání | Zpoždění | Méně galaxínu | Kvalita |
 |---|---|---|---|---|---|---|
-| Šmelinář Lojza | 2 kr/j | 400 j | 12 s | 35 % (+10–20 s) | 30 % (doveze 30–60 %) | nekvalitní |
+| Sizel Varn | 2 kr/j | 400 j | 12 s | 35 % (+10–20 s) | 30 % (doveze 30–60 %) | nekvalitní |
 | Galaxis Distribuce | 3 kr/j | 400 j | 10 s | 20 % (+6–12 s) | 15 % (poloprázdná) | dobrá |
 | Orion Premium | 4 kr/j | 600 j | 8 s | nikdy | nikdy | prémiová |
 
@@ -232,7 +232,7 @@ V misích 1 a 2 je galaxínu neomezeně a stojí pevně 6 kr/j. S misí 3 se zap
 | Rychlé doručení | 2 000 kr, 6 s | 4 000 kr, 8 s | doba dodání (i zpoždění) ×0,7 / ×0,45 |
 | Větší cisterny | 2 500 kr, 6 s | 5 000 kr, 8 s | cisterna ×1,5 / ×2 |
 | Rychlé přečerpávání | 1 500 kr, 5 s | 3 000 kr, 7 s | přečerpávání ×1,6 / ×2,5 |
-| Filtry galaxínu | 2 000 kr, 6 s | 3 500 kr, 8 s | vyčistí 40 % / 70 % nekvalitního galaxínu z dodávky; level 3 (5 000 kr, 10 s) vyčistí všechno, takže levný Lojza je bez pokut |
+| Filtry galaxínu | 2 000 kr, 6 s | 3 500 kr, 8 s | vyčistí 40 % / 70 % nekvalitního galaxínu z dodávky; level 3 (5 000 kr, 10 s) vyčistí všechno, takže levný Sizel je bez pokut. Level 1 jde koupit od Mise 4, level 2 od Mise 6 a level 3 až se schématem od Sizela v Misi 8 (`Mission.max_filter_level`) |
 | Automatický dispečink | 6 000 kr, 10 s | – | objedná cisternu u vybraného dodavatele sám, když v zásobníku zbývá méně než 40 % (a hráč na ni má) |
 
 ### Obrana (od mise 5)
@@ -293,6 +293,8 @@ V misích 1 a 2 je galaxínu neomezeně a stojí pevně 6 kr/j. S misí 3 se zap
 
 ## Příběh a rozhovory
 
+**Sizel Varn** (přijde v Misi 8): ještěří dohazovač a překupník z černého trhu v zažloutlém kabátě, s kalkulačkou v ruce. Od začátku ekonomiky je to nejlevnější a nejhorší dodavatel galaxínu. Hráče oslovuje „šéfe“.
+
 **Zora Zender** (přijde v Misi 6): cirkusová artistka s rychlou a obratnou raketou s cirkusovými motivy. Jako malá s ní matka utekla a našla azyl v cirkusu, kde vyrostla. Ve skutečnosti je dcerou galaktického císaře a právoplatnou dědičkou vesmírného trůnu. Hráč se to dozvídá postupně, nesmí to vědět hned. Má stejné čtyři emoce jako Pumpík (`zora_*.png`).
 
 Připravené lodě pro příběh, zatím se ve hře nepoužívají a do běžného provozu nepatří (`assets/sprites/ships/`): Zořina raketa `rocket_zora`, cirkusová maringotka `rocket_circus_wagon`, loď principála `rocket_ringmaster`, císařský kurýr `rocket_imperial_courier`, císařský křižník `rocket_imperial_cruiser` a pirátská vlajková loď `rocket_pirate_flagship`. Křižník a vlajková loď jsou velké jako nákladní loď.
@@ -302,6 +304,7 @@ Postavy mluví v dialogovém okně ve spodní části obrazovky: vlevo detailní
 - Zadání každé mise říká **Pumpík** v rozhovoru místo modálního okna. Cíle jsou vidět vpravo nahoře. Okno se shrnutím po splnění mise zůstává.
 - Pumpík má čtyři emoce: klidný, nadšený, ustaraný a naštvaný (`neutral`, `happy`, `worried`, `angry`).
 - Kobaltový strážce má čtyři emoce: přísný, pohrdavý, vyděšený a naštvaný (`neutral`, `scornful`, `scared`, `angry`).
+- Sizel Varn má čtyři emoce: klidný, potěšený, vyděšený a naštvaný (`neutral`, `happy`, `worried`, `angry`).
 - Rozhovory jsou v `dialogue/story.gd`.
 
 ## Zvuk
@@ -448,14 +451,22 @@ Bzučák nestíhá a dodavatel mešká. Asi 45 s po začátku mise přistane cí
 
 ## Mise 8: Embargo
 
-Císař stanici zakáže dodávky galaxínu. Objednávat jde jen od šmelináře Lojzy, který toho využije a prodává za 6 kr/j. Jeho galaxín je dál nekvalitní, takže hráč musí koupit filtry. Příběhová linka se teprve doplní.
+Císař uvalí embargo na celou oblast a snaží se zastavit pohyb osob. Oficiální dodavatelé nefungují, objednávat jde jen od překupníka Sizela Varna z černého trhu za 6 kr/j. Posádky se bojí létat a čerpat, takže přilétá o 50 % lodí méně. Strach trvá po celou dobu embarga.
 
 **Startovní stav** (jen při startu od mise 8): jako v Misi 7, ale obě věže na levelu 2.
 
 **Cíle:**
-- Filtry galaxínu na **levelu 3** (maximum).
+- Filtry galaxínu na **levelu 3** (maximum). Tenhle level jde koupit až se schématem od Sizela.
 
-Embargo je pravidlo mise (`Mission.embargo`). Platí i ve volné hře po misi a vypne ho až další mise bez tohoto pravidla.
+**Příběh Sizela** (`game/sizel_scene.gd`, počítají se dodávky, které dorazily k zásobníku):
+1. První dodávka: Sizel se představí a Pumpík se zlobí na cenu.
+2. Druhá dodávka: Sizel varuje, že jsou mu hlídky v patách.
+3. Třetí cisterna přiletí poškozená a hořící. Pumpík ji okamžitě pošle na plošinu. Volnou, a když žádná není, loď na první plošině zaplatí, co natankovala, a uhne.
+4. Bzučák cisternu opraví. Má to přednost před ostatní prací a piráti ji neodeženou.
+5. Sizel je náš přítel: zlevní na 4 kr/j a dá nám schéma na filtr level 3. Cisterna pak dokončí dodávku za původní cenu 6 kr/j.
+6. Hráč si filtr level 3 nainstaluje za 5 000 kr a tím misi dokončí.
+
+Embargo je pravidlo mise (`Mission.embargo`). Platí i ve volné hře po misi a vypne ho až další mise bez tohoto pravidla. Další mise musí mít `max_filter_level = 3`, jinak by hráč schéma ztratil. Volba z Mise 7 (prozradit, nebo zatajit Zoru) zatím průběh Mise 8 nemění.
 
 ## Mise Z: Volná hra
 

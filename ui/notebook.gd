@@ -3,7 +3,6 @@ extends Node2D
 ## Pumpíkův zápisník: encyklopedie hry s kapitolami a Centrem zvuků. Obsah je v `Notebook`.
 
 const SOUND_CENTER_SCENE := "res://ui/sound_center.tscn"
-const IMAGE_MAX_HEIGHT := 190.0
 const ROW_HEIGHT := 34.0
 const MONEY_ICON_SIZE := 15
 

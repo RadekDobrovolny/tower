@@ -3,7 +3,6 @@ extends Node2D
 
 ## Kořist ze sestřeleného piráta: trosky (prodají se za kredity) nebo truhla s artefaktem.
 ## Vznáší se na místě, kde pirát vybuchl, dokud pro ni nedoletí stavební dron a nesebere ji.
-## Pozice je globální (kořist je ve světě, ne ve stanici).
 
 enum Kind { WRECKAGE, CHEST }
 
@@ -36,8 +35,8 @@ func _ready() -> void:
 	_sprite.texture = TEXTURES[kind]
 	_sprite.scale = Vector2.ONE * SCALE
 	_glow.modulate = Color(0.4, 1.0, 0.9) if kind == Kind.CHEST else Color(1.0, 0.6, 0.3)
-	station.queue_job(self, "Sběr: %s" % info_title(), [{"name": "Sbírání", "duration": COLLECT_TIME}],
-			Callable(), collect)
+	station.queue_job(self, "Sběr: %s" % info_title(), {"name": "Sbírání", "duration": COLLECT_TIME},
+			collect)
 
 
 func _process(delta: float) -> void:

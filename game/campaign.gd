@@ -19,6 +19,8 @@ var mission_elapsed := 0.0
 ## Mise je splněná a hra čeká, až hráč potvrdí okno se shrnutím.
 var _completed := false
 var _dual_hose_told := false
+## Cíle nebo příběh se měly vyhodnotit, když hra stála. Dožene se to, až se zase rozběhne.
+var _recheck_pending := false
 
 @onready var station: Station = $Station
 @onready var spawner: ShipSpawner = $ShipSpawner
@@ -26,6 +28,7 @@ var _dual_hose_told := false
 @onready var junk_dealer: JunkDealer = $JunkDealer
 @onready var zora_scene: ZoraScene = $ZoraScene
 @onready var patrol_scene: PatrolScene = $PatrolScene
+@onready var sizel_scene: SizelScene = $SizelScene
 @onready var hud: Hud = $HUD
 
 
@@ -59,6 +62,10 @@ func _exit_tree() -> void:
 
 func _process(delta: float) -> void:
 	mission_elapsed += delta
+	if _recheck_pending:
+		_recheck_pending = false
+		_check_goals()
+		_check_dual_hose_story()
 
 
 ## Pořadové číslo aktuální mise (od 1), ve volné hře 0.
@@ -195,8 +202,10 @@ func _begin_mission(index: int) -> void:
 	_apply_rules(mission)
 	zora_scene.active = mission.zora_scene
 	patrol_scene.active = mission.patrol_scene
+	sizel_scene.active = mission.sizel_scene
 	station.ship_tier = number()
 	hud.refresh_mission()
+	_recheck_pending = true
 	mission_started.emit(number())
 
 
@@ -211,6 +220,7 @@ func _apply_rules(rules: Mission) -> void:
 	station.tower_available = rules.tower_available
 	station.warehouse_available = rules.warehouse_available
 	station.drone.upgrades_available = rules.drone_upgrades
+	station.max_filter_level = rules.max_filter_level
 	station.supply.set_embargo(rules.embargo)
 	if rules.galaxin_economy and not station.galaxin_economy:
 		station.enable_galaxin_economy(rules.start_galaxin)
@@ -235,9 +245,12 @@ func _pause_with_popup(title: String, body: String, button_text: String) -> void
 
 ## Když se otevře druhá hadice, Pumpík o ní hráči řekne (jen jednou za hru).
 func _check_dual_hose_story() -> void:
-	if _dual_hose_told or _completed or hud.dialogue.is_open() or not station.dual_hose_unlocked():
+	if _dual_hose_told or not station.dual_hose_unlocked():
 		return
 	if station.get_androids().all(func(android: Android) -> bool: return android.has_dual_hose()):
+		return
+	if get_tree().paused:
+		_recheck_pending = true
 		return
 	_dual_hose_told = true
 	hud.dialogue.play(Story.DUAL_HOSE_UNLOCKED)
@@ -256,7 +269,10 @@ func _best_fuel_level() -> int:
 
 
 func _check_goals() -> void:
-	if mission == null or _completed or hud.dialogue.is_open():
+	if mission == null or _completed:
+		return
+	if get_tree().paused:
+		_recheck_pending = true
 		return
 	if (mission.zora_scene and not zora_scene.done) or (mission.patrol_scene and not patrol_scene.done):
 		return

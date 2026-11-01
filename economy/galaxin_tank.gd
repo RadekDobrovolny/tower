@@ -69,13 +69,13 @@ func _process(delta: float) -> void:
 		_level_label.text = "Zásobník · L%d" % level
 
 
-## Nastaví level bez placení (startovní stav).
 func sale_items() -> Array[ShopItem]:
 	if level <= 1:
 		return []
 	return [ShopItem.sale("Zásobník, level %d" % level, LEVELS[level - 1].cost, set_level.bind(level - 1))]
 
 
+## Nastaví level bez placení (startovní stav).
 func set_level(value: int) -> void:
 	level = clampi(value, 1, LEVELS.size())
 	_update_looks()
@@ -132,8 +132,8 @@ func start_upgrade() -> bool:
 		return false
 	var target_level := level + 1
 	station.queue_job(self, "Rozšíření na level %d" % target_level,
-			[{"name": "Rozšiřování", "duration": LEVELS[target_level - 1].upgrade_time}],
-			Callable(), _finish_upgrade)
+			{"name": "Rozšiřování", "duration": LEVELS[target_level - 1].upgrade_time},
+			_finish_upgrade)
 	return true
 
 

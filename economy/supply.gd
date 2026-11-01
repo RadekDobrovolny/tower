@@ -5,7 +5,11 @@ extends Node2D
 ## k zásobníku a přečerpá galaxín. Za to, co nedoveze nebo co se nevejde, vrátí peníze.
 ## Řídící centrum u zásobníku dodávky vylepšuje a s dispečinkem objednává cisterny samo.
 ## Když útočí piráti, cisterny nelétají: objednávka se zruší a cisterna u stanice odletí.
-## Při císařském embargu prodává jen šmelinář Lojza, a to dráž.
+## Při císařském embargu prodává jen překupník Sizel, a to dráž.
+
+## Cisterna vyletěla ke stanici (příběh ji může poškodit) a dorazila k zásobníku.
+signal tanker_sent(tanker: Tanker)
+signal tanker_docked(supplier: Dictionary)
 
 enum State { IDLE, ORDERED, ARRIVING, UNLOADING }
 
@@ -21,7 +25,7 @@ const USEFUL_UNITS := 50
 ## zpoždění (s), šance a rozsah poloprázdné cisterny (podíl objednaného), kvalita a barva.
 const SUPPLIERS := [
 	{
-		"name": "Šmelinář Lojza", "short_name": "Lojza", "price": 2.0, "units": 400,
+		"name": "Sizel Varn", "short_name": "Sizel", "price": 2.0, "units": 400,
 		"lead_time": 12.0, "delay_chance": 0.35, "delay_min": 10.0, "delay_max": 20.0,
 		"short_chance": 0.3, "short_min": 0.3, "short_max": 0.6,
 		"low_quality": true, "color": Color(0.6, 0.42, 0.28),
@@ -43,10 +47,13 @@ const SUPPLIERS := [
 	},
 ]
 
-## Index šmelináře Lojzy v SUPPLIERS: jediný, kdo embargo obchází, a kolik si při něm řekne.
+## Index Sizela v SUPPLIERS: jediný, kdo embargo obchází, a kolik si při něm řekne, než se
+## s námi spřátelí a potom.
 const BLACK_MARKET := 0
 const EMBARGO_PRICE := 6.0
-const EMBARGO_INFO := "Císařské embargo: zbyl jen Lojza a zdražil. Jeho galaxín je nekvalitní, hrozí pokuty."
+const FRIEND_PRICE := 4.0
+const EMBARGO_INFO := "Embargo na celou oblast: zbyl jen Sizel a zdražil. Jeho galaxín je nekvalitní, hrozí pokuty."
+const FRIEND_INFO := "Embargo trvá, ale Sizel je náš přítel a prodává levněji. Jeho galaxín je dál nekvalitní."
 
 ## Kde cisterna zakotví a odkud přilétá (souřadnice stanice).
 @export var dock_position := Vector2(-230, 85)
@@ -59,6 +66,8 @@ var station: Station
 var selected := 1
 var state := State.IDLE
 var embargo := false
+## Sizel nám je vděčný za opravu cisterny.
+var sizel_friend := false
 
 var _supplier: Dictionary
 ## Cena za jednotku v aktuální objednávce, podle ní se vrací peníze.
@@ -95,7 +104,7 @@ func selected_supplier() -> Dictionary:
 	return SUPPLIERS[selected]
 
 
-## Zapne nebo vypne embargo. Při něm jde objednávat jen od Lojzy.
+## Zapne nebo vypne embargo. Při něm jde objednávat jen od Sizela.
 func set_embargo(value: bool) -> void:
 	embargo = value
 	if embargo:
@@ -108,12 +117,16 @@ func is_available(index: int) -> bool:
 
 ## Cena za jednotku u dodavatele s tímhle indexem.
 func unit_price(index: int) -> float:
-	return EMBARGO_PRICE if embargo and index == BLACK_MARKET else SUPPLIERS[index].price
+	if not embargo or index != BLACK_MARKET:
+		return SUPPLIERS[index].price
+	return FRIEND_PRICE if sizel_friend else EMBARGO_PRICE
 
 
 ## Popis vybraného dodavatele pro HUD.
 func info_text() -> String:
-	return EMBARGO_INFO if embargo else selected_supplier().info
+	if not embargo:
+		return selected_supplier().info
+	return FRIEND_INFO if sizel_friend else EMBARGO_INFO
 
 
 ## Kolik jednotek by šlo teď objednat: velikost cisterny, ale nejvýš volné místo v zásobníku
@@ -168,13 +181,15 @@ func order() -> bool:
 
 
 ## Začal útok pirátů: objednávka se zruší a peníze se vrátí. Cisterna, která už je tady,
-## odletí a vrátí peníze za to, co nestihla přečerpat.
+## odletí a vrátí peníze za to, co nestihla přečerpat. Poškozená cisterna nemá kam utéct.
 func abort_delivery() -> void:
 	match state:
 		State.ORDERED:
 			_refund(tank.position + Vector2(0, -60))
 			state = State.IDLE
 		State.ARRIVING, State.UNLOADING:
+			if _tanker.damaged:
+				return
 			_tanker.say_scared(Lines.pick(Lines.TANKER_SCARED))
 			_finish_delivery()
 
@@ -187,7 +202,7 @@ func status_text() -> String:
 				return "Cisterna přiletí za %d s" % ceili(_expected_left)
 			return "Cisterna má zpoždění!"
 		State.ARRIVING:
-			return "Cisterna přilétá"
+			return "Cisterna je poškozená!" if _tanker.damaged else "Cisterna přilétá"
 		State.UNLOADING:
 			return "Přečerpávání: %d / %d j" % [roundi(_delivered), _ordered_units]
 	if station and station.under_attack():
@@ -206,6 +221,7 @@ func _send_tanker() -> void:
 	_tanker.docked.connect(_on_tanker_docked)
 	add_child(_tanker)
 	state = State.ARRIVING
+	tanker_sent.emit(_tanker)
 
 
 func _on_tanker_docked() -> void:
@@ -218,6 +234,7 @@ func _on_tanker_docked() -> void:
 	else:
 		_tanker.say(Lines.pick(Lines.TANKER_ARRIVAL))
 	state = State.UNLOADING
+	tanker_docked.emit(_supplier)
 
 
 func _finish_delivery() -> void:

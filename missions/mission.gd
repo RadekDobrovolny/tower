@@ -31,12 +31,17 @@ extends Resource
 @export var warehouse_available := false
 ## Jestli jde vylepšovat stavební dron (rychlost letu a práce).
 @export var drone_upgrades := false
-## Císařské embargo: galaxín jde objednat jen od Lojzy, a to dráž.
+## Na jaký nejvyšší level jdou koupit filtry galaxínu v řídícím centru.
+@export var max_filter_level := 1
+## Císařské embargo na celou oblast: galaxín jde objednat jen od Sizela, a to dráž, a lodí
+## přilétá méně.
 @export var embargo := false
 ## Jestli v misi proběhne scéna se Zorou. Mise skončí až po ní.
 @export var zora_scene := false
 ## Jestli v misi proběhne scéna s císařskou hlídkou. Mise skončí až po ní.
 @export var patrol_scene := false
+## Jestli v misi běží příběh Sizela (hořící cisterna a schéma na filtr level 3).
+@export var sizel_scene := false
 ## Jestli na stanici útočí piráti a rozmezí v sekundách mezi útoky.
 @export var pirates := false
 @export var pirate_interval_min := 40.0

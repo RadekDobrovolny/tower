@@ -15,7 +15,7 @@ Ceny vycházejí z konstant v kódu. Když se změní cena nebo cíl mise, je po
 | 5 | Piráti | postavit skladiště u obchodu, sestřelit 10 pirátů, postavit obrannou věž | **9 000** | 0 | 9 000 + galaxín |
 | 6 | Nečekaná zákaznice | naspořit 6 000 kr, zábavní systém na levelu 3, 2 obranné věže, scéna se Zorou | **14 000** | 6 000 | 20 000 + galaxín |
 | 7 | Plné ruce práce | věž na levelu 2, spolehlivé dodávky na levelu 2, Bzučák rychlost letu i práce na levelu 2, scéna s císařskou hlídkou | **14 500** | 0 | 8 500 + galaxín |
-| 8 | Embargo | filtry galaxínu na levelu 3 | **10 500** | 0 | 10 500 + galaxín |
+| 8 | Embargo | filtry galaxínu na levelu 3 (schéma od Sizela) | **10 500** | 0 | 10 500 + galaxín |
 | | **Celkem** | | **82 300** | | **82 300 + galaxín** |
 
 - **Nutné výdaje:** součet všech povinných nákupů v misi.
@@ -89,7 +89,7 @@ Ceny vycházejí z konstant v kódu. Když se změní cena nebo cíl mise, je po
 
 **Odemkne se:**
 - obchod a jeho 4 druhy zboží
-- řídící centrum u zásobníku (od levelu 3) a jeho vylepšení včetně automatického dispečinku
+- řídící centrum u zásobníku (od levelu 3) a jeho vylepšení včetně automatického dispečinku, filtry galaxínu jen na level 1
 - třetí čerpací slot
 - nové lodě: nomádská raketa a zmrzlinářská raketa
 - turistická loď, až stojí hotový obchod
@@ -137,6 +137,7 @@ Ceny vycházejí z konstant v kódu. Když se změní cena nebo cíl mise, je po
 - Zora Zender a její scéna: asi 45 s po začátku mise přiletí, nechá si natankovat a odletí bez placení, Pumpík po ní vystřelí a vypadne z ní truhla
 - Medailon s císařským orlem: uloží se do skladiště a nejde prodat
 - skladiště má 8 slotů místo 6
+- filtry galaxínu jdou koupit na level 2
 
 | Nákup | Cena |
 |---|---|
@@ -169,11 +170,15 @@ Ceny vycházejí z konstant v kódu. Když se změní cena nebo cíl mise, je po
 
 ## Mise 8: Embargo
 
-**Cíl:** filtry galaxínu na levelu 3, to je maximum. Až potom je Lojzův galaxín celý čistý.
+**Cíl:** filtry galaxínu na levelu 3, to je maximum. Tenhle level jde koupit až se schématem od Sizela.
 
 **Přibude:**
-- císařské embargo: Galaxis a Orion jsou vypnutí a jde objednávat jen od Lojzy
-- Lojza prodává za 6 kr/j místo 2 kr/j. Stejně jako dřív mešká, vozí méně a jeho galaxín je nekvalitní
+- embargo na celou oblast: Galaxis a Orion jsou vypnutí a jde objednávat jen od Sizela Varna
+- Sizel prodává za 6 kr/j místo 2 kr/j. Stejně jako dřív mešká, vozí méně a jeho galaxín je nekvalitní
+- posádky se bojí létat a čerpat: lodí přilétá o 50 % méně, po celou dobu embarga
+- první dvě dodávky doplní rozhovor se Sizelem
+- třetí cisterna přiletí poškozená a hořící, přistane na plošině a Bzučák ji opraví
+- potom Sizel zlevní na 4 kr/j a dá nám schéma na filtr level 3
 - embargo platí i po misi, dokud ho další mise nevypne
 
 | Nákup | Cena |
@@ -183,8 +188,9 @@ Ceny vycházejí z konstant v kódu. Když se změní cena nebo cíl mise, je po
 | Filtry galaxínu, level 3 | 5 000 |
 | **Celkem** | **10 500** |
 
-- Hráč musí vydělat **10 500 kr** a k tomu na galaxín.
-- Při běžné prodejní ceně 6 kr/j galaxín nevydělá nic. Výdělek musí přijít z vyšší prodejní ceny, dýšek, obchodu a zábavy.
+- Hráč musí vydělat **10 500 kr** a k tomu na galaxín. Kdo koupil level 1 nebo 2 dřív, ušetří jejich cenu.
+- Mise nejde splnit bez tří dodávek od Sizela, protože schéma přijde až s tou třetí. Dvě objednávky stojí při plné cisterně 2 400 kr, třetí taky, ještě za 6 kr/j.
+- Při běžné prodejní ceně 6 kr/j galaxín před zlevněním nevydělá nic a lodí je méně. Výdělek musí přijít z vyšší prodejní ceny, dýšek, obchodu a zábavy. Po zlevnění na 4 kr/j vydělá 2 kr/j.
 
 ## Mise Z: Volná hra
 

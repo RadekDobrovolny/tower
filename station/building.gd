@@ -56,14 +56,6 @@ func complete_phase(count: int) -> void:
 	_update_construction_looks()
 
 
-## Celková cena stavby (součet cen všech částí).
-func total_cost() -> int:
-	var total := 0
-	for phase in build_phases():
-		total += phase.cost
-	return total
-
-
 ## Cena další části stavby, nebo -1, když teď další část postavit nejde
 ## (budova je hotová, nebo se na ní právě pracuje).
 func next_phase_cost() -> int:
@@ -79,7 +71,7 @@ func start_next_phase() -> bool:
 		return false
 	var phase: Dictionary = build_phases()[built_phases]
 	station.queue_job(self, "Stavba, část %d/%d" % [built_phases + 1, build_phases().size()],
-			[phase], Callable(), _on_phase_built)
+			phase, _on_phase_built)
 	return true
 
 

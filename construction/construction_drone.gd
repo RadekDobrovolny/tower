@@ -163,7 +163,6 @@ func info_lines() -> PackedStringArray:
 	if upgrades_available or speed_level > 1 or work_level > 1:
 		lines.append("Let: level %d (%d px/s), práce: level %d (%d %% rychlosti)" % [
 			speed_level, roundi(speed()), work_level, roundi(work_factor() * 100.0)])
-	var station := get_parent() as Station
 	return lines
 
 

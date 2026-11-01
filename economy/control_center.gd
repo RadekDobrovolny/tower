@@ -115,10 +115,9 @@ func display_name() -> String:
 
 ## Cena dalšího levelu vylepšení, nebo -1 (centrum není hotové, pracuje se na něm, maximum).
 func upgrade_cost(id: String) -> int:
-	var upgrade := _upgrade(id)
-	if not is_operational() or job != null or levels[id] >= upgrade.costs.size():
+	if not is_operational() or job != null or levels[id] >= _max_level(id):
 		return -1
-	return upgrade.costs[levels[id]]
+	return _upgrade(id).costs[levels[id]]
 
 
 func start_upgrade(id: String) -> bool:
@@ -127,7 +126,7 @@ func start_upgrade(id: String) -> bool:
 		return false
 	var upgrade := _upgrade(id)
 	station.queue_job(self, "%s, level %d" % [upgrade.name, levels[id] + 1],
-			[{"name": "Instalace", "duration": upgrade.times[levels[id]]}], Callable(), _finish_upgrade.bind(id))
+			{"name": "Instalace", "duration": upgrade.times[levels[id]]}, _finish_upgrade.bind(id))
 	return true
 
 
@@ -156,6 +155,8 @@ func info_lines() -> PackedStringArray:
 		lines.append("Filtry: nekvalitní galaxín se vyčistí celý, levný dodavatel bez pokut.")
 	elif purification < 1.0:
 		lines.append("Filtry: vyčistí %d %% nekvalitního galaxínu." % roundi((1.0 - purification) * 100.0))
+	if station.supply.embargo and levels.purification >= station.max_filter_level and purification > 0.0:
+		lines.append("Filtry level %d: chybí nám schéma." % (levels.purification + 1))
 	if value("dispatch"):
 		lines.append("Dispečink: objedná cisternu sám, když v zásobníku zbývá méně než %d %%."
 				% roundi(DISPATCH_SHARE * 100.0))
@@ -175,6 +176,12 @@ func info_actions() -> Array[ShopItem]:
 		actions.append(ShopItem.new(_upgrade_label.bind(id), upgrade_cost.bind(id),
 				start_upgrade.bind(id), ShopItem.Kind.UPGRADE))
 	return actions
+
+
+## Nejvyšší level vylepšení, který jde teď koupit. Filtry odemykají až další mise.
+func _max_level(id: String) -> int:
+	var levels_total: int = _upgrade(id).costs.size()
+	return mini(levels_total, station.max_filter_level) if id == "purification" else levels_total
 
 
 static func _upgrade(id: String) -> Dictionary:

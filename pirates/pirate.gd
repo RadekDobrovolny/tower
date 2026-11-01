@@ -4,10 +4,8 @@ extends Node2D
 ## Pirátská loď. Přiletí k jednomu z míst kolem stanice a každou chvíli vystřelí: dokud
 ## je android (Pumpík) v provozu, střílí po něm, a když je rozbitý, střílí po zásobníku
 ## a ukradne část kreditů z pokladny. Po několika krádežích odletí. Sestřelit ji může
-## obranná věž, a když stanice věž nemá, android.
+## obranná věž i android.
 ## Pozice jsou globální (piráti jsou ve světě, ne ve stanici).
-
-signal finished(pirate: Pirate)
 
 enum State { ARRIVING, ATTACKING, LEAVING, DESTROYED }
 
@@ -195,7 +193,7 @@ func _fly_away(delta: float) -> void:
 	global_position += Vector2.from_angle(_body.rotation) * _speed * delta
 	_engine.target_throttle = 0.4 + 0.6 * _speed / max_speed
 	if not Game.visible_world_rect(self).grow(OFFSCREEN_MARGIN).has_point(global_position):
-		_finish()
+		queue_free()
 
 
 func _destroy() -> void:
@@ -210,9 +208,4 @@ func _destroy() -> void:
 	create_tween().tween_property(_blast_light, "energy", 0.0, 0.6).from(3.0)
 	FloatingText.spawn(get_parent(), global_position + Vector2(0, -40), "Pirát sestřelen!", DOWN_COLOR)
 	station.spawn_loot(global_position, kind == "gunship")
-	get_tree().create_timer(WRECK_TIME, false).timeout.connect(_finish)
-
-
-func _finish() -> void:
-	finished.emit(self)
-	queue_free()
+	get_tree().create_timer(WRECK_TIME, false).timeout.connect(queue_free)

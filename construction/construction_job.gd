@@ -1,68 +1,47 @@
 class_name ConstructionJob
 extends RefCounted
 
-## Jedna zakázka pro stavebního drona: stavba nové budovy nebo vylepšení. Skládá se z fází,
-## každá trvá nějakou dobu. Po dokončení fáze a celé zakázky volá zadané funkce.
+## Jedna zakázka pro stavebního drona: část stavby, vylepšení, oprava nebo sběr kořisti.
+## Po dokončení volá zadanou funkci.
 
-## Kam dron letí: budova nebo zásobník (uzel ve stanici).
+## Kam dron letí: budova, zásobník, android nebo kořist.
 var target: Node2D
-## Např. „Stavba: Zábavní systém“.
+## Např. „Stavba, část 1/4“.
 var title: String
-## Fáze: [{"name": String, "duration": float (s)}].
-var phases: Array
-## Index právě rozpracované fáze (== phases.size() znamená hotovo).
-var phase := 0
+## Co dron dělá: {"name": String, "duration": float (s)}.
+var phase: Dictionary
 var phase_time := 0.0
-## (počet hotových fází: int) -> void
-var on_phase_done: Callable
 ## () -> void
 var on_done: Callable
 
 
-func _init(job_target: Node2D, job_title: String, job_phases: Array) -> void:
+func _init(job_target: Node2D, job_title: String, job_phase: Dictionary) -> void:
 	target = job_target
 	title = job_title
-	phases = job_phases
+	phase = job_phase
 
 
-func is_done() -> bool:
-	return phase >= phases.size()
-
-
-## Odpracuje `delta` sekund. Vrátí true, když je celá zakázka hotová.
+## Odpracuje `delta` sekund. Vrátí true, když je zakázka hotová.
 func work(delta: float) -> bool:
-	if is_done():
-		return true
 	phase_time += delta
-	if phase_time >= phases[phase].duration:
-		phase_time = 0.0
-		phase += 1
-		if on_phase_done.is_valid():
-			on_phase_done.call(phase)
-		if is_done():
-			if on_done.is_valid():
-				on_done.call()
-			return true
-	return false
+	if phase_time < phase.duration:
+		return false
+	if on_done.is_valid():
+		on_done.call()
+	return true
 
 
-## Jak daleko je rozpracovaná fáze (0–1).
+## Jak daleko je rozpracovaná zakázka (0–1).
 func phase_fraction() -> float:
-	if is_done():
-		return 1.0
-	return phase_time / phases[phase].duration
+	return phase_time / phase.duration
 
 
 func phase_name() -> String:
-	return "" if is_done() else phases[phase].name
+	return phase.name
 
 
 ## Stav zakázky pro info panel.
 func status_text(drone: ConstructionDrone) -> String:
 	if drone.is_waiting(self):
 		return "%s: čeká na %s" % [title, drone.accusative]
-	if phases.size() == 1:
-		return "%s: %s (%d %%)" % [title, phase_name(), roundi(phase_fraction() * 100.0)]
-	return "%s, fáze %d/%d: %s (%d %%)" % [
-		title, phase + 1, phases.size(), phase_name(), roundi(phase_fraction() * 100.0),
-	]
+	return "%s: %s (%d %%)" % [title, phase_name(), roundi(phase_fraction() * 100.0)]
