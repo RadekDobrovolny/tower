@@ -35,6 +35,18 @@ theme_override_constants/icon_max_width = 16
 icon_alignment = 1
 script = ExtResource("10_sound")
 
+[node name="NotebookButton" type="Button" parent="UI"]
+unique_name_in_owner = true
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -212.0
+offset_top = 14.0
+offset_right = -58.0
+offset_bottom = 44.0
+grow_horizontal = 0
+focus_mode = 0
+text = "Pumpíkův zápisník"
+
 [node name="Center" type="CenterContainer" parent="UI"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -42,12 +54,12 @@ mouse_filter = 2
 
 [node name="VBox" type="VBoxContainer" parent="UI/Center"]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 8
 
 [node name="Title" type="Label" parent="UI/Center/VBox"]
 layout_mode = 2
 theme_type_variation = &"HudTitle"
-theme_override_font_sizes/font_size = 60
+theme_override_font_sizes/font_size = 46
 text = "Tower"
 uppercase = true
 horizontal_alignment = 1
@@ -61,7 +73,7 @@ uppercase = true
 horizontal_alignment = 1
 
 [node name="Spacer" type="Control" parent="UI/Center/VBox"]
-custom_minimum_size = Vector2(0, 24)
+custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 mouse_filter = 2
 
@@ -78,12 +90,5 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 8
-columns = 2
+columns = 8
 
-[node name="NotebookButton" type="Button" parent="UI/Center/VBox"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(340, 36)
-layout_mode = 2
-focus_mode = 0
-theme_type_variation = &"FlatButton"
-text = "Pumpíkův zápisník"

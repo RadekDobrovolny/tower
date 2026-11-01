@@ -6,6 +6,8 @@ extends Resource
 ## rovnou od téhle mise (výběr v menu, hodí se pro testování).
 
 @export var title := ""
+## Čtvercový obrázek mise v menu.
+@export var icon: Texture2D
 
 @export_group("Pravidla")
 ## Nejvyšší level, na který jde vylepšit androida (tankování i jízdu).

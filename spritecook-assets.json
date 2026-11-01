@@ -928,6 +928,62 @@
           "cell": "celý obrázek"
         }
       ]
+    },
+    {
+      "source": "Codex CLI s tarifem ChatGPT, nemá SpriteCook ID",
+      "label": "Tower – obrázky misí do menu, filmové scény, arch 4×3 (reference grafika ze hry)",
+      "files": [
+        {
+          "file": "assets/sprites/missions/mission_1.png",
+          "sha12": "8d9daaa82b76",
+          "cell": "mise 1"
+        },
+        {
+          "file": "assets/sprites/missions/mission_2.png",
+          "sha12": "33c101c233c6",
+          "cell": "mise 2"
+        },
+        {
+          "file": "assets/sprites/missions/mission_3.png",
+          "sha12": "a46b99f2bb82",
+          "cell": "mise 3"
+        },
+        {
+          "file": "assets/sprites/missions/mission_4.png",
+          "sha12": "395fd8177a39",
+          "cell": "mise 4"
+        },
+        {
+          "file": "assets/sprites/missions/mission_5.png",
+          "sha12": "cfe2f1d65d69",
+          "cell": "mise 5"
+        },
+        {
+          "file": "assets/sprites/missions/mission_6.png",
+          "sha12": "a48a7a167840",
+          "cell": "mise 6"
+        },
+        {
+          "file": "assets/sprites/missions/mission_7.png",
+          "sha12": "62240d0787ae",
+          "cell": "mise 7"
+        },
+        {
+          "file": "assets/sprites/missions/mission_8.png",
+          "sha12": "b863514df84b",
+          "cell": "mise 8"
+        },
+        {
+          "file": "assets/sprites/missions/mission_9.png",
+          "sha12": "de1df5aa27af",
+          "cell": "mise 9"
+        },
+        {
+          "file": "assets/sprites/missions/mission_z.png",
+          "sha12": "768c8ff15c48",
+          "cell": "mise Z"
+        }
+      ]
     }
   ]
 }

@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="Mission" format=3]
 
 [ext_resource type="Script" path="res://missions/mission.gd" id="1_mission"]
+[ext_resource type="Texture2D" path="res://assets/sprites/missions/mission_1.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_mission")
+icon = ExtResource("2_icon")
 title = "Pumpík se učí tankovat"
 max_android_level = 3
 max_slots = 1
