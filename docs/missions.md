@@ -9,11 +9,11 @@ Ceny vycházejí z konstant v kódu. Když se změní cena nebo cíl mise, je po
 | Mise | Název | Cíle | Nutné výdaje | Držet na účtu | Vydělat při plynulé hře |
 |---|---|---|---|---|---|
 | 1 | Pumpík se učí tankovat | naspořit 1 000 kr, tankování na levelu 3 | **2 800** | 1 000 | 3 800 |
-| 2 | Zábava pro zákazníky | naspořit 2 000 kr, postavit zábavní systém | **4 000** | 2 000 | 5 000 |
+| 2 | Zábava pro zákazníky | naspořit 2 000 kr, postavit holokino | **4 000** | 2 000 | 5 000 |
 | 3 | Vlastní galaxín | naspořit 4 000 kr, zásobník na levelu 2, 2 čerpací sloty | **9 500** | 4 000 | 11 500 + galaxín |
 | 4 | Obchod a logistika | postavit obchod, 1 druh zboží, automatický dispečink | **18 000** | 0 | 14 000 + galaxín |
 | 5 | Piráti | postavit skladiště u obchodu, sestřelit 10 pirátů, postavit obrannou věž | **9 000** | 0 | 9 000 + galaxín |
-| 6 | Nečekaná zákaznice | naspořit 6 000 kr, zábavní systém na levelu 3, 2 obranné věže, scéna se Zorou | **14 000** | 6 000 | 20 000 + galaxín |
+| 6 | Nečekaná zákaznice | naspořit 6 000 kr, holokino na levelu 3, 2 obranné věže, scéna se Zorou | **14 000** | 6 000 | 20 000 + galaxín |
 | 7 | Plné ruce práce | věž na levelu 2, spolehlivé dodávky na levelu 2, Bzučák rychlost letu i práce na levelu 2, scéna s císařskou hlídkou | **14 500** | 0 | 8 500 + galaxín |
 | 8 | Embargo | filtry galaxínu na levelu 3 (schéma od Sizela) | **10 500** | 0 | 10 500 + galaxín |
 | 9 | Provizorní motel | rozšířit plošinu, postavit motel, postavit parkoviště | **18 000** | 0 | 18 000 + galaxín |
@@ -44,12 +44,10 @@ Ceny vycházejí z konstant v kódu. Když se změní cena nebo cíl mise, je po
 
 ## Mise 2: Zábava pro zákazníky
 
-**Cíle:** mít na účtu 2 000 kr a postavit zábavní systém.
+**Cíle:** mít na účtu 2 000 kr a postavit holokino.
 
 **Odemkne se:**
-- zábavní systém (autokino) a jeho vylepšení do levelu 5, výherní automaty
-- druhý čerpací slot
-- Druhá hadice, až stojí druhý slot, a Pumpíkův rozhovor o ní
+- holokino a jeho vylepšení do levelu 5, výherní automaty
 - vylepšení Pumpíka do levelu 6 (jízda do levelu 5)
 - vylepšení Bzučáka: rychlost letu a práce
 - nové lodě: romantická raketa a rodinná raketa
@@ -57,11 +55,11 @@ Ceny vycházejí z konstant v kódu. Když se změní cena nebo cíl mise, je po
 
 | Nákup | Cena |
 |---|---|
-| Stavba zábavního systému (4 části) | 4 000 |
+| Stavba holokina (4 části) | 4 000 |
 | **Celkem** | **4 000** |
 
 - Z Mise 1 si hráč přinese 1 000 kr, takže musí vydělat 4 000 + 2 000 − 1 000 = **5 000 kr**.
-- Druhý čerpací slot tu ještě není nutný, je cílem Mise 3.
+- Druhý čerpací slot jde postavit až v Misi 3.
 
 ## Mise 3: Vlastní galaxín
 
@@ -71,6 +69,7 @@ Ceny vycházejí z konstant v kódu. Když se změní cena nebo cíl mise, je po
 - ekonomika galaxínu: zásobník s omezenou kapacitou, objednávání cisteren a volba dodavatele
 - vlastní prodejní cena galaxínu
 - rozšíření zásobníku do levelu 4
+- druhý čerpací slot
 - Druhá hadice a Pumpíkův rozhovor o ní, jakmile stojí druhý slot
 - vesmírný vetešník, když dojde galaxín i kredity
 - nové lodě: kurýrní raketa a dodávka
@@ -81,7 +80,7 @@ Ceny vycházejí z konstant v kódu. Když se změní cena nebo cíl mise, je po
 | Druhý čerpací slot (4 části) | 8 000 |
 | **Celkem** | **9 500** |
 
-- Z Mise 2 si hráč přinese 2 000 kr, takže musí vydělat 9 500 + 4 000 − 2 000 = **11 500 kr**. Kdo druhý slot postavil už v Misi 2, ušetří tady 8 000 kr.
+- Z Mise 2 si hráč přinese 2 000 kr, takže musí vydělat 9 500 + 4 000 − 2 000 = **11 500 kr**.
 - Navíc platí galaxín: první várka 300 j je zdarma, dál stojí 2 až 4 kr/j podle dodavatele a běžně se prodává za 6 kr/j.
 
 ## Mise 4: Obchod a logistika
@@ -132,7 +131,7 @@ Ceny vycházejí z konstant v kódu. Když se změní cena nebo cíl mise, je po
 
 ## Mise 6: Nečekaná zákaznice
 
-**Cíle:** mít na účtu 6 000 kr, zábavní systém na levelu 3 a 2 hotové obranné věže. Mise navíc skončí až po scéně se Zorou, ta se v cílech neukazuje.
+**Cíle:** mít na účtu 6 000 kr, holokino na levelu 3 a 2 hotové obranné věže. Mise navíc skončí až po scéně se Zorou, ta se v cílech neukazuje.
 
 **Přibude:**
 - Zora Zender a její scéna: asi 45 s po začátku mise přiletí, nechá si natankovat a odletí bez placení, Pumpík po ní vystřelí a vypadne z ní truhla
@@ -142,8 +141,8 @@ Ceny vycházejí z konstant v kódu. Když se změní cena nebo cíl mise, je po
 
 | Nákup | Cena |
 |---|---|
-| Zábavní systém na level 2 | 3 000 |
-| Zábavní systém na level 3 | 5 000 |
+| Holokino na level 2 | 3 000 |
+| Holokino na level 3 | 5 000 |
 | Druhá obranná věž (4 části) | 6 000 |
 | **Celkem** | **14 000** |
 
@@ -224,11 +223,11 @@ Když hra začne přímo od mise, dostane hráč pevný startovní stav. Od Mise
 |---|---|---|---|
 | 1 | 0 | 1 slot, Pumpík na levelu 1 | 3 800 |
 | 2 | 2 000 | 1 slot, tankování a jízda na levelu 3 | 4 000 |
-| 3 | 3 000 | 2 sloty, Druhá hadice, tankování 6, jízda 5, zábavní systém 3, zásobník 1 | 2 500 + galaxín |
+| 3 | 3 000 | 2 sloty, Druhá hadice, tankování 6, jízda 5, holokino 3, zásobník 1 | 2 500 + galaxín |
 | 4 | 6 000 | jako Mise 3 a zásobník 3 | 9 000 + galaxín |
-| 5 | 8 000 | 3 sloty, Druhá hadice, tankování 6, jízda 5, zábavní systém 3, zásobník 3, obchod se 2 druhy zboží, řídící centrum s dispečinkem | 1 000 + galaxín |
-| 6 | 8 000 | jako Mise 5, ale zábavní systém 2, věž na levelu 1 a skladiště | 9 000 + galaxín |
-| 7 | 8 000 | jako Mise 6, ale zábavní systém 3, 2 věže na levelu 1 a medailon ve skladišti | 6 500 + galaxín |
+| 5 | 8 000 | 3 sloty, Druhá hadice, tankování 6, jízda 5, holokino 3, zásobník 3, obchod se 2 druhy zboží, řídící centrum s dispečinkem | 1 000 + galaxín |
+| 6 | 8 000 | jako Mise 5, ale holokino 2, věž na levelu 1 a skladiště | 9 000 + galaxín |
+| 7 | 8 000 | jako Mise 6, ale holokino 3, 2 věže na levelu 1 a medailon ve skladišti | 6 500 + galaxín |
 | 8 | 8 000 | jako Mise 7, ale 2 věže na levelu 2 | 2 500 + galaxín |
 | 9 | 8 000 | jako Mise 8, ale filtry na levelu 3 a Sizel je přítel | 10 000 + galaxín |
 
@@ -240,9 +239,9 @@ Nejsou nutné ke splnění žádné mise.
 |---|---|---|
 | Tankování na levelu 4 až 6 | 2 | 17 000 (3 500 + 5 500 + 8 000) |
 | Jízda na levelu 2 až 5 | 1, level 4 a 5 od Mise 2 | 7 000 (500 + 1 000 + 2 000 + 3 500) |
-| Druhá hadice | 2, po dostavění druhého slotu (nejpozději v Misi 3) | 3 000 |
+| Druhá hadice | 3, po dostavění druhého slotu | 3 000 |
 | Třetí čerpací slot | 4 | 8 000 |
-| Zábavní systém na levelu 4 a 5 | 2 | 20 000 (8 000 + 12 000) |
+| Holokino na levelu 4 a 5 | 2 | 20 000 (8 000 + 12 000) |
 | Výherní automaty | 2 | 6 000 |
 | Bzučák: rychlost letu na level 3 | 2 | 4 000 |
 | Bzučák: rychlost práce na level 3 | 2 | 5 000 |

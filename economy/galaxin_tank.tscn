@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://economy/galaxin_tank.gd" id="1_tank"]
 [ext_resource type="Texture2D" path="res://assets/sprites/station/tank.png" id="2_tank"]
 [ext_resource type="Texture2D" path="res://fx/soft_light.tres" id="3_light"]
+[ext_resource type="Script" path="res://fx/drop_shadow.gd" id="shadow_script"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gauge_bg"]
 bg_color = Color(0, 0, 0, 0.6)
@@ -16,6 +17,10 @@ script = ExtResource("1_tank")
 [node name="Body" type="Sprite2D" parent="."]
 scale = Vector2(0.4, 0.4)
 texture = ExtResource("2_tank")
+
+[node name="Shadow" type="Node2D" parent="Body"]
+script = ExtResource("shadow_script")
+height = 15.5
 
 [node name="Glow" type="PointLight2D" parent="."]
 color = Color(1, 0.24, 0.55, 1)

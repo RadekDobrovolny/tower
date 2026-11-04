@@ -65,14 +65,17 @@ const SPEAKERS := {
 ## Úvody misí ve stejném pořadí jako `Missions.ALL`.
 const MISSION_INTROS := [
 	[
-		{"speaker": PUMPIK, "mood": "happy", "text": "Vítej na stanici, šéfiku! Jsem Pumpík, tvůj android a zatím jediný zaměstnanec."},
-		{"speaker": PUMPIK, "mood": "neutral", "text": "Jsme na okraji galaxie, máme jeden čerpací slot a prázdnou pokladnu. Vyděláme první peníze a vylepšíš mi tankování, ať stíhám."},
-		{"speaker": PUMPIK, "mood": "neutral", "text": "Na mě i na budovy můžeš kliknout, ukážu ti, co všechno jde. Cíle najdeš vpravo nahoře."},
+		{"speaker": PUMPIK, "mood": "neutral", "text": "No konečně. Ty seš ten novej majitel? Čekám tu na tebe tak dlouho, že mi málem zrezivěl knír."},
+		{"speaker": PUMPIK, "mood": "happy", "text": "Ale jo, rád tě vidím, šéfiku. Já sem Pumpík. Tankuju, opravuju, zametám. Hlavně tankuju."},
+		{"speaker": PUMPIK, "mood": "neutral", "text": "Moc toho tu nemáme. Jeden slot, rez na palubě a prázdná kasa. Ale lodě sem furt lítaj a mě tu znaj."},
+		{"speaker": PUMPIK, "mood": "worried", "text": "Jenže banka chce vidět na účtu aspoň 1 000 kr. Jinak nám stanici zabavěj. I se mnou. A já se jim do trezoru nevejdu."},
+		{"speaker": PUMPIK, "mood": "neutral", "text": "Makat umím, to zas jo. Jen ta moje pumpa je trochu líná. Vylepši mi tankování na level 3 a uvidíš, jak to bude frčet."},
+		{"speaker": PUMPIK, "mood": "happy", "text": "Tak dost kecání, práce čeká. Klikni na mě a ukážu ti, co se ve mně dá vylepšit. Á, první zákazník!"},
 	],
 	[
-		{"speaker": PUMPIK, "mood": "worried", "text": "Šéfiku, lodí přibývá a fronty se prodlužují. Posádky začínají být nervózní."},
-		{"speaker": PUMPIK, "mood": "neutral", "text": "Klikni na prázdnou parcelu a postav zábavní systém. Autokino pro rakety, u filmu jim čekání uteče."},
-		{"speaker": PUMPIK, "mood": "neutral", "text": "A kdyby lodí pořád přibývalo, postav druhý čerpací slot. Parcel máme dost."},
+		{"speaker": PUMPIK, "mood": "neutral", "text": "Banka je s náma spokojená, šéfiku. Tak spokojená, že teď chce vidět 2 000 kr."},
+		{"speaker": PUMPIK, "mood": "worried", "text": "A lodí přibývá. Ve frontě už začínaj bejt nervózní."},
+		{"speaker": PUMPIK, "mood": "neutral", "text": "Postav jim na volný parcele holokino. U filmu jim čekání uteče a mně daj pokoj."},
 	],
 	[
 		{"speaker": PUMPIK, "mood": "angry", "text": "Šéfiku, dosavadní dodavatel s námi končí! Od teď si galaxín objednáváš sám."},
@@ -94,7 +97,7 @@ const MISSION_INTROS := [
 	],
 	[
 		{"speaker": PUMPIK, "mood": "happy", "text": "Piráty jsme zahnali, šéfiku! O stanici se začíná mluvit po celé galaxii."},
-		{"speaker": PUMPIK, "mood": "neutral", "text": "Chce to dotáhnout rozdělanou práci: autokino na level 3 a něco naspořit."},
+		{"speaker": PUMPIK, "mood": "neutral", "text": "Chce to dotáhnout rozdělanou práci: holokino na level 3 a něco naspořit."},
 		{"speaker": PUMPIK, "mood": "worried", "text": "A dávej pozor, kdo k nám přilétá. Prý se tu objevují divné lodě."},
 		{"speaker": PUMPIK, "mood": "neutral", "text": "Ještě bychom potřebovali druhou věž na druhém kraji paluby, ať piráti nemají kde se schovat."},
 	],
@@ -121,9 +124,19 @@ const MISSION_INTROS := [
 
 ## Stojí druhý slot, takže se otevřela druhá hadice.
 const DUAL_HOSE_UNLOCKED := [
-	{"speaker": PUMPIK, "mood": "happy", "text": "Šéfiku, druhý slot stojí! Vypadá skvěle."},
-	{"speaker": PUMPIK, "mood": "worried", "text": "Jenže mám jen jednu hadici, takže tankuju lodě po jedné a druhá čeká."},
-	{"speaker": PUMPIK, "mood": "neutral", "text": "Pořiď mi druhou hadici a zvládnu dvě lodě najednou. Najdeš ji, když na mě klikneš."},
+	{"speaker": PUMPIK, "mood": "happy", "text": "Druhej slot stojí! Dva sloty, šéfiku, to je skoro řetězec."},
+	{"speaker": PUMPIK, "mood": "worried", "text": "Jenže já mám jen jednu hadici. Dokud tankuju jednu loď, druhá čeká."},
+	{"speaker": PUMPIK, "mood": "neutral", "text": "Pořiď mi druhou hadici a zvládnu dvě najednou. Klikni na mě."},
+]
+
+## Mise 1: Pumpík má tankování na levelu z cíle mise.
+const FUEL_GOAL_REACHED := [
+	{"speaker": PUMPIK, "mood": "happy", "text": "No teda, level 3! Slyšíš to, šéfiku? Ta pumpa konečně přede jak kočka."},
+]
+
+## Mise 2: holokino je dostavěné.
+const HOLOKINO_BUILT := [
+	{"speaker": PUMPIK, "mood": "happy", "text": "Holokino jede, šéfiku! Konečně čuměj na film, a ne na mě."},
 ]
 
 ## Mise 6: Zora přistála a chce natankovat.

@@ -14,7 +14,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 | Pohled | Shora. Stanice je plošina, lodě přilétají z okolního vesmíru. |
 | Tankování | Lodě obsluhuje **personál**: zaměstnanec dojde k zakotvené lodi a natankuje ji. |
 | Boj | **Nepřímý**: věže a ochranka bojují samy, hráč staví a vylepšuje obranu předem i během útoku. |
-| Struktura | Hra je **kontinuální**: stanice běží pořád dál a **mise** (úkoly) jdou jedna za druhou. Kredity, vylepšení, sloty i zásobník se přenášejí do další mise. Každá mise začíná rozhovorem, ve kterém Pumpík řekne zadání, po splnění se hra pozastaví, ukáže shrnutí a další mise začne svým rozhovorem. Po poslední misi pokračuje volná hra bez cílů. Mise 1 je krátký úvod na pár minut, další mise by měly trvat **aspoň 20 minut**. |
+| Struktura | Hra je **kontinuální**: stanice běží pořád dál a **mise** (úkoly) jdou jedna za druhou. Kredity, vylepšení, sloty i zásobník se přenášejí do další mise. Každá mise začíná rozhovorem, ve kterém Pumpík řekne zadání, po splnění se hra pozastaví, ukáže shrnutí a další mise začne svým rozhovorem. Po poslední misi pokračuje volná hra bez cílů. Mise trvají zhruba **2 až 6 minut** (nejdelší je Mise 9) a celá hra asi **35 minut**. Takové tempo je záměr. |
 | Ovládání | Hráč kliká na objekty (Pumpík, budovy, zásobník, stavební dron Bzučák, prázdné parcely). Vpravo se otevře info panel s popisem, stavem a tlačítky na vylepšení nebo stavbu. Zobrazují se jen věci, které jde právě koupit. Na co hráč nemá dost kreditů, je vidět, ale šedé. Klik do prázdna panel zavře. |
 | Stavění | Nepostavené budovy nejsou vidět, jen velmi jemný obrys prázdné parcely. Po kliknutí na parcelu si hráč vybere, co postavit. Stavba se **platí po částech**: hráč zaplatí část, stavební dron **Bzučák** ji postaví a pak hráč zaplatí další. Budova začne fungovat až po poslední části. Vylepšení budov se platí najednou a Bzučák je pak chvíli staví. |
 | Menu | Hra začíná menu, kde jde vybrat, od které mise začít (hodí se hlavně pro testování); pak se použije startovní stav té mise. Poslední volba je **Mise Z**: volná hra bez cílů, kde je všechno postavené a vylepšené na maximum. Mise jsou v menu karty s číslem, čtvercovým obrázkem a názvem, po 8 v řadě, takže se jich na obrazovku vejde 32. Nahoře vedle ovládání hlasitosti je **Pumpíkův zápisník**: encyklopedie psaná Pumpíkovým hlasem s kapitolami Lodě, Postavy, Budovy a Svět a s Centrem zvuků. Je přístupná hned od začátku, proto nesmí prozradit tajemství příběhu. Během hry jde hru pozastavit tlačítkem „Menu“ nebo klávesou Esc (pokračovat, začít znovu, hlavní menu). |
@@ -30,7 +30,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 ## Svět a postavy
 
 - **Galaxín:** vesmírné palivo, které stanice prodává. Píše se s malým g jako běžné palivo (natankovat galaxín, plná nádrž galaxínu), velké G jen na začátku věty. Do budoucna se nabízí víc druhů, např. *galaxín Natural* a *galaxín Super*.
-- **Pumpík:** první android na stanici, tankuje lodě. Lodě ho znají a oslovují ho („Ahoj, Pumpíku!“).
+- **Pumpík:** první android na stanici, tankuje lodě. Lodě ho znají a oslovují ho („Ahoj, Pumpíku!“). Svou práci miluje a je to dříč. Působí trochu jako bručoun, ale má zlaté srdce a potměšilý smysl pro humor. Mluví stručně, ukecaný není, a obecnou češtinou, ne spisovně („novej“, „furt“, „lítaj“, „sem“ místo „jsem“). Hráče oslovuje „šéfiku“.
 - **Bzučák:** stavební dron. Staví a vylepšuje budovy na stanici („Čeká na Bzučáka“).
 - **Hlášky:** lodě i Pumpík mluví v bublinách. Lodě zdraví, objednávají, stěžují si ve frontě, naštvaně odlétají a děkují, Pumpík odpovídá a raduje se z vylepšení. Všechny hlášky jsou v `dialogue/lines.gd`.
 
@@ -63,7 +63,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 - **Bzučák:** hmyzí stavební dron, vybledlé žluto-černé pruhy, síťované rotory, červené světýlko, jiskry svařování.
 - **Pumpa u slotu:** štíhlý vínový art deco sloup s mosaznými žebry a skleněnou koulí, ve které svítí galaxín.
 - **Zásobník:** zašlá chromová koule s mosaznými obručemi, průzory s růžovým galaxínem, stékající rez.
-- **Zábavní systém:** autokino pro rakety. Široké plátno na nýtované ocelové konstrukci s art deco hřebenem a žárovkami, před ním promítací budka a vedle neonová šipka. Na plátně běží hypnotické psychedelické obrazce.
+- **Holokino:** nízký art deco pavilon z nýtované oceli s vínovými panely a mosazí. Na střeše má holoprojektor, který nad budovu promítá tyrkysovou holografickou kouli s otáčející se mřížkou a přelévajícím se obrazem. Na fasádě běží titulky.
 - **Paluba stanice:** tmavá ocel s panelovými spárami, nýty, rez, olejové skvrny, ošoupané mosazné lemování.
 - **Vesmír:** téměř černý s vínovými a fialovými mlhovinami, tmavá planeta s rudým okrajem světla a prstencem.
 
@@ -73,11 +73,20 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 - **Plamen motoru** raket i cisterny: plápolající plamen ze shaderu (bílé jádro, oranžová, konec do růžového neonu galaxínu), jiskry a oranžové světlo, které osvětlí loď i palubu pod ní. Délka plamene a síla světla rostou s rychlostí. Loď visící ve frontě má malý plamen, na plošině motor zhasne.
 - **Značky přistávacích plošek** (jantarová světla v rozích) svítí, až je slot hotový. Volná ploška pomalu „dýchá“, když k ní letí loď, světla rychle obíhají dokola (navádění), a když loď stojí na plošce, svítí klidně a slaběji.
 - **Zásobník** barví palubu kolem do růžova. Čím víc galaxínu v něm je, tím víc svítí.
-- **Plátno autokina** svítí do okolí v barvě, která zrovna převládá v obraze, a promítací budka na něj hází kužel světla stejné barvy.
+- **Koule holokina** svítí do okolí tyrkysově a projektor do ní hází kužel světla. Občas zazrní, řádky se posunou a problikne, světlo na palubě i kužel s ní.
 - **Bzučák** svítí tyrkysově na konci svařovacího paprsku.
 - **Skleněné koule pump** jemně září růžovým neonem.
 - **Reflektor nad palubou**: teplé světlo, uprostřed stanice nejsilnější, k okrajům slábne.
-- **Viditelnost lodí:** trupy mají chladný obrys ze strany, odkud svítí vzdálená hvězda (vlevo nahoře). Černá závodní raketa je navíc zjasněná, jinak by v temném vesmíru zanikla.
+- **Viditelnost lodí:** trupy mají chladný obrys ze strany, odkud přichází světlo (vlevo dole, stejně jako u stínů). Černá závodní raketa je navíc zjasněná, jinak by v temném vesmíru zanikla.
+
+**Stíny** (hotové): budovy jsou kreslené zepředu a rakety shora, svět sjednocují vržené stíny s jedním směrem světla.
+- **Směr:** světlo přichází zleva zdola, stín padá doprava nahoru za objekt. Budovy tak stojí pevně na palubě; stín doprava dolů pod nimi vypadal, jako by levitovaly. Ze stejné strany svítí obrys trupů raket a pirátů.
+- **Vzhled:** tvar spritu ztmavený na 54 % s měkkým okrajem rozmazaným o 6 px. Nesvítí na něj světla stanice.
+- **Odlesk:** budovy, Pumpík, cisterna a Bzučák mají na hraně ke světlu (vlevo dole) jemný studený odlesk, slabší než obrys trupů raket.
+- **Délka podle výšky:** budovy a zásobník 12–15 px, čerpadla a hlaveň věže 12 px, stánky, automaty a kufry 6–9 px, Pumpík 7 px.
+- **Lodě:** ve vzduchu (fronta, přílet, odlet) mají stín 40 px daleko, při přistání se k lodi přibližuje a na plošině nebo na stání je 4 px od ní. Loď ve vzduchu je kreslená větší (při přistání se zmenšuje, při vzletu zase zvětšuje), stín zůstává velký jako loď na zemi. Cisterna letí se stínem 30 px a při nouzovém přistání se k němu přiblíží, piráti 34 px. Ve vesmíru padá stín do prázdna, vidět je jen nad palubou a přes planetu.
+- **Bzučák** visí nad budovou, jeho stín leží pod ním na budově a s jeho pohupováním se nehýbe (stejně u útočících pirátů).
+- **Bez stínu** je, co leží na palubě (přistávací plochy, parkovací stání, potrubí, staveniště), holografická koule a záře.
 
 **Rozhraní (HUD):** moderní herní HUD v noir paletě.
 - **Písmo** Chakra Petch (Google Fonts, licence OFL v `assets/fonts/OFL.txt`): hranaté technické písmo se zkosenými rohy. Běžný text 13 px, nadpisy polotučně verzálkami s prostrkáním.
@@ -93,17 +102,18 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 - **Hotové sprity** (40 kreditů):
   - Rakety zákazníků: `ships/rocket.png` (ve hře), `rocket_cargo.png`, `rocket_racer.png`, `rocket_workhorse.png`; cisterna `ships/tanker.png`.
   - Pumpík (původně `staff/pumpik.png`, teď nahrazený animacemi níže), Bzučák `construction/bzucak.png`.
-  - Stanice: pumpa `station/pump.png`, zásobník `station/tank.png`, přistávací plocha `station/landing_pad.png`, autokino `entertainment/drive_in_screen.png` (prázdné plátno, film kreslí shader `fx/film_screen.gdshader`), holá konstrukce `entertainment/drive_in_frame.png`, promítací budka `entertainment/projection_booth.png` a neonová šipka `entertainment/neon_arrow.png` (16 kreditů, arch s referencí), opakovatelná textura paluby `station/deck.png`.
+  - Stanice: pumpa `station/pump.png`, zásobník `station/tank.png`, přistávací plocha `station/landing_pad.png`, původní autokino `entertainment/drive_in_screen.png`, holá konstrukce `entertainment/drive_in_frame.png`, promítací budka `entertainment/projection_booth.png` a neonová šipka `entertainment/neon_arrow.png` (16 kreditů, arch s referencí, od přestavby na holokino se nepoužívají a do web exportu se nedostanou), opakovatelná textura paluby `station/deck.png`.
   - Staveniště pro rozestavěné budovy `construction/foundation.png`, planeta s prstencem do pozadí `space/planet.png`.
 - **Ve hře** jsou zapojené všechny:
   - Lodě dostávají náhodně jednu ze čtyř raket. Cisterna má sprite, do kterého se jemně promítá barva dodavatele.
   - Pumpík je kulatý retro robot na kolech (červený a krémový smalt, skleněná kopule s elektronkami, knír, budík na břiše, láhev s hadicemi na zádech). Má osm snímků na animaci: jízda ve čtyřech směrech (`staff/pumpik_drive_down.png`, `_up`, `_left`, `_right`, čím rychlejší jízda, tím rychleji se točí kola) , tankování ve čtyřech směrech (`pumpik_pump.png` zepředu, `pumpik_pump_up.png`, `_left`, `_right`) a klid zepředu (`pumpik_idle.png`). Při tankování stojí čelem k lodi (u dvou lodí k první), při střelbě k pirátovi. Když jen stojí, je čelem k hráči. S levelem tankování se jen jemně zbarvuje. Bzučák se ve vzduchu kolébá.
   - Paluba má opakovanou texturu a mosazné lemování. Planeta je vpravo dole v pozadí hry i v menu.
-  - Rozestavěné budovy: v 1. části staveniště. Čerpací slot pak má přistávací plochu, art deco pumpu vedle ní a nakonec potrubí k patě pumpy. Zábavní systém ve 2. části ukazuje holou ocelovou konstrukci, ve 3. tmavé plátno s promítací budkou a po zapojení elektřiny film s běžícími titulky, kužel projektoru a neonovou šipku.
+  - Rozestavěné budovy: v 1. části staveniště. Čerpací slot pak má přistávací plochu, art deco pumpu vedle ní a nakonec potrubí k patě pumpy. Holokino ve 2. části ukazuje kostru pavilonu, ve 3. hotový pavilon s vypnutým projektorem a po zapojení elektřiny rozsvícený projektor, holografickou kouli a titulky na fasádě.
 - **Nové lodě, kořist a zábava** (16 kreditů, dva archy 2×2): nákladní loď `ships/freighter.png`, turistická `ships/tourist.png`, trosky `loot/wreckage.png`, truhla `loot/chest.png`, výherní automaty, hologram a světla scény v `entertainment/` (ventil potrubí z tohoto archu se nakonec nepoužívá).
 - **Potrubí** (40 kreditů, pět archů 2×2): navazující dílek měděné trubky `station/pipe_tile.png`, kolena `pipe_elbow_*.png` a T kusy `pipe_tee_*.png` pro každý potřebný směr ramen (přípona = směry: l, r, u, d), příruba `pipe_flange.png`, podlahová spojka u čerpadla `pipe_floor.png`, průhledítko s galaxínem `pipe_sight.png` a tlakoměr `pipe_gauge.png`. Všechny díly jsou nasvícené zleva shora a nikdy se neotáčejí, aby stíny byly všude na stejné straně: rovné trubky se kreslí zleva doprava a zdola nahoru (lesk nahoře, u svislých vlevo) a každý směr kolena i T kusu má vlastní obrázek. Potrubí je rozvod, který vede jen vodorovně a svisle: ze zásobníku vede trubka nahoru do hlavní větve v uličce mezi horními a dolními parcelami, z ní k čerpadlům v horní řadě odbočují T kusy (na konci větve je koleno). Čerpadla na dolních parcelách mají vlastní trubku do boku zásobníku. U zásobníku jsou příruby, u čerpadel podlahové spojky, na levé větvi průhledítko a na pravé tlakoměr. Trubky leží nad spojkami a zasouvají se do jejich objímek tak, aby zakryly otvory a kolem trubky zůstal vidět mosazný kroužek. Puls galaxínu v trubkách je vypnutý.
 - **Stavby a piráti** (24 kreditů, tři archy 2×2): obchod `shop/shop.png` a stánky `shop/food_cart.png`, `holonews.png`, `souvenirs.png`, `accessories.png`; řídící centrum `station/control_center.png` a anténa dispečinku `station/radar_dish.png`; obranná věž `defense/tower_base.png` a kanóny `defense/turret.png`, `turret_twin.png` (level 3); piráti `pirates/raider.png` a `pirates/gunship.png`.
 - **Pumpík** (16 + 180 kreditů): nový vzhled podle hráčovy předlohy, nejdřív arch se čtyřmi pohledy na stejného robota (s předlohou jako referencí), pak devět animací po 20 kreditech (`frame-engine-v1.1`). Všechny jsou oříznuté jedním společným rámečkem, aby na sebe při přepínání seděly.
+- **Holokino** (Codex CLI s tarifem ChatGPT, jeden arch 2×2): pavilon ve třech fázích `entertainment/holokino_frame.png`, `holokino_off.png`, `holokino_on.png` (neonový nápis ze stejného archu se nepoužil).
 - **Bez kreditů v kódu:** HUD (ikonky, shader panelů), neonový nápis, vesmírné pozadí a mlhoviny, efekty (kouř, jiskry, blikání neonu) a animace pohybem.
 
 ## Systémy
@@ -132,7 +142,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 - S postupem levelu přilétá víc lodí a přibývají náročnější zákazníci.
 
 ### Parcely a stavění
-- Stanice má **5 parcel**: tři nahoře (kam se nejvíc hodí čerpací sloty) a dvě dole. Na každou jde postavit čerpací slot, zábavní systém nebo obchod. Na krajích paluby vlevo a vpravo jsou navíc **2 menší místa pro obranné věže**. Uprostřed stojí pevně zásobník a Pumpíkovo stanoviště, vedle zásobníku jde přistavět řídící centrum.
+- Stanice má **5 parcel**: tři nahoře (kam se nejvíc hodí čerpací sloty) a dvě dole. Na každou jde postavit čerpací slot, holokino nebo obchod. Na krajích paluby vlevo a vpravo jsou navíc **2 menší místa pro obranné věže**. Uprostřed stojí pevně zásobník a Pumpíkovo stanoviště, vedle zásobníku jde přistavět řídící centrum.
 - Prázdná parcela je vidět jako velmi jemný obrys a jde na ni kliknout, jen když na ní jde něco postavit (podle pravidel mise a limitů, i když na to hráč zrovna nemá). Jinak není vidět vůbec, takže v misi 1 žádné volné parcely nejsou. Po kliknutí ukáže, co jde postavit, kolik to stojí celkem, a tlačítka „Začít stavět…“ s cenou první části. Co v aktuální misi postavit nejde, se nezobrazí.
 - **Placení po částech:** každá budova se staví ve čtyřech částech. Hráč zaplatí část, Bzučák ji postaví a pak rozestavěná budova čeká, až hráč zaplatí další. Nad ní je vidět „Další část: …“ a v jejím panelu tlačítko „Postavit: … (cena)“.
 - **Vylepšení Bzučáka** (od mise 2, okamžitě): rychlejší let 230 px/s za 2 000 kr a 300 px/s za 4 000 kr (základ 170 px/s), rychlejší práce ×1,4 za 2 500 kr a ×1,8 za 5 000 kr (staví, vylepšuje, opravuje i sbírá kořist rychleji).
@@ -147,7 +157,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 
 ### Personál
 - **Androidi** (tankovači) obsluhují lodě.
-- Android tankuje jednu loď. S vylepšením **Druhá hadice** (3 000 kr) zvládne **2 lodě najednou**: postaví se mezi dva sloty a ke každé lodi natáhne hadici, každou tankuje plnou rychlostí. Vylepšení se otevře, jakmile stojí druhý čerpací slot (jde postavit od Mise 2, cílem je v Misi 3), a Pumpík o něm řekne v rozhovoru. Při startu od Mise 3 ho už má.
+- Android tankuje jednu loď. S vylepšením **Druhá hadice** (3 000 kr) zvládne **2 lodě najednou**: postaví se mezi dva sloty a ke každé lodi natáhne hadici, každou tankuje plnou rychlostí. Vylepšení se otevře, jakmile stojí druhý čerpací slot (jde postavit od Mise 3, kde je i cílem), a Pumpík o něm řekne v rozhovoru. Při startu od Mise 3 ho už má.
 - Pumpíkovi se zvlášť vylepšuje **tankování** a **jízda**. Do jakého levelu jde vylepšovat, určuje mise. Barva těla odpovídá levelu tankování.
 
 | Level | Tankování | Cena | Barva |
@@ -169,11 +179,11 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 - **Ochranka** bojuje s piráty, kteří se vylodili na stanici.
 - Personál se nabírá a trénuje.
 
-### Zábavní systém
-- Autokino pro rakety na stanici. Na plátně běží film a ve spodní části titulky s reklamami a pořady (texty jsou v `dialogue/lines.gd`).
-- Lodím ve frontě pomaleji ubývá trpělivost a pobavení zákazníci častěji nechávají dýško. Lodě ve frontě občas komentují, co běží na plátně.
-- Části stavby (celkem 4 000 kr a 15 s): základní deska (600 kr, 3 s), konstrukce plátna (800 kr, 4 s), instalace plátna (1 800 kr, 5 s), napojení elektřiny (800 kr, 3 s). Bonusy platí až po zapojení elektřiny.
-- Level 4 přidá vedle plátna **holoprojekci** (tančící hologram), level 5 **neonovou show** (světla nad plátnem).
+### Holokino
+- Kino pro rakety na stanici, v kódu `EntertainmentSystem`. V holografické kouli nad pavilonem běží film a na fasádě titulky s reklamami a pořady (texty jsou v `dialogue/lines.gd`). Kouli kreslí shader `fx/holo_sphere.gdshader` a výpadky řídí `station/holo_sphere.gd`.
+- Lodím ve frontě pomaleji ubývá trpělivost a pobavení zákazníci častěji nechávají dýško. Lodě ve frontě občas komentují, co běží v holokinu.
+- Části stavby (celkem 4 000 kr a 15 s): základní deska (600 kr, 3 s), kostra pavilonu (800 kr, 4 s), holoprojektor (1 800 kr, 5 s), napojení elektřiny (800 kr, 3 s). Bonusy platí až po zapojení elektřiny.
+- Level 4 přidá vedle pavilonu **holotanečnici** (tančící hologram), level 5 **neonovou show** (dva neonové prstence obíhají kouli).
 - **Výherní automaty** (6 000 kr, instalace 10 s) jdou dokoupit zvlášť: každé 4 s si každá loď ve frontě s šancí 25 % zahraje a stanice vydělá 15–60 kr („+… kr automaty“).
 
 | Level | Cena | Doba vylepšení | Úbytek trpělivosti | Šance na dýško |
@@ -181,7 +191,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 | 1 | 4 000 kr (stavba po částech) | 15 s (stavba) | −25 % | 12 % |
 | 2 | 3 000 kr | 8 s | −40 % | 14 % |
 | 3 | 5 000 kr | 12 s | −55 % | 16 % |
-| 4 (holoprojekce) | 8 000 kr | 14 s | −65 % | 18 % |
+| 4 (holotanečnice) | 8 000 kr | 14 s | −65 % | 18 % |
 | 5 (neonová show) | 12 000 kr | 16 s | −75 % | 20 % |
 
 ### Ekonomika galaxínu (od mise 3)
@@ -211,7 +221,7 @@ V misích 1 a 2 je galaxínu neomezeně a stojí pevně 6 kr/j. S misí 3 se zap
 ### Obchod (od mise 4)
 - Staví se na běžnou parcelu ve 4 částech (celkem 3 000 kr): základová deska (500 kr, 3 s), kiosek (1 200 kr, 5 s), vybavení a pult (800 kr, 4 s), neonová reklama (500 kr, 3 s).
 - Posádka každé lodi, která přistane, si nakoupí: každý druh zboží si koupí s jeho šancí. Tržba se ukáže nad obchodem („+40 kr obchod“).
-- Lodím ve frontě pomaleji ubývá trpělivost (násobí se se zábavním systémem).
+- Lodím ve frontě pomaleji ubývá trpělivost (násobí se s holokinem).
 - Hned po postavení prodává nápoje. Další druhy zboží přidává hráč, instaluje je Bzučák a každý má vedle obchodu vlastní stánek:
 
 | Zboží | Cena | Instalace | Šance na nákup | Útrata | Trpělivost ve frontě |
@@ -289,7 +299,7 @@ V misích 1 a 2 je galaxínu neomezeně a stojí pevně 6 kr/j. S misí 3 se zap
 
 Starý šedý krtek s růžovým čumákem, vousky, kšiltovkou s lupou a kabátem plným klíčů a harampádí. Cynik s dobrým srdcem, prázdný zásobník prý cítí až z Jupiteru. Má čtyři emoce (`neutral`, `happy`, `worried`, `angry`). V okně nabídky se usmívá, u almužny je ustaraný.
 - Přiletí, když je zásobník prázdný, žádná cisterna není objednaná ani na cestě a hráč nemá ani na 50 j od nejlevnějšího dodavatele (100 kr). Menší dávku vypije jedna loď a stanice se z ní nevzpamatuje. Musí to trvat 4 s, protože kredity ještě může přinést kořist, obchod nebo automaty, a počká i na lodě u čerpadel, které ještě zaplatí za natankovaný galaxín. Během útoku pirátů nepřiletí.
-- Hra se zastaví a vetešník nabídne **3 náhodná vylepšení, která hráč má, za 50 % nákupní ceny**. Prodané vylepšení hráč ztratí (o jeden level zpět) a může si ho později znovu koupit. Prodat jde levely Pumpíka, štíty, nanoboty, Bzučáka, zásobníku, zábavního systému, věží, zboží obchodu, výherní automaty a vylepšení řídícího centra. Budovy samotné ani to, na čem Bzučák právě pracuje, prodat nejde.
+- Hra se zastaví a vetešník nabídne **3 náhodná vylepšení, která hráč má, za 50 % nákupní ceny**. Prodané vylepšení hráč ztratí (o jeden level zpět) a může si ho později znovu koupit. Prodat jde levely Pumpíka, štíty, nanoboty, Bzučáka, zásobníku, holokina, věží, zboží obchodu, výherní automaty a vylepšení řídícího centra. Budovy samotné ani to, na čem Bzučák právě pracuje, prodat nejde.
 - Hráč může odmítnout („Zatím ne“), vetešník se pak vrátí za 30 s.
 - Kdo už nemá co prodat, dostane almužnu 150 kr, aby se nezasekl.
 
@@ -333,8 +343,8 @@ Mise jsou zdroje `missions/mission_*.tres` (dají se upravovat v inspektoru Godo
 **Startovní stav:** 1 čerpací slot (horní prostřední parcela), Pumpík s tankováním i jízdou na levelu 1, 0 kr.
 
 **Cíle** (musí platit oba zároveň):
-- Mít na účtu **1 000 kr**. Počítá se zůstatek, peníze utracené za vylepšení se tedy do cíle nezapočítávají.
-- Vylepšit Pumpíkovi **tankování na level 3**.
+- Mít na účtu **1 000 kr**. Počítá se zůstatek, peníze utracené za vylepšení se tedy do cíle nezapočítávají. V úvodu to Pumpík vysvětlí bankou: chce vidět, že stanice tolik drží, jinak ji zabaví.
+- Vylepšit Pumpíkovi **tankování na level 3**. Jakmile ho má, okomentuje to jednou větou (`Story.FUEL_GOAL_REACHED`). Když tím je mise splněná, shrnutí počká, až hráč rozhovor odklikne.
 
 **Piráti:** zatím nejsou, přijdou až s krokem 5 plánu.
 
@@ -354,7 +364,7 @@ Mise jsou zdroje `missions/mission_*.tres` (dají se upravovat v inspektoru Godo
 | Přistání: pozdrav Pumpíka | loď | 50 % |
 | Přistání: objednávka (plná nádrž nebo částka) | loď | vždy |
 | Pumpík začíná tankovat | Pumpík | 50 % |
-| Ve frontě po polovině trpělivosti | loď | 60 % (se zábavním systémem napůl stížnost, napůl komentář k filmu) |
+| Ve frontě po polovině trpělivosti | loď | 60 % (s holokinem napůl stížnost, napůl komentář k filmu) |
 | Odlet bez placení (červená bublina) | loď | vždy |
 | Odlet po zaplacení: dýško | loď, Pumpík poděkuje | 10 % |
 | Odlet po zaplacení: poděkování (když nebylo dýško) | loď | 50 % |
@@ -371,28 +381,28 @@ Mise jsou zdroje `missions/mission_*.tres` (dají se upravovat v inspektoru Godo
 **Startovní stav** (jen při startu od mise 2): 1 čerpací slot, Pumpík s tankováním i jízdou na levelu 3, 2 000 kr. Při plynulé hře pokračuje hráč s tím, co měl na konci mise 1.
 
 **Cíle** (musí platit oba zároveň):
-- Mít na účtu **2 000 kr**.
-- Postavit **zábavní systém**. Vylepšovat ho není nutné.
+- Mít na účtu **2 000 kr**. Pumpík v úvodu řekne, že banka je spokojená, a tak teď chce víc.
+- Postavit **holokino**. Vylepšovat ho není nutné. Po dostavění ho Pumpík okomentuje jednou větou (`Story.HOLOKINO_BUILT`).
 
-**Co jde dělat:** postavit zábavní systém a druhý **čerpací slot za 8 000 kr** (na libovolné prázdné parcele), vylepšovat Pumpíka až do levelu 6. Slot není nutný ke splnění cíle. Jakmile stojí, Pumpík se ozve v rozhovoru a otevře se mu vylepšení **Druhá hadice** (3 000 kr), se kterým tankuje dvě lodě najednou.
+**Co jde dělat:** postavit holokino a vylepšovat Pumpíka až do levelu 6. Druhý čerpací slot jde postavit až v Misi 3, aby se mise točila jen kolem holokina.
 
-**Lodě** přilétají častěji než v misi 1, každé 2–5 s. Jeden slot je nestíhá, takže se vyplatí zábavní systém i druhý slot. Ostatní ekonomika je stejná jako v misi 1.
+**Lodě** přilétají častěji než v misi 1, každé 2–5 s. Jeden slot je nestíhá, fronta roste a holokino se hned vyplatí. Ostatní ekonomika je stejná jako v misi 1.
 
 ### Tempo
-- Robotický hráč misi splnil za 5:42 při plynulé hře z mise 1 a za 5:15 při startu rovnou od mise 2 (jednotlivé běhy, vyvažováno nebylo).
+- Robotický hráč misi splnil za 5:42 při plynulé hře z mise 1 a za 5:15 při startu rovnou od mise 2 (jednotlivé běhy, vyvažováno nebylo, ještě když šel v Misi 2 postavit druhý slot).
 
 ## Mise 3: Vlastní galaxín
 
 Představuje ekonomiku galaxínu. Cíle jsou zatím provizorní, uprav je podle sebe.
 
-**Startovní stav** (jen při startu od mise 3): 2 čerpací sloty (třetí nejde postavit), Pumpík s tankováním na levelu 6 a jízdou na levelu 5, zábavní systém na levelu 3, 3 000 kr, zásobník na levelu 1. Vždy: 300 j galaxínu zdarma, prodejní cena 6 kr/j, vybraný dodavatel Galaxis.
+**Startovní stav** (jen při startu od mise 3): 2 čerpací sloty (třetí nejde postavit), Pumpík s tankováním na levelu 6 a jízdou na levelu 5, holokino na levelu 3, 3 000 kr, zásobník na levelu 1. Vždy: 300 j galaxínu zdarma, prodejní cena 6 kr/j, vybraný dodavatel Galaxis.
 
 **Cíle** (musí platit všechny zároveň):
 - Mít na účtu **4 000 kr**.
 - Vylepšit zásobník na **level 2**.
 - Mít **2 hotové čerpací sloty**.
 
-**Co jde dělat:** rozšiřovat zásobník a všechno, co zbylo z mise 2 (Pumpík, zábavní systém, druhý slot).
+**Co jde dělat:** rozšiřovat zásobník, postavit druhý **čerpací slot za 8 000 kr**, po jeho dostavění koupit **Druhou hadici** (3 000 kr, Pumpík se o ní ozve v rozhovoru) a všechno, co zbylo z mise 2 (Pumpík, holokino).
 
 **Lodě** přilétají každé 2–5 s (při běžné ceně), dál podle nastavené ceny.
 
@@ -403,7 +413,7 @@ Představuje ekonomiku galaxínu. Cíle jsou zatím provizorní, uprav je podle 
 
 Klidná mise bez pirátů, představuje obchod a řídící centrum.
 
-**Startovní stav** (jen při startu od mise 4): 2 čerpací sloty (třetí jde postavit), Pumpík s tankováním na levelu 6 a jízdou na levelu 5, zábavní systém na levelu 3, zásobník na levelu 3, 6 000 kr.
+**Startovní stav** (jen při startu od mise 4): 2 čerpací sloty (třetí jde postavit), Pumpík s tankováním na levelu 6 a jízdou na levelu 5, holokino na levelu 3, zásobník na levelu 3, 6 000 kr.
 
 **Cíle:**
 - Postavit **obchod**.
@@ -414,7 +424,7 @@ Klidná mise bez pirátů, představuje obchod a řídící centrum.
 
 Na stanici začnou útočit piráti, jde stavět obranné věže.
 
-**Startovní stav** (jen při startu od mise 5): 3 čerpací sloty, Pumpík s tankováním na levelu 6 a jízdou na levelu 5, zábavní systém na levelu 3, zásobník na levelu 3, obchod se 2 druhy zboží navíc, řídící centrum s dispečinkem, 8 000 kr.
+**Startovní stav** (jen při startu od mise 5): 3 čerpací sloty, Pumpík s tankováním na levelu 6 a jízdou na levelu 5, holokino na levelu 3, zásobník na levelu 3, obchod se 2 druhy zboží navíc, řídící centrum s dispečinkem, 8 000 kr.
 
 **Cíle:**
 - Postavit **skladiště** u obchodu.
@@ -425,11 +435,11 @@ Na stanici začnou útočit piráti, jde stavět obranné věže.
 
 První příběhová mise, přichází Zora Zender.
 
-**Startovní stav** (jen při startu od mise 6): jako v Misi 5, ale zábavní systém na levelu 2, obranná věž na levelu 1 a skladiště.
+**Startovní stav** (jen při startu od mise 6): jako v Misi 5, ale holokino na levelu 2, obranná věž na levelu 1 a skladiště.
 
 **Cíle:**
 - Mít na účtu **6 000 kr**.
-- Zábavní systém na **levelu 3**.
+- Holokino na **levelu 3**.
 - **2 hotové obranné věže**.
 - Mise skončí až po scéně se Zorou (v cílech se neukazuje).
 
@@ -445,7 +455,7 @@ První příběhová mise, přichází Zora Zender.
 
 Bzučák nestíhá a dodavatel mešká. Asi 45 s po začátku mise přistane císařská hlídka a Kobaltový strážce se ptá na Zoru. O medailonu nemluví a Pumpík o něm taky nic neřekne. Hráč si vybere, jestli ji prozradí, nebo zatají. Výběr zatím mění jen repliky a pamatuje si ho `Game.zora_reported` pro další příběh. Mise skončí až po téhle scéně.
 
-**Startovní stav** (jen při startu od mise 7): jako v Misi 6, ale zábavní systém na levelu 3 a 2 věže na levelu 1. Ve skladišti je medailon od Zory a zůstává tam i v dalších misích, dokud ho nepoužije pozdější příběh.
+**Startovní stav** (jen při startu od mise 7): jako v Misi 6, ale holokino na levelu 3 a 2 věže na levelu 1. Ve skladišti je medailon od Zory a zůstává tam i v dalších misích, dokud ho nepoužije pozdější příběh.
 
 **Cíle:**
 - Jedna obranná věž na **levelu 2**.
@@ -492,7 +502,7 @@ Hrana paluby není přesně rovná: je o pár pixelů zubatá, místy vylomená 
 
 ## Mise Z: Volná hra
 
-Jde na ni jen z menu, na misi 5 nenavazuje. Pravidla jsou jako v misi 5 (včetně pirátů), ale nejsou tu žádné cíle a na začátku je všechno hotové: 3 čerpací sloty, obchod s veškerým zbožím, zábavní systém na levelu 5 s výherními automaty, obě věže na levelu 3, řídící centrum se všemi vylepšeními, zásobník na levelu 4 (plný), Pumpík i Bzučák na maximu. Start s 10 000 kr. Artefakty se sbírají až během hry.
+Jde na ni jen z menu, na misi 5 nenavazuje. Pravidla jsou jako v misi 5 (včetně pirátů), ale nejsou tu žádné cíle a na začátku je všechno hotové: 3 čerpací sloty, obchod s veškerým zbožím, holokino na levelu 5 s výherními automaty, obě věže na levelu 3, řídící centrum se všemi vylepšeními, zásobník na levelu 4 (plný), Pumpík i Bzučák na maximu. Start s 10 000 kr. Artefakty se sbírají až během hry.
 
 ## Otevřené otázky
 - Kradou piráti zatím jen kredity. Mají později krást i galaxín, ničit sloty nebo unášet personál?
@@ -511,4 +521,4 @@ Do kroku 8 se používají jednoduché barevné tvary, grafika přijde na řadu,
 5. **Piráti:** pirátské lodě kradou kredity, brání je obranné věže a Pumpík (mise 5) ✅. Zbývá výsadek pirátů pěšky a podmínka prohry.
 6. **Upgrady:** personál, sloty, obrana.
 7. **Piráti, útok lodí:** pirátské lodě útočí na obranné systémy.
-8. **Vyladění:** vyvážení na 20+ minut hraní, grafika, zvuky, export na itch.io.
+8. **Vyladění:** drobné doladění tempa (celá hra asi 35 minut), grafika, zvuky, export na itch.io.

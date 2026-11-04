@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/station/radar_dish.png" id="4_dish"]
 [ext_resource type="Texture2D" path="res://fx/soft_light.tres" id="5_light"]
 [ext_resource type="Material" path="res://fx/additive.tres" id="6_additive"]
+[ext_resource type="Script" path="res://fx/drop_shadow.gd" id="shadow_script"]
 
 [node name="ControlCenter" type="Node2D"]
 script = ExtResource("1_center")
@@ -20,6 +21,10 @@ visible = false
 scale = Vector2(0.45, 0.45)
 texture = ExtResource("3_center")
 
+[node name="Shadow" type="Node2D" parent="Body"]
+script = ExtResource("shadow_script")
+height = 12.0
+
 [node name="Servers" type="Sprite2D" parent="."]
 visible = false
 modulate = Color(0.4, 1, 0.9, 1)
@@ -33,3 +38,7 @@ visible = false
 position = Vector2(-26, -30)
 scale = Vector2(0.32, 0.32)
 texture = ExtResource("4_dish")
+
+[node name="Shadow" type="Node2D" parent="Dish"]
+script = ExtResource("shadow_script")
+height = 14.5

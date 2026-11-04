@@ -58,6 +58,7 @@ var _leave_angle := 0.0
 
 @onready var _body: Node2D = $Body
 @onready var _sprite: Sprite2D = $Body/Sprite
+@onready var _shadow: DropShadow = $Body/Shadow
 @onready var _engine: EngineFlame = $Body/EngineFlame
 @onready var _health_bar: ProgressBar = $HealthBar
 @onready var _hit_sparks: CPUParticles2D = $HitSparks
@@ -137,6 +138,8 @@ func _attack(delta: float) -> void:
 	var aim: Vector2 = target.global_position if target else station.tank.global_position
 	_body.rotation = lerp_angle(_body.rotation, (aim - global_position).angle(), minf(TURN_SPEED * delta, 1.0))
 	_body.position.y = sin(_time * 3.0) * 2.0
+	# Pirát se ve vzduchu pohupuje, jeho stín na palubě zůstává na místě.
+	_shadow.ground_offset = -_body.position
 	_engine.target_throttle = 0.3
 	_steal_timer -= delta
 	if _steal_timer > 0.0:

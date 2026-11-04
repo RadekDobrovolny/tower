@@ -42,6 +42,8 @@ const PRODUCTS := [
 ## Kde vedle obchodu stojí stánky (v pořadí PRODUCTS).
 const PROP_POSITIONS := [Vector2(-66, 34), Vector2(66, 32), Vector2(-68, -26), Vector2(68, -26)]
 const PROP_SCALE := 0.42
+## Jak daleko od stánků padá jejich stín (DropShadow.height).
+const PROP_SHADOW_HEIGHT := 8.5
 const SALE_COLOR := Color(0.45, 0.95, 0.85)
 ## Prodej v obchodě cinkne výš a tišeji než platba za galaxín.
 const SALE_COIN_PITCH := 1.5
@@ -70,6 +72,7 @@ func _ready() -> void:
 		prop.scale = Vector2.ONE * PROP_SCALE
 		prop.position = PROP_POSITIONS[i]
 		prop.hide()
+		DropShadow.attach(prop, PROP_SHADOW_HEIGHT)
 		add_child(prop)
 		# Stánky dole jsou před kioskem, horní za ním.
 		move_child(prop, _kiosk.get_index() + (1 if PROP_POSITIONS[i].y > 0 else 0))

@@ -7,6 +7,7 @@
 [ext_resource type="Material" path="res://fx/additive.tres" id="5_additive"]
 [ext_resource type="Texture2D" path="res://fx/soft_light.tres" id="6_light"]
 [ext_resource type="PackedScene" path="res://ui/speech_bubble.tscn" id="7_bubble"]
+[ext_resource type="Script" path="res://fx/drop_shadow.gd" id="shadow_script"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rim"]
 shader = ExtResource("3_rim")
@@ -32,6 +33,13 @@ z_index = 4
 script = ExtResource("1_pirate")
 
 [node name="Body" type="Node2D" parent="."]
+
+[node name="Shadow" type="Node2D" parent="Body" node_paths=PackedStringArray("source")]
+script = ExtResource("shadow_script")
+source = NodePath("../Sprite")
+rim_light = false
+height = 34.0
+ground_scale = 0.75
 
 [node name="EngineFlame" parent="Body" instance=ExtResource("2_engine")]
 position = Vector2(-28, 0)

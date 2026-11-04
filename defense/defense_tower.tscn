@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/defense/tower_base.png" id="3_base"]
 [ext_resource type="Texture2D" path="res://assets/sprites/defense/turret.png" id="4_turret"]
 [ext_resource type="Script" path="res://fx/range_ring.gd" id="5_ring"]
+[ext_resource type="Script" path="res://fx/drop_shadow.gd" id="shadow_script"]
 
 [node name="DefenseTower" type="Node2D"]
 script = ExtResource("1_tower")
@@ -19,11 +20,19 @@ visible = false
 scale = Vector2(0.46, 0.46)
 texture = ExtResource("3_base")
 
+[node name="Shadow" type="Node2D" parent="Pedestal"]
+script = ExtResource("shadow_script")
+height = 7.0
+
 [node name="Turret" type="Sprite2D" parent="."]
 visible = false
 scale = Vector2(0.42, 0.42)
 texture = ExtResource("4_turret")
 offset = Vector2(24, 0)
+
+[node name="Shadow" type="Node2D" parent="Turret"]
+script = ExtResource("shadow_script")
+height = 12.0
 
 [node name="RangeRing" type="Node2D" parent="."]
 visible = false

@@ -984,6 +984,27 @@
           "cell": "mise Z"
         }
       ]
+    },
+    {
+      "source": "Codex CLI s tarifem ChatGPT, nemá SpriteCook ID",
+      "label": "Tower – holokino: pavilon ve třech fázích stavby, arch 2×2 (čtvrtý obrázek, nápis, se nepoužil)",
+      "files": [
+        {
+          "file": "assets/sprites/entertainment/holokino_frame.png",
+          "sha12": "c56124b1704f",
+          "cell": "vlevo nahoře, kostra"
+        },
+        {
+          "file": "assets/sprites/entertainment/holokino_off.png",
+          "sha12": "edbcb49de9bc",
+          "cell": "vpravo nahoře, vypnutý projektor"
+        },
+        {
+          "file": "assets/sprites/entertainment/holokino_on.png",
+          "sha12": "5b8fb6f7647c",
+          "cell": "vlevo dole, zapnutý projektor"
+        }
+      ]
     }
   ]
 }

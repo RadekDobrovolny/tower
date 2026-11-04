@@ -103,6 +103,10 @@ const TURN_SPEED := 4.0
 const APPROACH_RADIUS := 240.0
 ## Zvětšení lodi ve vzduchu. Na plošině má měřítko 1, takže to vypadá, že přistává.
 const FLIGHT_SCALE := 1.35
+## Jak daleko od lodi padá stín (DropShadow.height): na plošině těsně u ní, ve vzduchu
+## (ve frontě, při příletu a odletu) daleko. Mezi tím podle toho, jak je loď zvětšená.
+const LANDED_SHADOW := 4.0
+const FLIGHT_SHADOW := 40.0
 ## Jak daleko za okrajem obrazovky se odlétající loď smaže.
 const OFFSCREEN_MARGIN := 100.0
 ## Jak dlouho (s) loď vydrží čekat ve frontě, než odletí.
@@ -185,6 +189,7 @@ var _motel_pay_left := 0.0
 
 @onready var _body: Node2D = $Body
 @onready var _sprite: Sprite2D = $Body/Sprite
+@onready var _shadow: DropShadow = $Body/Shadow
 @onready var _engine: EngineFlame = $Body/EngineFlame
 @onready var _fuel_bar: ProgressBar = $FuelBar
 @onready var _patience_bar: ProgressBar = $PatienceBar
@@ -233,6 +238,7 @@ func _process(delta: float) -> void:
 	_patience_bar.visible = state == State.QUEUED or waiting_for_fuel
 	_fuel_bar.visible = state == State.LANDED and not waiting_for_fuel
 	_engine.target_throttle = _engine_throttle()
+	_update_shadow()
 
 
 ## Pošle loď na její místo ve frontě, kde počká, až na ni přijde řada.
@@ -558,6 +564,14 @@ func _stay_in_motel(delta: float) -> void:
 	if _motel_payments <= 0:
 		station.parking().release_bay(self)
 		_depart(PAID_DEPARTURE_DELAY)
+
+
+## Výška lodi nad palubou je vidět na zvětšení (na plošině 1, ve vzduchu FLIGHT_SCALE):
+## čím výš, tím dál padá stín. Stín zůstává velký jako loď na zemi.
+func _update_shadow() -> void:
+	var lift := clampf((_body.scale.x - 1.0) / (FLIGHT_SCALE - 1.0), 0.0, 1.0)
+	_shadow.height = lerpf(LANDED_SHADOW, FLIGHT_SHADOW, lift)
+	_shadow.ground_scale = 1.0 / _body.scale.x
 
 
 ## Na plošině (a před odletem) je motor vypnutý, ve vzduchu táhne podle rychlosti.

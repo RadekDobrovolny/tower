@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" path="res://ui/speech_bubble.tscn" id="2_bubble"]
 [ext_resource type="Texture2D" path="res://assets/sprites/staff/pumpik_idle.png" id="3_pumpik"]
 [ext_resource type="Material" path="res://fx/additive.tres" id="4_additive"]
+[ext_resource type="Script" path="res://fx/drop_shadow.gd" id="shadow_script"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_bg"]
 bg_color = Color(0, 0, 0, 0.6)
@@ -32,6 +33,10 @@ default_color = Color(0.9, 0.5, 0.2, 1)
 scale = Vector2(0.46, 0.46)
 texture = ExtResource("3_pumpik")
 hframes = 8
+
+[node name="Shadow" type="Node2D" parent="Sprite"]
+script = ExtResource("shadow_script")
+height = 7.0
 
 [node name="DamageSparks" type="CPUParticles2D" parent="."]
 material = ExtResource("4_additive")

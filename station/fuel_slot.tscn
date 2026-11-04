@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://fx/pad_lights.gd" id="5_pad_lights"]
 [ext_resource type="Texture2D" path="res://fx/soft_light.tres" id="6_light"]
 [ext_resource type="Material" path="res://fx/additive.tres" id="7_additive"]
+[ext_resource type="Script" path="res://fx/drop_shadow.gd" id="shadow_script"]
 
 [node name="FuelSlot" type="Node2D"]
 script = ExtResource("1_slot")
@@ -29,6 +30,10 @@ visible = false
 position = Vector2(64, 0)
 scale = Vector2(0.22, 0.22)
 texture = ExtResource("4_pump")
+
+[node name="Shadow" type="Node2D" parent="Pump"]
+script = ExtResource("shadow_script")
+height = 12.0
 
 [node name="GlobeGlow" type="Sprite2D" parent="Pump"]
 modulate = Color(1, 0.24, 0.55, 0.75)

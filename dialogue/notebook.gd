@@ -123,8 +123,8 @@ static func _buildings() -> Array[Dictionary]:
 			"text": "Tady je všechen galaxín stanice. Když dojde, lodě odletí a nové nepřiletí.\n\n%s" % _cost_line("Rozšíření", GalaxinTank.LEVELS.map(_cost_of).slice(1)),
 		},
 		{
-			"title": "Zábavní systém", "image": preload("res://assets/sprites/entertainment/drive_in_screen.png"),
-			"text": "Autokino pro rakety. U filmu lodím rychleji utíká čekání a nechávají větší dýška. Stojí %s.\n\n%s\n- Výherní automaty: %s" % [
+			"title": "Holokino", "image": preload("res://assets/sprites/entertainment/holokino_on.png"),
+			"text": "Kino pro rakety. U filmu lodím rychleji utíká čekání a nechávají větší dýška. Stojí %s.\n\n%s\n- Výherní automaty: %s" % [
 				_phases_cost(EntertainmentSystem.PHASES),
 				_cost_line("Vylepšení", EntertainmentSystem.LEVELS.map(_cost_of).slice(1)),
 				_price(EntertainmentSystem.SLOTS_COST),

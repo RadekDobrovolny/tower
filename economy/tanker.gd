@@ -32,6 +32,11 @@ const EXIT_ANGLE_MIN := 0.15 * PI
 const EXIT_ANGLE_MAX := 0.9 * PI
 ## Jak daleko za okrajem obrazovky se odlétající cisterna smaže.
 const OFFSCREEN_MARGIN := 120.0
+## Stín (DropShadow): cisterna ve vzduchu (i u zásobníku) má stín daleko a menší, na plošině
+## těsně u sebe. Při nouzovém přistání a vzletu se mění podle vzdálenosti od plošiny.
+const FLIGHT_SHADOW := 30.0
+const LANDED_SHADOW := 4.0
+const FLIGHT_SHADOW_SCALE := 0.75
 
 var dock_position: Vector2
 ## Kam vede hadice při přečerpávání (zásobník).
@@ -45,6 +50,9 @@ var state := State.ARRIVING
 
 ## Kde cisterna přečerpává, když kvůli opravě přistála jinde.
 var _unload_position: Vector2
+## Plošina, na které cisterna nouzově přistává nebo přistála (souřadnice rodiče).
+var _pad := Vector2.ZERO
+var _has_pad := false
 var _time := 0.0
 var _speed := 0.0
 var _current_speed := 0.0
@@ -52,6 +60,7 @@ var _exit_angle := 0.0
 
 @onready var _body: Node2D = $Body
 @onready var _sprite: Sprite2D = $Body/Sprite
+@onready var _shadow: DropShadow = $Body/Shadow
 @onready var _engine: EngineFlame = $Body/EngineFlame
 @onready var _hose: Line2D = $Hose
 @onready var _bubble: SpeechBubble = $SpeechBubble
@@ -93,6 +102,9 @@ func _process(delta: float) -> void:
 			if damaged and state == State.ARRIVING else Vector2.ZERO
 	if damaged:
 		_fire_light.energy = FIRE_LIGHT_ENERGY + FIRE_FLICKER * sin(_time * 14.0)
+	var lift := clampf(position.distance_to(_pad) / APPROACH_RADIUS, 0.0, 1.0) if _has_pad else 1.0
+	_shadow.height = lerpf(LANDED_SHADOW, FLIGHT_SHADOW, lift)
+	_shadow.ground_scale = lerpf(1.0, FLIGHT_SHADOW_SCALE, lift)
 
 
 ## Cisterna začne hořet.
@@ -106,6 +118,8 @@ func set_damaged() -> void:
 func land_at(point: Vector2) -> void:
 	_unload_position = dock_position
 	dock_position = point
+	_pad = point
+	_has_pad = true
 
 
 ## Dron cisternu opravil: oheň zhasne a sprite dostane zpátky svoji barvu.

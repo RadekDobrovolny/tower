@@ -37,6 +37,7 @@ var _home: Vector2
 var _time := 0.0
 
 @onready var _body: Node2D = $Body
+@onready var _shadow: DropShadow = $Body/Shadow
 @onready var _sparks: Polygon2D = $Body/Sparks
 @onready var _beam: Line2D = $Body/Beam
 @onready var _beam_light: PointLight2D = $Body/BeamLight
@@ -50,6 +51,8 @@ func _process(delta: float) -> void:
 	_time += delta
 	_body.position.y = sin(_time * 4.0) * 2.0
 	_body.rotation = sin(_time * 2.5) * 0.06
+	# Bzučák visí HOVER_OFFSET nad budovou: stín leží na ní a s jeho pohupováním se nehýbe.
+	_shadow.ground_offset = -HOVER_OFFSET - _body.position
 	var working := false
 	_working_job = null
 	if _jobs.is_empty():

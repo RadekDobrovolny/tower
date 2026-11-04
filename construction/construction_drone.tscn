@@ -3,12 +3,19 @@
 [ext_resource type="Script" path="res://construction/construction_drone.gd" id="1_drone"]
 [ext_resource type="Texture2D" path="res://assets/sprites/construction/bzucak.png" id="2_bzucak"]
 [ext_resource type="Texture2D" path="res://fx/soft_light.tres" id="3_light"]
+[ext_resource type="Script" path="res://fx/drop_shadow.gd" id="shadow_script"]
 
 [node name="Drone" type="Node2D"]
 z_index = 5
 script = ExtResource("1_drone")
 
 [node name="Body" type="Node2D" parent="."]
+
+[node name="Shadow" type="Node2D" parent="Body" node_paths=PackedStringArray("source")]
+script = ExtResource("shadow_script")
+source = NodePath("../Sprite")
+height = 5.0
+ground_scale = 0.85
 
 [node name="Beam" type="Line2D" parent="Body"]
 visible = false

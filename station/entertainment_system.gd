@@ -1,26 +1,27 @@
 class_name EntertainmentSystem
 extends Building
 
-## Zábavní systém: autokino pro rakety. Lodě ve frontě se dívají na plátno, takže jim pomaleji
-## ubývá trpělivost, a pobavení zákazníci o něco častěji nechávají dýško.
-## Začne fungovat, až je postavený celý (po zapojení elektřiny). Level 4 přidá holoprojekci,
-## level 5 neonovou show. Zvlášť jdou dokoupit výherní automaty, na kterých hrají lodě ve frontě.
+## Zábavní systém, ve hře holokino: pavilon, který nad sebe promítá holografickou kouli s filmem.
+## Lodě ve frontě se na ni dívají, takže jim pomaleji ubývá trpělivost, a pobavení zákazníci
+## o něco častěji nechávají dýško. Začne fungovat, až je postavené celé (po zapojení elektřiny).
+## Level 4 přidá vedle pavilonu tančící hologram, level 5 neonové prstence kolem koule. Zvlášť jdou
+## dokoupit výherní automaty, na kterých hrají lodě ve frontě.
 
 ## Části stavby: název, cena (dohromady 4 000 kr) a doba stavby (s).
 const PHASES := [
 	{"name": "Základní deska", "cost": 600, "duration": 3.0},
-	{"name": "Konstrukce plátna", "cost": 800, "duration": 4.0},
-	{"name": "Instalace plátna", "cost": 1800, "duration": 5.0},
+	{"name": "Kostra pavilonu", "cost": 800, "duration": 4.0},
+	{"name": "Holoprojektor", "cost": 1800, "duration": 5.0},
 	{"name": "Napojení elektřiny", "cost": 800, "duration": 3.0},
 ]
 ## Pro každý level: cena vylepšení na tenhle level, jak rychle lodím ve frontě ubývá
-## trpělivost (1 = bez autokina), o kolik se zvýší šance na dýško a jak dlouho (s)
+## trpělivost (1 = bez holokina), o kolik se zvýší šance na dýško a jak dlouho (s)
 ## vylepšení trvá. Level 1 je samotná stavba (cena a doba jsou v PHASES).
 const LEVELS := [
 	{"cost": 0, "patience_drain": 0.75, "tip_bonus": 0.02, "upgrade_time": 0.0},
 	{"cost": 3000, "patience_drain": 0.6, "tip_bonus": 0.04, "upgrade_time": 8.0},
 	{"cost": 5000, "patience_drain": 0.45, "tip_bonus": 0.06, "upgrade_time": 12.0},
-	{"cost": 8000, "patience_drain": 0.35, "tip_bonus": 0.08, "upgrade_time": 14.0, "name": "Holoprojekce"},
+	{"cost": 8000, "patience_drain": 0.35, "tip_bonus": 0.08, "upgrade_time": 14.0, "name": "Holotanečnice"},
 	{"cost": 12000, "patience_drain": 0.25, "tip_bonus": 0.1, "upgrade_time": 16.0, "name": "Neonová show"},
 ]
 ## Výherní automaty: cena, doba instalace, jak často (s) a s jakou šancí si každá loď ve
@@ -32,10 +33,13 @@ const SLOTS_PLAY_CHANCE := 0.25
 const SLOTS_WIN_MIN := 15
 const SLOTS_WIN_MAX := 60
 const SLOTS_COLOR := Color(1.0, 0.55, 0.85)
-const SCROLL_SPEED := 40.0
+const SCROLL_SPEED := 30.0
 const AD_GAP := 60.0
 
-## Level 0 znamená, že systém ještě nefunguje (není dostavěný).
+const PAVILION_OFF := preload("res://assets/sprites/entertainment/holokino_off.png")
+const PAVILION_ON := preload("res://assets/sprites/entertainment/holokino_on.png")
+
+## Level 0 znamená, že holokino ještě nefunguje (není dostavěné).
 var level := 0
 var has_slot_machines := false
 
@@ -43,15 +47,12 @@ var _slots_timer := SLOTS_INTERVAL
 
 @onready var _base: Sprite2D = $Base
 @onready var _frame: Sprite2D = $Frame
-@onready var _cinema: Sprite2D = $Cinema
-@onready var _booth: Sprite2D = $Booth
-@onready var _neon_arrow: Sprite2D = $NeonArrow
-@onready var _screen_fx: ColorRect = $ScreenFx
+@onready var _pavilion: Sprite2D = $Pavilion
+@onready var _holo: ColorRect = $Holo
 @onready var _screen: Control = $Screen
 @onready var _ad_label: Label = $Screen/AdLabel
 @onready var _level_label: Label = $LevelLabel
 @onready var _hologram: Sprite2D = $Hologram
-@onready var _stage_lights: Sprite2D = $StageLights
 @onready var _slot_machines: Sprite2D = $SlotMachines
 
 
@@ -76,7 +77,7 @@ func build_phases() -> Array:
 
 
 func display_name() -> String:
-	return "Zábavní systém"
+	return "Holokino"
 
 
 ## Zapne systém po dostavění (level 1).
@@ -146,7 +147,7 @@ func start_slot_machines() -> bool:
 func sale_items() -> Array[ShopItem]:
 	var items: Array[ShopItem] = []
 	if level > 1:
-		items.append(ShopItem.sale("Zábavní systém, level %d" % level, LEVELS[level - 1].cost, _lose_level))
+		items.append(ShopItem.sale("Holokino, level %d" % level, LEVELS[level - 1].cost, _lose_level))
 	if has_slot_machines:
 		items.append(ShopItem.sale("Výherní automaty", SLOTS_COST, _lose_slot_machines))
 	return items
@@ -156,7 +157,7 @@ func info_lines() -> PackedStringArray:
 	var lines := PackedStringArray()
 	if level == 0:
 		lines.append(construction_line())
-		lines.append("Až bude hotový, lodím ve frontě pomaleji ubude trpělivost a častěji nechají dýško.")
+		lines.append("Až bude hotové, lodím ve frontě pomaleji ubude trpělivost a častěji nechají dýško.")
 		return lines
 	lines.append("Level %d" % level)
 	lines.append("Trpělivost lodí ve frontě ubývá o %d %% pomaleji." % roundi((1.0 - patience_drain()) * 100.0))
@@ -231,18 +232,16 @@ func _next_ad() -> void:
 
 func _update_construction_looks() -> void:
 	super()
-	# Části stavby: staveniště -> holá konstrukce -> plátno s promítací budkou -> po zapojení
-	# elektřiny film a neonová šipka.
+	# Části stavby: staveniště -> kostra pavilonu -> pavilon s vypnutým projektorem -> po zapojení
+	# elektřiny holografická koule a titulky.
 	_base.visible = built_phases == 1
 	_frame.visible = built_phases == 2
-	_cinema.visible = built_phases >= 3
-	_booth.visible = built_phases >= 3
-	_neon_arrow.visible = level > 0
-	_screen_fx.visible = level > 0
-	_screen_fx.set("level", level)
+	_pavilion.visible = built_phases >= 3
+	_pavilion.texture = PAVILION_ON if level > 0 else PAVILION_OFF
+	_holo.visible = level > 0
+	_holo.set("level", level)
 	_screen.visible = level > 0
 	_hologram.visible = level >= 4
-	_stage_lights.visible = level >= 5
 	_slot_machines.visible = has_slot_machines
 	_level_label.visible = built_phases >= 1
-	_level_label.text = "Zábavní systém · L%d" % level if level > 0 else "Zábavní systém"
+	_level_label.text = "Holokino · L%d" % level if level > 0 else "Holokino"

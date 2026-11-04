@@ -19,6 +19,8 @@ var mission_elapsed := 0.0
 ## Mise je splněná a hra čeká, až hráč potvrdí okno se shrnutím.
 var _completed := false
 var _dual_hose_told := false
+## Poznámky Pumpíka ke splněným cílům, které už zazněly (každá jen jednou za hru).
+var _told_goal_comments: Array = []
 ## Cíle nebo příběh se měly vyhodnotit, když hra stála. Dožene se to, až se zase rozběhne.
 var _recheck_pending := false
 
@@ -123,11 +125,12 @@ func get_goals() -> Array[Dictionary]:
 				clampi(Game.credits, 0, mission.goal_credits), mission.goal_credits))
 	if mission.goal_fuel_level > 0:
 		goals.append(_goal("%s: tankování na levelu %d" % [_android_name(), mission.goal_fuel_level],
-				_best_fuel_level(), mission.goal_fuel_level))
+				_best_fuel_level(), mission.goal_fuel_level, Story.FUEL_GOAL_REACHED))
 	if mission.goal_entertainment_level > 0:
 		var built_only := mission.goal_entertainment_level == 1
-		goals.append(_goal("Postavit zábavní systém" if built_only else "Zábavní systém na levelu %d" % mission.goal_entertainment_level,
-				station.entertainment_level(), mission.goal_entertainment_level))
+		goals.append(_goal("Postavit holokino" if built_only else "Holokino na levelu %d" % mission.goal_entertainment_level,
+				station.entertainment_level(), mission.goal_entertainment_level,
+				Story.HOLOKINO_BUILT if built_only else []))
 	if mission.goal_tank_level > 0:
 		goals.append(_goal("Zásobník na levelu %d" % mission.goal_tank_level,
 				station.tank.level, mission.goal_tank_level))
@@ -172,13 +175,15 @@ func get_goals() -> Array[Dictionary]:
 	return goals
 
 
-func _goal(label: String, value: int, target: int) -> Dictionary:
+## `comment` jsou repliky, kterými Pumpík splněný cíl okomentuje (prázdné = nic neřekne).
+func _goal(label: String, value: int, target: int, comment: Array = []) -> Dictionary:
 	var reached := mini(value, target)
 	return {
 		"label": label,
 		"value": "%s / %s" % [Game.format_number(reached), Game.format_number(target)],
 		"progress": float(reached) / target,
 		"done": reached >= target,
+		"comment": comment,
 	}
 
 
@@ -268,6 +273,18 @@ func _check_dual_hose_story() -> void:
 	hud.dialogue.play(Story.DUAL_HOSE_UNLOCKED)
 
 
+## Splněný cíl s poznámkou Pumpík okomentuje (každou poznámku jen jednou za hru). Kdyby tím
+## byla mise splněná, shrnutí počká, až hráč rozhovor odklikne.
+func _tell_goal_comment() -> bool:
+	for goal in get_goals():
+		if goal.done and not goal.comment.is_empty() and not _told_goal_comments.has(goal.comment):
+			_told_goal_comments.append(goal.comment)
+			_recheck_pending = true
+			hud.dialogue.play(goal.comment)
+			return true
+	return false
+
+
 func _android_name() -> String:
 	var androids := station.get_androids()
 	return androids[0].display_name if not androids.is_empty() else "Android"
@@ -285,6 +302,8 @@ func _check_goals() -> void:
 		return
 	if get_tree().paused:
 		_recheck_pending = true
+		return
+	if _tell_goal_comment():
 		return
 	if (mission.zora_scene and not zora_scene.done) or (mission.patrol_scene and not patrol_scene.done):
 		return

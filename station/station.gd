@@ -28,11 +28,11 @@ const BUILDING_SCENES := {
 }
 ## Názvy budov a text tlačítka, kterým se stavba začíná.
 const BUILDING_NAMES := {
-	"fuel_slot": "Čerpací slot", "entertainment": "Zábavní systém", "shop": "Obchod", "tower": "Obranná věž",
+	"fuel_slot": "Čerpací slot", "entertainment": "Holokino", "shop": "Obchod", "tower": "Obranná věž",
 	"motel": "Motel", "parking": "Parkoviště", "extension": "Rozšíření plošiny",
 }
 const BUILD_LABELS := {
-	"fuel_slot": "Začít stavět čerpací slot", "entertainment": "Začít stavět zábavní systém",
+	"fuel_slot": "Začít stavět čerpací slot", "entertainment": "Začít stavět holokino",
 	"shop": "Začít stavět obchod", "tower": "Začít stavět obrannou věž",
 	"motel": "Začít stavět motel", "parking": "Začít stavět parkoviště", "extension": "Začít rozšiřovat plošinu",
 }
