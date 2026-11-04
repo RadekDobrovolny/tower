@@ -263,9 +263,22 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func select(object: Node) -> void:
+	_light_labels(selected, false)
 	_move_selection_glow(object)
 	selected = object
+	_light_labels(object, true)
 	selection_changed.emit(object)
+
+
+## Štítky budov a postav jsou tlumené (varianta tématu WorldLabel), štítek vybraného
+## objektu se rozsvítí zlatě (WorldLabelLit).
+func _light_labels(object: Node, lit: bool) -> void:
+	if not is_instance_valid(object):
+		return
+	for child in object.get_children():
+		var label := child as Label
+		if label and label.theme_type_variation in [&"WorldLabel", &"WorldLabelLit"]:
+			label.theme_type_variation = &"WorldLabelLit" if lit else &"WorldLabel"
 
 
 func get_plots() -> Array[Plot]:

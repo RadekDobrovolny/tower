@@ -1,15 +1,14 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://ui/sound_center.gd" id="1_center"]
-[ext_resource type="Script" path="res://space/starfield.gd" id="2_stars"]
+[ext_resource type="PackedScene" path="res://space/sky.tscn" id="2_stars"]
 [ext_resource type="Script" path="res://ui/hud_panel.gd" id="3_panel"]
 [ext_resource type="Script" path="res://ui/sound_button.gd" id="4_sound"]
 
 [node name="SoundCenter" type="Node2D"]
 script = ExtResource("1_center")
 
-[node name="Starfield" type="Node2D" parent="."]
-script = ExtResource("2_stars")
+[node name="Sky" parent="." instance=ExtResource("2_stars")]
 
 [node name="Camera" type="Camera2D" parent="."]
 position = Vector2(640, 360)

@@ -12,6 +12,8 @@ uniform vec4 accent : source_color = vec4(0.97, 0.74, 0.38, 1.0);
 // 0..1: jak velká část panelu (shora) je odkrytá. Nad 1 je panel celý.
 uniform float reveal = 1.1;
 uniform float sweep_period = 9.0;
+// Síla zrnění (0 = žádné). Dialogové okno ho nemá, na velké ploše rušilo.
+uniform float grain = 0.035;
 
 float hash(vec2 p) {
 	return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
@@ -24,9 +26,9 @@ void fragment() {
 
 	// Horní část panelu je o kousek světlejší, jako by na ni padalo světlo.
 	c.rgb += vec3(0.05, 0.035, 0.06) * (1.0 - smoothstep(0.0, 0.55, UV.y));
-	// Scanlines po 3 px a zrnění, které se mění několikrát za sekundu.
+	// Scanlines po 3 px a zrnění, které se mění několikrát za sekundu (síla `grain`).
 	c.rgb *= 0.93 + 0.07 * step(1.0, mod(px.y, 3.0));
-	c.rgb += (hash(floor(px) + floor(TIME * 8.0) * 17.0) - 0.5) * 0.035;
+	c.rgb += (hash(floor(px) + floor(TIME * 8.0) * 17.0) - 0.5) * grain;
 
 	// Vzdálenost od okraje panelu (se zkosenými rohy vlevo nahoře a vpravo dole).
 	float d = min(min(px.x, px.y), min(inv.x, inv.y));

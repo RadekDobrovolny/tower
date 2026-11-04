@@ -77,7 +77,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 - **Bzučák** svítí tyrkysově na konci svařovacího paprsku.
 - **Skleněné koule pump** jemně září růžovým neonem.
 - **Reflektor nad palubou**: teplé světlo, uprostřed stanice nejsilnější, k okrajům slábne.
-- **Viditelnost lodí:** trupy mají chladný obrys ze strany, odkud přichází světlo (vlevo dole, stejně jako u stínů). Černá závodní raketa je navíc zjasněná, jinak by v temném vesmíru zanikla.
+- **Viditelnost lodí:** trupy mají jemný chladný obrys ze strany, odkud přichází světlo (vlevo dole, stejně jako u stínů). Původně byl dvakrát silnější a zbytečně výrazný. Piráti mají obrys načervenalý a silnější. Černá závodní raketa je navíc zjasněná, jinak by v temném vesmíru zanikla.
 
 **Stíny** (hotové): budovy jsou kreslené zepředu a rakety shora, svět sjednocují vržené stíny s jedním směrem světla.
 - **Směr:** světlo přichází zleva zdola, stín padá doprava nahoru za objekt. Budovy tak stojí pevně na palubě; stín doprava dolů pod nimi vypadal, jako by levitovaly. Ze stejné strany svítí obrys trupů raket a pirátů.
@@ -88,14 +88,21 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 - **Bzučák** visí nad budovou, jeho stín leží pod ním na budově a s jeho pohupováním se nehýbe (stejně u útočících pirátů).
 - **Bez stínu** je, co leží na palubě (přistávací plochy, parkovací stání, potrubí, staveniště), holografická koule a záře.
 
+**Vesmír** (hotový, jen kód): stejné pozadí je ve hře, v menu, v zápisníku i v centru zvuků. Světla stanice na něj nesvítí.
+- **Mlhoviny:** slabá vínová a fialová oblaka s jemnými vlákny a tmavými prachovými pásy, jen v jednom širokém pruhu šikmo přes obraz (zleva zdola doprava nahoru), který se trhá do cárů. Zbytek vesmíru zůstává temný: výraznější a všude rozprostřená mlhovina působila spíš jako mraky než jako vesmír. Nejhustší místa se jemně rozsvítí neonem galaxínu. Oblaka se velmi pomalu přelévají (jedno kolo trvá 15 minut).
+- **Hvězdy:** 40 % jich pomalu a nepravidelně mrká, asi pětina je teplejší barvy.
+- **Provoz v dálce:** každých 8–18 s přeletí za stanicí a za planetou malá tmavá silueta lodi se svítícím motorem, v průměru jsou vidět dvě najednou. Jednou za 70–150 s proletí kometa: jasné jádro v tyrkysovém závoji, dlouhý tyrkysový ocas z paprsků, které se od hlavy rozbíhají, a kratší širší skvrnitý růžový ocas, který se stáčí stranou. Ocasy mají měkké okraje a vlákna z nich pomalu odtékají; ocasy jako dva rovné klíny působily jako podle pravítka. Letí zhruba ke světlu (doleva dolů), takže ocas míří od světla stejně jako stíny.
+
 **Rozhraní (HUD):** moderní herní HUD v noir paletě.
 - **Písmo** Chakra Petch (Google Fonts, licence OFL v `assets/fonts/OFL.txt`): hranaté technické písmo se zkosenými rohy. Běžný text 13 px, nadpisy polotučně verzálkami s prostrkáním.
-- **Panely** jsou tmavé poloprůhledné se zkoseným levým horním a pravým dolním rohem a tenkým mosazným lemem. Shader `ui/hud_panel.gdshader` přidává scanlines, filmové zrno, svítící mosazné rohy, světelný pruh přejíždějící šikmo přes obrazovku a při otevření panel „naskenuje“ shora dolů. Panel galaxínu má místo mosazi neonově růžový akcent.
+- **Panely** jsou tmavé poloprůhledné se zkoseným levým horním a pravým dolním rohem a tenkým mosazným lemem. Shader `ui/hud_panel.gdshader` přidává scanlines, filmové zrno (dialogové okno ho nemá, na velké ploše rušilo), svítící mosazné rohy, světelný pruh přejíždějící šikmo přes obrazovku a při otevření panel „naskenuje“ shora dolů. Panel galaxínu má místo mosazi neonově růžový akcent.
 - **Ikonky** (SVG kreslené ručně v `assets/ui/icons/`): zlatá mince místo „kr“, kapka galaxínu, raketa (obsloužené lodě), raketa s křížkem (odletěly bez placení), zásobník, cenovka, cisterna, graf zájmu, cíl (kosočtverec) a splněný cíl (zelený kosočtverec s fajfkou), šipky vylepšení a klíč stavby.
 - **Výběr objektu:** vybraný objekt nemá rámeček, ale pulzující zlatý obrys podle svého tvaru a přejíždí přes něj světelný pruh. Vybraná prázdná parcela se rozsvítí měkkou září.
 - **Rozložení:** vlevo nahoře lišta zdrojů (mince s kredity, obsloužené a ztracené lodě), pod ní panel galaxínu. Uprostřed nahoře tlačítko Menu. Vpravo cíle mise (každý s ukazatelem postupu) a pod nimi info panel vybraného objektu. Tlačítka akcí mají vlevo ikonku a popisek, vpravo cenu s mincí. Na co hráč nemá, je ztlumené a cena svítí červeně.
 - **Oživení:** kredity „dojíždějí“ k nové hodnotě a mince při příjmu povyskočí (při výdaji se zmenší). Splněný cíl blikne a ikonka cvakne. Tlačítka při najetí myší září. Nápověda dole se ukáže jen při startu od mise 1, pomalu pulzuje a zmizí po prvním kliknutí na objekt.
 - Řeč postav v bublinách dál říká „kr“, ikonky jsou jen v HUD a v plovoucích částkách nad loděmi.
+- **Bubliny řeči** nad loděmi, cisternou, piráty a Pumpíkem vypadají jako panely HUD: tmavé, se zkoseným levým horním a pravým dolním rohem, tenkým mosazným lemem a ocáskem dolů k mluvčímu. Nová hláška krátce vyskočí. Rozzlobená hláška má rudý lem i text. Dřív byly bílé a byly nejsvětlejší věcí na obrazovce, přebíjely neon.
+- **Štítky ve světě** (název a level pod budovou, Pumpíkova jmenovka) jsou malé a tlumené, aby nepřebíjely grafiku. Štítek vybraného objektu se rozsvítí zlatě. Světla stanice na bubliny ani štítky nesvítí.
 
 **Grafika:** generuje se přes plugin SpriteCook (uživatel tam má účet, bezplatný tarif). Hotové obrázky a jejich ID jsou v `spritecook-assets.json`.
 - Všechno je generované modelem GPT 2.5 Flare (medium, 1K, 8 kreditů za obrázek). Aby kredity vystačily, generují se 4 objekty v jednom obrázku (arch 2×2) a rozstříhají se lokálně nástrojem `tools/slice_sheet.gd`. Stylová předloha (reference) by stála 8 kreditů navíc, proto se jednotný styl drží stejným zadáním (téma, styl, paleta).

@@ -10,6 +10,8 @@ const REVEAL_TIME := 0.22
 
 @export var accent := Color(0.97, 0.74, 0.38)
 @export var reveal_on_show := true
+## Síla zrnění v shaderu (0 = žádné).
+@export var grain := 0.035
 
 var _material: ShaderMaterial
 var _reveal_tween: Tween
@@ -19,6 +21,7 @@ func _ready() -> void:
 	_material = ShaderMaterial.new()
 	_material.shader = SHADER
 	_material.set_shader_parameter("accent", accent)
+	_material.set_shader_parameter("grain", grain)
 	material = _material
 	resized.connect(_on_resized)
 	visibility_changed.connect(_on_visibility_changed)

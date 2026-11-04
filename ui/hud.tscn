@@ -813,6 +813,7 @@ offset_top = -196.0
 offset_right = -24.0
 offset_bottom = -18.0
 script = ExtResource("3_panel")
+grain = 0.0
 
 [node name="Margin" type="MarginContainer" parent="DialogueBox/Panel"]
 layout_mode = 2

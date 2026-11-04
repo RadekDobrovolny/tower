@@ -1,15 +1,14 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://ui/main_menu.gd" id="1_menu"]
-[ext_resource type="Script" path="res://space/starfield.gd" id="2_stars"]
+[ext_resource type="PackedScene" path="res://space/sky.tscn" id="2_stars"]
 [ext_resource type="Texture2D" path="res://assets/sprites/space/planet.png" id="9_planet"]
 [ext_resource type="Script" path="res://ui/sound_button.gd" id="10_sound"]
 
 [node name="MainMenu" type="Node2D"]
 script = ExtResource("1_menu")
 
-[node name="Starfield" type="Node2D" parent="."]
-script = ExtResource("2_stars")
+[node name="Sky" parent="." instance=ExtResource("2_stars")]
 
 [node name="Planet" type="Sprite2D" parent="."]
 modulate = Color(0.85, 0.85, 0.9, 1)

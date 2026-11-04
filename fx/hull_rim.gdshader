@@ -6,7 +6,7 @@ shader_type canvas_item;
 // do souřadnic spritu, takže obrys zůstává na stejné straně, i když se loď otáčí.
 
 uniform vec4 rim_color : source_color = vec4(0.72, 0.82, 1.0, 1.0);
-uniform float rim_strength = 0.85;
+uniform float rim_strength = 0.42;
 // Šířka obrysu v pixelech textury.
 uniform float rim_width = 6.0;
 // Směr, odkud světlo přichází (souřadnice obrazovky, y dolů): opačný než DropShadow.DIRECTION.

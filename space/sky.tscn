@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://space/nebula.gd" id="1_nebula"]
+[ext_resource type="Shader" path="res://space/nebula.gdshader" id="2_nebula_shader"]
+[ext_resource type="Texture2D" path="res://assets/sprites/space/nebula_noise.png" id="3_noise"]
+[ext_resource type="Script" path="res://space/starfield.gd" id="4_stars"]
+[ext_resource type="Script" path="res://space/sky_traffic.gd" id="5_traffic"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nebula"]
+shader = ExtResource("2_nebula_shader")
+shader_parameter/noise = ExtResource("3_noise")
+
+[node name="Sky" type="Node2D"]
+z_index = -2
+
+[node name="Nebula" type="Node2D" parent="."]
+material = SubResource("ShaderMaterial_nebula")
+script = ExtResource("1_nebula")
+
+[node name="Starfield" type="Node2D" parent="."]
+script = ExtResource("4_stars")
+
+[node name="Traffic" type="Node2D" parent="."]
+script = ExtResource("5_traffic")
