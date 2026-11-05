@@ -9,8 +9,9 @@ extends Node2D
 
 enum Kind { BUILDING, TOWER, EXTENSION, PARKING }
 
-## Jak výrazný je obrys míst mimo palubu, kde by jinak nebyl na tmavém vesmíru vidět.
-const OUTSIDE_OUTLINE_ALPHA := 0.5
+## Jak výrazný je obrys míst mimo palubu, kde by jinak nebyl na tmavém vesmíru vidět. Na černém
+## pozadí je asi dvakrát kontrastnější než obrys parcel na palubě (víc už bilo do očí).
+const OUTSIDE_OUTLINE_ALPHA := 0.25
 
 @export var kind := Kind.BUILDING
 @export var size := Vector2(170, 120)

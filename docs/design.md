@@ -507,7 +507,7 @@ Embargo trvá a Sizel přijde s nápadem: lidé uvízli a někde spát musejí, 
 - **Postavit motel** (4 části, 6 000 kr) na běžné parcele.
 - **Postavit parkoviště** (3 části, 4 000 kr) pod plošinou pro 4 lodě.
 
-**Rozložení:** kamera se nemění, všechno se vejde do základního výhledu. Rozšíření je vpravo, aby ho nezakrýval panel galaxínu. Parkoviště přiléhá k palubě zespodu, vpravo od kotviště cisterny.
+**Rozložení:** kamera se nemění, všechno se vejde do základního výhledu. Rozšíření je vpravo, aby ho nezakrýval panel galaxínu. Parkoviště přiléhá k palubě zespodu, vpravo od kotviště cisterny. Místa pro rozšíření a parkoviště mají ve vesmíru obrys jako parcely, jen o něco výraznější (krytí 25 % místo 15 %), aby byla na tmavém pozadí vidět; s krytím 50 % bila do očí.
 
 **Hosté motelu:** když stojí motel i parkoviště a je volné stání, loď po zaplacení s šancí 35 % přeletí na parkoviště. Zůstane 25 až 45 s a každých 5 s pošle platbu: běžně 20 kr, rodinná raketa 40 kr a luxusní limuzína 50 kr. Turistická loď do motelu nejezdí. Před piráty hosté neutíkají. Šance a délka pobytu jsou odhad, zatím nevyvážené.
 
