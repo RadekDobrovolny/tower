@@ -9,12 +9,22 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/station/deck.png" id="7_deck"]
 [ext_resource type="Texture2D" path="res://fx/soft_light.tres" id="8_light"]
 [ext_resource type="Shader" path="res://fx/deck_rust.gdshader" id="9_rust"]
+[ext_resource type="Script" path="res://station/deck_side.gd" id="10_deck_side"]
+[ext_resource type="Texture2D" path="res://assets/sprites/station/deck_side.png" id="11_deck_side_tex"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rust"]
 shader = ExtResource("9_rust")
 
 [node name="Station" type="Node2D"]
 script = ExtResource("1_station")
+
+[node name="DeckSide" type="Node2D" parent="."]
+script = ExtResource("10_deck_side")
+texture = ExtResource("11_deck_side_tex")
+variants = 8
+portholes = PackedVector3Array(0.5, 0.487, 1, 0.5, 0.487, 1, 0.5, 0.5, 0, 0.5, 0.5, 0, 0.5, 0.487, 1, 0.5, 0.487, 1, 0.5, 0.5, 0, 0.5, 0.5, 0)
+glass_radius = 0.215
+glass_aspect = 0.835
 
 [node name="Platform" type="Polygon2D" parent="."]
 clip_children = 2

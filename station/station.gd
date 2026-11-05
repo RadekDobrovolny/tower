@@ -227,6 +227,7 @@ var _glowing: Array[Sprite2D] = []
 @onready var _control_center_spot: Marker2D = $ControlCenterSpot
 @onready var _platform: Polygon2D = $Platform
 @onready var _deck_rust: Line2D = $Platform/DeckRust
+@onready var _deck_side: DeckSide = $DeckSide
 @onready var _floodlight: PointLight2D = $Floodlight
 
 
@@ -896,9 +897,10 @@ func _update_deck() -> void:
 	if has_parking():
 		outline.append_array(PackedVector2Array(DECK_PARKING))
 	outline.append_array(PackedVector2Array(DECK_LEFT))
-	outline = _roughen_edge(outline)
-	_platform.polygon = outline
-	_deck_rust.points = outline
+	var rough := _roughen_edge(outline)
+	_platform.polygon = rough
+	_deck_rust.points = rough
+	_deck_side.build(rough, outline, _platform.texture_offset.x)
 	if platform_extended or has_parking():
 		_floodlight.texture_scale = LARGE_DECK_FLOODLIGHT_SCALE
 

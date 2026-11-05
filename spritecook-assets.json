@@ -1005,6 +1005,17 @@
           "cell": "vlevo dole, zapnutý projektor"
         }
       ]
+    },
+    {
+      "source": "Codex CLI s tarifem ChatGPT, nemá SpriteCook ID",
+      "label": "Tower – bok paluby, osm plechů na šířku jedné desky paluby (čisté a zrezivělé, s okénkem, mřížkou nebo poklopem), reference dřívější arch tří pásů boku a textura paluby. Plechy jsou ve hře vedle sebe v jedné textuře, každý zmenšený na 128×32 px. Starší arch tří vodorovných pásů (čistý, s art deco pilíři, zrezivělý) se nepoužívá",
+      "files": [
+        {
+          "file": "assets/sprites/station/deck_side.png",
+          "sha12": "497c99c38836",
+          "cell": "všech 8 plechů, po řádcích zleva doprava"
+        }
+      ]
     }
   ]
 }
