@@ -2,7 +2,7 @@
 
 2D hra v Godotu 4.7 (GDScript) s pohledem shora: hráč provozuje vesmírnou čerpací stanici, jeho personál tankuje přilétající lodě a stanici brání proti pirátům. Cílová platforma je web (HTML5 export).
 
-Návrh hry, otevřené otázky a plán vývoje jsou v [docs/design.md](docs/design.md). Když se změní rozhodnutí o hře, aktualizuj i tento dokument. Soupis misí s nutnými výdaji je v [docs/missions.md](docs/missions.md), po změně cílů mise nebo cen ho aktualizuj. Pumpíkův zápisník (encyklopedie v menu) má obsah v `dialogue/notebook.gd`: čísla bere z dat hry, ale novou budovu, postavu nebo pojem do něj dopiš a nezapomeň, že zápisník nesmí prozradit tajemství příběhu.
+Návrh hry, otevřené otázky a plán vývoje jsou v [docs/design.md](docs/design.md). Když se změní rozhodnutí o hře, aktualizuj i tento dokument. Soupis misí s nutnými výdaji je v [docs/missions.md](docs/missions.md), po změně cílů mise nebo cen ho aktualizuj. Přehled pro lidi (o hře, ovládání, spuštění, struktura složek) je v [README.md](README.md) se snímkem `docs/screenshot.jpg`; když přibude velká věc ve hře nebo se změní příkazy či složky, uprav i ten. README nesmí prozradit příběh. Pumpíkův zápisník (encyklopedie v menu) má obsah v `dialogue/notebook.gd`: čísla bere z dat hry, ale novou budovu, postavu nebo pojem do něj dopiš a nezapomeň, že zápisník nesmí prozradit tajemství příběhu.
 
 ## Technické volby
 - Renderer **Compatibility** (`gl_compatibility`), protože ho vyžaduje web export.
