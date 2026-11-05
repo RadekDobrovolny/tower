@@ -120,7 +120,7 @@ static func _buildings() -> Array[Dictionary]:
 		},
 		{
 			"title": "Zásobník", "image": preload("res://assets/sprites/station/tank.png"),
-			"text": "Tady je všechen galaxín stanice. Když dojde, lodě odletí a nové nepřiletí.\n\n%s" % _cost_line("Rozšíření", GalaxinTank.LEVELS.map(_cost_of).slice(1)),
+			"text": "Tady je všechen galaxín stanice. Budík nahoře ukazuje, jak je plný. Když dojde, lodě odletí a nové nepřiletí.\n\n%s" % _cost_line("Rozšíření", GalaxinTank.LEVELS.map(_cost_of).slice(1)),
 		},
 		{
 			"title": "Holokino", "image": preload("res://assets/sprites/entertainment/holokino_on.png"),

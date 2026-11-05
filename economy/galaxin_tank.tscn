@@ -4,23 +4,33 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/station/tank.png" id="2_tank"]
 [ext_resource type="Texture2D" path="res://fx/soft_light.tres" id="3_light"]
 [ext_resource type="Script" path="res://fx/drop_shadow.gd" id="shadow_script"]
+[ext_resource type="Script" path="res://economy/tank_needle.gd" id="4_needle"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gauge_bg"]
-bg_color = Color(0, 0, 0, 0.6)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gauge_fill"]
-bg_color = Color(1, 1, 1, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_display"]
+bg_color = Color(0.03, 0.02, 0.025, 0.82)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [node name="Tank" type="Node2D"]
 script = ExtResource("1_tank")
 
 [node name="Body" type="Sprite2D" parent="."]
-scale = Vector2(0.4, 0.4)
+position = Vector2(0, -2.4)
+scale = Vector2(0.4255, 0.4255)
 texture = ExtResource("2_tank")
 
 [node name="Shadow" type="Node2D" parent="Body"]
 script = ExtResource("shadow_script")
 height = 15.5
+
+[node name="Needle" type="Node2D" parent="."]
+position = Vector2(0.1, -23.9)
+script = ExtResource("4_needle")
+length = 8.0
+tail = 2.5
+width = 4.0
 
 [node name="Glow" type="PointLight2D" parent="."]
 color = Color(1, 0.24, 0.55, 1)
@@ -28,39 +38,35 @@ energy = 0.0
 texture = ExtResource("3_light")
 texture_scale = 2.0
 
+[node name="Display" type="Panel" parent="."]
+visible = false
+light_mask = 0
+offset_left = -20.8
+offset_top = -3.75
+offset_right = 21.3
+offset_bottom = 8.65
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_display")
+
 [node name="AmountLabel" type="Label" parent="."]
 visible = false
-offset_left = -46.0
-offset_top = -12.0
-offset_right = 46.0
-offset_bottom = 12.0
+light_mask = 0
+offset_left = -21.75
+offset_top = -5.55
+offset_right = 22.25
+offset_bottom = 10.45
 mouse_filter = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 16
-text = "0 j"
+theme_type_variation = &"TankDisplay"
+text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="Gauge" type="ProgressBar" parent="."]
-visible = false
-custom_minimum_size = Vector2(90, 8)
-offset_left = -45.0
-offset_top = 52.0
-offset_right = 45.0
-offset_bottom = 60.0
-mouse_filter = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_gauge_bg")
-theme_override_styles/fill = SubResource("StyleBoxFlat_gauge_fill")
-step = 0.0
-show_percentage = false
 
 [node name="LevelLabel" type="Label" parent="."]
 visible = false
 offset_left = -60.0
-offset_top = 62.0
+offset_top = 57.0
 offset_right = 60.0
-offset_bottom = 80.0
+offset_bottom = 75.0
 light_mask = 0
 mouse_filter = 2
 theme_type_variation = &"WorldLabel"

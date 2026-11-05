@@ -15,7 +15,6 @@ const LEVELS := [
 ## Pod jakým podílem kapacity se zásobník hlásí jako téměř prázdný.
 const LOW_SHARE := 0.2
 const LOW_COLOR := Color(1.0, 0.35, 0.3)
-const OK_COLOR := Color(0.95, 0.75, 0.25)
 ## Síla růžové záře z průzorů u prázdného a plného zásobníku.
 const GLOW_EMPTY := 0.3
 const GLOW_FULL := 2.0
@@ -41,7 +40,9 @@ var _blink := 0.0
 var _glow_time := 0.0
 
 @onready var _glow: PointLight2D = $Glow
-@onready var _gauge: ProgressBar = $Gauge
+@onready var _needle: TankNeedle = $Needle
+## Displej na štítku zásobníku, na kterém svítí počet jednotek.
+@onready var _display: Panel = $Display
 @onready var _amount_label: Label = $AmountLabel
 @onready var _level_label: Label = $LevelLabel
 
@@ -54,15 +55,14 @@ func _process(delta: float) -> void:
 	_glow_time += delta
 	var fill := 1.0 if unlimited else amount / capacity()
 	_glow.energy = lerpf(GLOW_EMPTY, GLOW_FULL, fill) * (0.85 + 0.15 * sin(_glow_time * 1.6))
+	# Budík na zásobníku ukazuje, jak je plný (neomezený je pořád plný).
+	_needle.value = fill
 	if unlimited:
 		return
 	var low := amount < capacity() * LOW_SHARE
 	_blink = fmod(_blink + delta, 1.0)
-	_amount_label.text = "%d j" % roundi(amount)
+	_amount_label.text = str(roundi(amount))
 	_amount_label.modulate = LOW_COLOR if low and _blink < 0.5 else Color.WHITE
-	_gauge.max_value = capacity()
-	_gauge.value = amount
-	_gauge.modulate = LOW_COLOR if low else OK_COLOR
 	if job:
 		_level_label.text = "Zásobník · rozšiřuje se %d %%" % roundi(job.phase_fraction() * 100.0)
 	else:
@@ -185,7 +185,7 @@ func _finish_upgrade() -> void:
 
 
 func _update_looks() -> void:
-	_gauge.visible = not unlimited
+	_display.visible = not unlimited
 	_amount_label.visible = not unlimited
 	_level_label.visible = not unlimited
 	_level_label.text = "Zásobník · L%d" % level

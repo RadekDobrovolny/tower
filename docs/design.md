@@ -62,7 +62,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 - **Pumpík:** elegantní chromový android s tyrkysovým hledím (žádná roztomilá kulatá očka), dlouhé paže, hadice.
 - **Bzučák:** hmyzí stavební dron, vybledlé žluto-černé pruhy, síťované rotory, červené světýlko, jiskry svařování.
 - **Pumpa u slotu:** štíhlý vínový art deco sloup s mosaznými žebry a skleněnou koulí, ve které svítí galaxín.
-- **Zásobník:** zašlá chromová koule s mosaznými obručemi, průzory s růžovým galaxínem, stékající rez.
+- **Zásobník:** těžký nýtovaný tank s žebry a mosazí, kreslený zepředu jako budovy. Nahoře má mosazný budík, jehož ručička (tmavá ocel s měkkými okraji, leskem na hraně ke světlu a drobným stínem na ciferník, aby nepůsobila jako plochá černá čára) ukazuje, jak je zásobník plný (prázdný vlevo dole, plný v růžovém poli vpravo dole, k nové hodnotě se plynule dotočí a jemně se chvěje). Pod budíkem je v mosazném rámu displej, na kterém jantarově svítí počet jednotek bez jednotky (u téměř prázdného zásobníku červeně bliká). Budík a displej nahradily dřívější ukazatel pod zásobníkem, a dole široký průzor s růžovým galaxínem. Nahoře je hrdlo trubky z hlavní větve a po stranách přípojky k dolním čerpadlům. Nahradil dřívější chromovou kouli kreslenou zpředu naplocho, která mezi budovy nezapadala.
 - **Holokino:** nízký art deco pavilon z nýtované oceli s vínovými panely a mosazí. Na střeše má holoprojektor, který nad budovu promítá tyrkysovou holografickou kouli s otáčející se mřížkou a přelévajícím se obrazem. Na fasádě běží titulky.
 - **Paluba stanice:** tmavá ocel s panelovými spárami, nýty, rez, olejové skvrny, ošoupané mosazné lemování.
 - **Vesmír:** téměř černý s vínovými a fialovými mlhovinami, tmavá planeta s rudým okrajem světla a prstencem.
@@ -127,6 +127,7 @@ Sci-fi fantasy z budoucnosti, odehrává se ve vesmíru. Hráč vlastní **vesm�
 - **Stavby a piráti** (24 kreditů, tři archy 2×2): obchod `shop/shop.png` a stánky `shop/food_cart.png`, `holonews.png`, `souvenirs.png`, `accessories.png`; řídící centrum `station/control_center.png` a anténa dispečinku `station/radar_dish.png`; obranná věž `defense/tower_base.png` a kanóny `defense/turret.png`, `turret_twin.png` (level 3); piráti `pirates/raider.png` a `pirates/gunship.png`.
 - **Pumpík** (16 + 180 kreditů): nový vzhled podle hráčovy předlohy, nejdřív arch se čtyřmi pohledy na stejného robota (s předlohou jako referencí), pak devět animací po 20 kreditech (`frame-engine-v1.1`). Všechny jsou oříznuté jedním společným rámečkem, aby na sebe při přepínání seděly.
 - **Bok paluby** (Codex CLI s tarifem ChatGPT): arch osmi plechů na šířku desky, ve hře vedle sebe v `station/deck_side.png`. Starší arch tří souvislých pásů se nepoužívá, spáry jeho plechů nelícovaly s deskami paluby.
+- **Zásobník** (Codex CLI s tarifem ChatGPT): arch 2×2 se čtyřmi návrhy, vybraný tank s budíkem je překreslený s prázdným ciferníkem do `station/tank.png`, ručičku kreslí hra. Původní koule ze SpriteCooku je nahrazená.
 - **Holokino** (Codex CLI s tarifem ChatGPT, jeden arch 2×2): pavilon ve třech fázích `entertainment/holokino_frame.png`, `holokino_off.png`, `holokino_on.png` (neonový nápis ze stejného archu se nepoužil).
 - **Bez kreditů v kódu:** HUD (ikonky, shader panelů), neonový nápis, vesmírné pozadí a mlhoviny, efekty (kouř, jiskry, blikání neonu) a animace pohybem.
 

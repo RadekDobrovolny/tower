@@ -38,7 +38,8 @@
         {
           "file": "assets/sprites/station/tank.png",
           "sha12": "c1827b8528e2",
-          "cell": "vpravo dole"
+          "cell": "vpravo dole",
+          "note": "nahrazen zásobníkem s budíkem z Codexu, viz níže"
         }
       ]
     },
@@ -1014,6 +1015,17 @@
           "file": "assets/sprites/station/deck_side.png",
           "sha12": "497c99c38836",
           "cell": "všech 8 plechů, po řádcích zleva doprava"
+        }
+      ]
+    },
+    {
+      "source": "Codex CLI s tarifem ChatGPT, nemá SpriteCook ID",
+      "label": "Tower – zásobník galaxínu, arch 2×2 se čtyřmi návrhy (koule na podstavci, kapsle na nožkách, raketový tvar s ploutvemi, těžký tank s budíkem), reference dřívější zásobník, obchod, řídící centrum, holokino a výřez ze hry. Vybraný tank s budíkem je pak překreslený s prázdným ciferníkem, ručičku kreslí hra (economy/tank_needle.gd)",
+      "files": [
+        {
+          "file": "assets/sprites/station/tank.png",
+          "sha12": "e64db4d4b6c7",
+          "cell": "vpravo dole, překreslený s prázdným ciferníkem"
         }
       ]
     }
