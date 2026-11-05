@@ -14,6 +14,8 @@ const BAYS: Array[Vector2] = [Vector2(-138, -8), Vector2(-26, -8), Vector2(86, -
 const BAY_SCALE := 0.5
 const BAY_TEXTURE := preload("res://assets/sprites/motel/parking_bay.png")
 const SHELL_MODULATE := Color(0.5, 0.5, 0.52)
+## Po které části jsou položené plechy (pak je parkoviště součástí obrysu paluby stanice).
+const PLATES_PHASE := 2
 
 ## Která loď stojí na kterém stání (null = volné).
 var _guests: Array[Ship] = []
@@ -21,15 +23,11 @@ var _bay_sprites: Array[Sprite2D] = []
 
 @onready var _frame: Node2D = $Frame
 @onready var _plate: Node2D = $Plate
-@onready var _deck: Polygon2D = $Plate/Deck
-@onready var _corner: Polygon2D = $Plate/Deck/Corner
 @onready var _lights: Node2D = $Lights
 @onready var _label: Label = $Label
 
 
 func _ready() -> void:
-	# Paluba je v souřadnicích stanice, aby na sebe její textura navazovala.
-	_deck.position = -plot.position
 	for bay in BAYS:
 		var sprite := Sprite2D.new()
 		sprite.texture = BAY_TEXTURE
@@ -43,8 +41,6 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	super(delta)
-	# Roh paluby nad parkovištěm doplní rozestavěný plech, dokud ho nezakryje rozšíření.
-	_corner.visible = not station.platform_extended
 	_label.text = "Parkoviště · %d / %d" % [guests(), BAYS.size()] if is_operational() else "Parkoviště"
 
 
@@ -87,13 +83,17 @@ func info_lines() -> PackedStringArray:
 	return lines
 
 
+## Jestli jsou už položené plechy (pak je parkoviště součástí obrysu paluby stanice).
+func has_plates() -> bool:
+	return built_phases >= PLATES_PHASE
+
+
 func _update_construction_looks() -> void:
 	super()
-	# Části stavby: nosníky -> tmavý plech se stáními -> světla a závora. Hotový plech je už
-	# součástí paluby stanice.
+	# Části stavby: nosníky -> plech se stáními (paluba stanice, ztmavená) -> světla a závora.
 	_frame.visible = built_phases == 1
 	_plate.visible = built_phases >= 2
 	_plate.modulate = Color.WHITE if is_operational() else SHELL_MODULATE
-	_deck.visible = not is_operational()
 	_lights.visible = is_operational()
 	_label.visible = built_phases >= 1
+	station.update_deck()

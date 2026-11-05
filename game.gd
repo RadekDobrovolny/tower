@@ -5,6 +5,11 @@ extends Node
 signal credits_changed(credits: int)
 signal stats_changed
 
+## Ve webu hra kreslí nanejvýš tolik snímků za sekundu. Prohlížeč by jinak kreslil podle
+## displeje (na Macu 120 Hz) a zbytečně by vytížil procesor. Mimo web se nic neomezuje,
+## aby běhy z příkazové řádky s --fixed-fps (simulace tempa) běžely rychleji než reálný čas.
+const WEB_MAX_FPS := 60
+
 ## Od které mise (index v Missions.ALL) hra začne. Nastavuje ho menu.
 var start_mission := 0
 var credits := 0
@@ -13,6 +18,11 @@ var ships_lost := 0
 var pirates_shot := 0
 ## Jestli hráč v Misi 7 prozradil Zoru císařské hlídce.
 var zora_reported := false
+
+
+func _ready() -> void:
+	if OS.has_feature("web"):
+		Engine.max_fps = WEB_MAX_FPS
 
 
 ## Vynuluje stav na začátku hry. Hráč může začínat s nějakými kredity.

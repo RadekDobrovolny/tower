@@ -510,7 +510,7 @@ Embargo trvá a Sizel přijde s nápadem: lidé uvízli a někde spát musejí, 
 
 **Hosté motelu:** když stojí motel i parkoviště a je volné stání, loď po zaplacení s šancí 35 % přeletí na parkoviště. Zůstane 25 až 45 s a každých 5 s pošle platbu: běžně 20 kr, rodinná raketa 40 kr a luxusní limuzína 50 kr. Turistická loď do motelu nejezdí. Před piráty hosté neutíkají. Šance a délka pobytu jsou odhad, zatím nevyvážené.
 
-Hotové parkoviště je s palubou jeden kus (`Station._update_deck`), stejně jako její rozšíření.
+Parkoviště i rozšíření jsou s palubou jeden kus (`Station.update_deck`), a to už od položení plechů (2. část stavby): mají stejnou zubatou hranu, rez a bok jako paluba. Dokud nejsou dostavěné, jsou i s bokem ztmavené. Dřív měla rozestavěná část vlastní plochý tmavý plech s rovnými hranami a bez boku a bok paluby jí vedl přes spoj.
 
 Hrana paluby není přesně rovná: je o pár pixelů zubatá, místy vylomená a podél ní je rez.
 

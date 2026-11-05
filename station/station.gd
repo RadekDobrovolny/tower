@@ -137,6 +137,11 @@ const DECK_PARKING: Array[Vector2] = [
 	Vector2(448, 160), Vector2(448, 284), Vector2(432, 300), Vector2(-52, 300), Vector2(-68, 284), Vector2(-68, 160),
 ]
 const LARGE_DECK_FLOODLIGHT_SCALE := 10.0
+## Rozestavěné části paluby (rozšíření a parkoviště) s položenými plechy: jsou už součástí
+## obrysu paluby, ale dokud nejsou hotové, ztmaví je překryv oříznutý tvarem paluby.
+const EXTENSION_AREA := Rect2(360, -180, 220, 340)
+const PARKING_AREA := Rect2(-90, 160, 560, 160)
+const UNFINISHED_DECK := Color(0.02, 0.015, 0.03, 0.5)
 ## Hrana paluby není přesně rovná: po krocích (px) se o kousek vlní a občas je z ní vylomený zub.
 const EDGE_STEP_MIN := 6.0
 const EDGE_STEP_MAX := 14.0
@@ -228,6 +233,7 @@ var _glowing: Array[Sprite2D] = []
 @onready var _platform: Polygon2D = $Platform
 @onready var _deck_rust: Line2D = $Platform/DeckRust
 @onready var _deck_side: DeckSide = $DeckSide
+var _unfinished_deck: Array[Polygon2D] = []
 @onready var _floodlight: PointLight2D = $Floodlight
 
 
@@ -242,7 +248,7 @@ func _ready() -> void:
 	supply.tank = tank
 	supply.station = self
 	_apply_galaxin_economy()
-	_update_deck()
+	update_deck()
 
 
 func _process(_delta: float) -> void:
@@ -701,7 +707,7 @@ func setup_maxed() -> void:
 	_open_extension()
 	_place_building("motel", first_empty_plot()).finish_instantly()
 	_place_building("parking", first_empty_plot(Plot.Kind.PARKING)).finish_instantly()
-	_update_deck()
+	update_deck()
 	tank.set_level(GalaxinTank.LEVELS.size())
 	drone.set_maxed()
 	for android in get_androids():
@@ -878,31 +884,68 @@ func on_building_finished(building: Building) -> void:
 		building.plot.clear()
 		_open_extension()
 	elif building is Parking:
-		_update_deck()
+		update_deck()
 
 
 ## Paluba se rozšíří a na novém kusu se otevřou parcely.
 func _open_extension() -> void:
 	platform_extended = true
-	_update_deck()
+	update_deck()
 
 
-## Poskládá obrys paluby podle toho, co už je postavené.
-func _update_deck() -> void:
+## Poskládá obrys paluby podle toho, co už je postavené. Rozšíření a parkoviště do něj patří,
+## jakmile mají položené plechy (`has_plates`), aby měly zubatou hranu, rez a bok a navazovaly
+## na palubu. Dokud nejsou hotové, jsou ztmavené (UNFINISHED_DECK, bok taky).
+func update_deck() -> void:
+	var extension := _extension()
+	var extended := platform_extended or (extension != null and extension.has_plates())
+	var parked := parking() != null and parking().has_plates()
 	var outline := PackedVector2Array(DECK_RIGHT)
-	if platform_extended:
+	if extended:
 		outline = PackedVector2Array(DECK_RIGHT_EXTENDED)
-	elif has_parking():
+	elif parked:
 		outline = PackedVector2Array(DECK_RIGHT_ABOVE_PARKING)
-	if has_parking():
+	if parked:
 		outline.append_array(PackedVector2Array(DECK_PARKING))
 	outline.append_array(PackedVector2Array(DECK_LEFT))
+	var unfinished: Array[Rect2] = []
+	if extended and not platform_extended:
+		unfinished.append(EXTENSION_AREA)
+		# Zubatá spodní hrana rozšíření přesahuje y = 160 o pár px. Kde je pod ní parkoviště
+		# s plechy, okraj netmavne, aby se neztmavilo i parkoviště.
+		var edge_from := DECK_PARKING[0].x if parked else EXTENSION_AREA.position.x
+		unfinished.append(Rect2(edge_from, EXTENSION_AREA.end.y, EXTENSION_AREA.end.x - edge_from, EDGE_CHIP_DEPTH * 3.0))
+	if parked and not has_parking():
+		unfinished.append(PARKING_AREA)
 	var rough := _roughen_edge(outline)
 	_platform.polygon = rough
 	_deck_rust.points = rough
-	_deck_side.build(rough, outline, _platform.texture_offset.x)
-	if platform_extended or has_parking():
+	_deck_side.build(rough, outline, _platform.texture_offset.x, unfinished)
+	_shade_unfinished_deck(unfinished)
+	if extended or parked:
 		_floodlight.texture_scale = LARGE_DECK_FLOODLIGHT_SCALE
+
+
+## Ztmaví nedostavěné části paluby. Překryvy jsou děti paluby, takže je ořízne její tvar.
+func _shade_unfinished_deck(areas: Array[Rect2]) -> void:
+	for old in _unfinished_deck:
+		old.queue_free()
+	_unfinished_deck.clear()
+	for area in areas:
+		var cover := Polygon2D.new()
+		cover.polygon = PackedVector2Array([area.position, Vector2(area.end.x, area.position.y),
+				area.end, Vector2(area.position.x, area.end.y)])
+		cover.color = UNFINISHED_DECK
+		_platform.add_child(cover)
+		_unfinished_deck.append(cover)
+
+
+## Rozšíření plošiny (i rozestavěné), nebo null.
+func _extension() -> PlatformExtension:
+	for plot in get_plots():
+		if plot.building is PlatformExtension:
+			return plot.building
+	return null
 
 
 ## Rozdělí rovné hrany obrysu na krátké kousky a trochu je rozhodí. Obrys vede ve směru hodinových

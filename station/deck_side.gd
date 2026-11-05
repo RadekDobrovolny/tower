@@ -10,6 +10,7 @@ extends Node2D
 ## má vedle sebe varianty plechu, shader station/deck_side.gdshader dá každému plechu
 ## náhodnou variantu a rozsvítí okénka. Na krajních spodních rozích blikají poziční světla:
 ## vlevo červené, vpravo zelené (záře z přičítaných spritů, ne skutečná světla).
+## Celý bok je jedna síť trojúhelníků, takže se kreslí jedním voláním.
 
 const SHADER := preload("res://station/deck_side.gdshader")
 const GLOW := preload("res://fx/soft_light.tres")
@@ -31,6 +32,8 @@ const NAV_CORE_SIZE := 7.0
 const NAV_INSET := 4.0
 ## Šířka desky paluby (px): textura paluby (256 px) má 4 desky vedle sebe.
 const PLATE_LENGTH := 64.0
+## Bok nedostavěné části paluby je ztmavený stejně jako její plechy.
+const UNFINISHED_SHADE := 0.5
 ## Bok mají jen kousky hrany, které míří dolů aspoň takhle (y vnější normály). Svislé hrany
 ## jsou zvlněné a jejich kousky občas míří nepatrně dolů, ty bok nemají.
 const FACING_DOWN := 0.3
@@ -46,7 +49,7 @@ const FACING_DOWN := 0.3
 ## Šířka skla vůči výšce (plechy jsou při zmenšení na šířku desky trochu zúžené).
 @export var glass_aspect := 1.0
 
-var _quads: Array[Dictionary] = []
+var _mesh: ArrayMesh
 var _nav: Array[Node2D] = []
 var _time := 0.0
 
@@ -84,8 +87,12 @@ func _process(delta: float) -> void:
 ## Postaví bok pod zvlněným obrysem paluby (body ve směru hodinových ručiček). Poziční
 ## světla dá na krajní spodní rohy obrysu před zvlněním (`corners`). `texture_offset` je
 ## posun textury paluby (Polygon2D.texture_offset.x), aby spáry plechů seděly pod deskami.
-func build(outline: PackedVector2Array, corners: PackedVector2Array, texture_offset: float) -> void:
-	_quads.clear()
+## Bok pod nedostavěnými částmi paluby (`unfinished`) je ztmavený.
+func build(outline: PackedVector2Array, corners: PackedVector2Array, texture_offset: float,
+		unfinished: Array[Rect2] = []) -> void:
+	var points := PackedVector2Array()
+	var colors := PackedColorArray()
+	var uvs := PackedVector2Array()
 	var count := outline.size()
 	var outward: Array[Vector2] = []
 	for i in count:
@@ -98,13 +105,27 @@ func build(outline: PackedVector2Array, corners: PackedVector2Array, texture_off
 			# Nasvícení ve vrcholech z průměru sousedních ploch, aby zvlněná hrana nebyla kostičkovaná.
 			var shade_a := _shade(outward[(i - 1 + count) % count] + outward[i])
 			var shade_b := _shade(outward[i] + outward[(i + 1) % count])
-			_quads.append({
-				"points": PackedVector2Array([a, b, b + down, a + down]),
-				"colors": PackedColorArray([shade_a, shade_b, shade_b, shade_a]),
-				# Textura jde podle x jako textura paluby, ne podél hrany.
-				"uvs": PackedVector2Array([Vector2(a.x + texture_offset, 0), Vector2(b.x + texture_offset, 0),
-						Vector2(b.x + texture_offset, 1), Vector2(a.x + texture_offset, 1)]),
-			})
+			for area in unfinished:
+				if area.has_point((a + b) * 0.5):
+					shade_a *= UNFINISHED_SHADE
+					shade_b *= UNFINISHED_SHADE
+			# Dva trojúhelníky: a, b, b dole a a, b dole, a dole.
+			points.append_array([a, b, b + down, a, b + down, a + down])
+			colors.append_array([shade_a, shade_b, shade_b, shade_a, shade_b, shade_a])
+			# Textura jde podle x jako textura paluby, ne podél hrany.
+			var u_a := a.x + texture_offset
+			var u_b := b.x + texture_offset
+			uvs.append_array([Vector2(u_a, 0), Vector2(u_b, 0), Vector2(u_b, 1),
+					Vector2(u_a, 0), Vector2(u_b, 1), Vector2(u_a, 1)])
+	_mesh = null
+	if not points.is_empty():
+		var arrays := []
+		arrays.resize(Mesh.ARRAY_MAX)
+		arrays[Mesh.ARRAY_VERTEX] = points
+		arrays[Mesh.ARRAY_COLOR] = colors
+		arrays[Mesh.ARRAY_TEX_UV] = uvs
+		_mesh = ArrayMesh.new()
+		_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 	_place_nav_lights(corners)
 	queue_redraw()
 
@@ -130,8 +151,8 @@ func _place_nav_lights(corners: PackedVector2Array) -> void:
 
 
 func _draw() -> void:
-	for quad in _quads:
-		draw_polygon(quad.points, quad.colors, quad.uvs, texture)
+	if _mesh:
+		draw_mesh(_mesh, texture)
 
 
 ## Jak je plocha nasvícená podle směru, kterým míří (světlo jde zleva zdola).

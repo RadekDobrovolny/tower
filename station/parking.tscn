@@ -1,7 +1,6 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://station/parking.gd" id="1_parking"]
-[ext_resource type="Texture2D" path="res://assets/sprites/station/deck.png" id="2_deck"]
 [ext_resource type="Texture2D" path="res://assets/sprites/motel/girders.png" id="3_girders"]
 [ext_resource type="Texture2D" path="res://assets/sprites/motel/lamp.png" id="4_lamp"]
 [ext_resource type="Texture2D" path="res://assets/sprites/motel/gate.png" id="5_gate"]
@@ -34,19 +33,6 @@ texture = ExtResource("3_girders")
 
 [node name="Plate" type="Node2D" parent="."]
 visible = false
-
-[node name="Deck" type="Polygon2D" parent="Plate"]
-z_index = -1
-texture_repeat = 2
-texture = ExtResource("2_deck")
-texture_offset = Vector2(-4, 0)
-polygon = PackedVector2Array(-68, 150, 448, 150, 448, 284, 432, 300, -52, 300, -68, 284)
-
-[node name="Corner" type="Polygon2D" parent="Plate/Deck"]
-texture_repeat = 2
-texture = ExtResource("2_deck")
-texture_offset = Vector2(-4, 0)
-polygon = PackedVector2Array(328, 160, 360, 128, 360, 160)
 
 [node name="Lights" type="Node2D" parent="."]
 visible = false
